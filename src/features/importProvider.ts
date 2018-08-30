@@ -48,47 +48,54 @@ export default class ImportProvider implements vscode.CodeActionProvider
 	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range, context: vscode.CodeActionContext, token: vscode.CancellationToken): Promise<any>
 	{
 		let diagnostic = context.diagnostics[0];
-		let pattern = /Variable not in scope:\s+(\S+)\s/;
-		let match: RegExpExecArray = pattern.exec(diagnostic.message);
-	  if(match === null || match.length < 2)
+		let patterns = [
+			/Variable not in scope:\s+(\S+)/,
+			/Not in scope: type constructor or class `(\S+)'/
+		];
+		var name = "";
+		for (let pattern of patterns)
 		{
-			return null;
+			let match = pattern.exec(diagnostic.message);
+	  	if(match === null || match.length < 2 )
+			{
+				continue;
+			}
+			name = match[1];
+			
+			let results = await this.search(name);
+
+			return results.map(result =>
+			{
+				return {
+					title: "Add import " + result.module + " (for " + result.result + ")",
+					tooltip: "Add missing import",
+					command: ImportProvider.commandId,
+					arguments: [document, name, result.module]
+				};
+			});
 		}
-		let name = match[1];
-
-		let results = await this.search(name);
-
-		return results.map(result =>
-		{
-			return {
-				title: "Add import " + result.module + " (for " + result.result + ")",
-				tooltip: "Add missing import",
-				command: ImportProvider.commandId,
-				arguments: [document, name, result.module]
-			};
-		});
 	}
 
 	
-	private runCodeAction(document: vscode.TextDocument, name: string, module:string): any {
-		
+	private runCodeAction(document: vscode.TextDocument, name: string, module:string): any
+	{
 		function AfterMatch(match)
 		{
 			let position = document.positionAt(match.index + match[0].length);
 			return document.offsetAt(position.with(position.line + 1, 0));
 		}
-
+				
 		let text = document.getText();
 		var position = 0;
 
-		let modulePattern = /^module\s+\w+\s*(?:\(.*\))?\s*where/gm;
+		let modulePattern = /^module(.|\n)+where/gm;
 		let moduleMatch = modulePattern.exec(text);
 		if(moduleMatch !== null)
 		{
 			position = AfterMatch(moduleMatch);
 		}
 
-		let importPattern = /^import\s+(?:qualified\s+)*(.+)$/gm;
+		let importPattern = /import\s+(?:qualified\s+)*([\w\d\.]+)\s*(\(.*\))?$/gm;
 		do
 		{
 			let importMatch = importPattern.exec(text);
