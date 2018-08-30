@@ -84,18 +84,18 @@ export default class ImportProvider implements vscode.CodeActionProvider
 			let position = document.positionAt(match.index + match[0].length);
 			return document.offsetAt(position.with(position.line + 1, 0));
 		}
-				
+
 		let text = document.getText();
 		var position = 0;
 
-		let modulePattern = /^module(.|\n)+where/gm;
+		let modulePattern = /^module(.|\n)+?where/gm;
 		let moduleMatch = modulePattern.exec(text);
 		if(moduleMatch !== null)
 		{
 			position = AfterMatch(moduleMatch);
 		}
 
-		let importPattern = /import\s+(?:qualified\s+)*([\w\d\.]+)\s*(\(.*\))?$/gm;
+		let importPattern = /^import\s+(?:qualified\s+)?(\S+)(?:\s+as\s+(\S+))?\s*?(\(\s*.*\s*\))?$/gm;
 		do
 		{
 			let importMatch = importPattern.exec(text);
