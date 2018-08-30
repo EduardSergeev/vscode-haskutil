@@ -64,6 +64,8 @@ export default class ImportProvider implements vscode.CodeActionProvider
 			
 			let results = await this.search(name);
 
+			let imports = this.getImports(document.getText());
+
 			return results.map(result =>
 			{
 				return {
@@ -79,9 +81,9 @@ export default class ImportProvider implements vscode.CodeActionProvider
 	
 	private runCodeAction(document: vscode.TextDocument, name: string, module:string): any
 	{
-		function AfterMatch(match)
+		function AfterMatch(offset)
 		{
-			let position = document.positionAt(match.index + match[0].length);
+			let position = document.positionAt(offset);
 			return document.offsetAt(position.with(position.line + 1, 0));
 		}
 
@@ -92,24 +94,18 @@ export default class ImportProvider implements vscode.CodeActionProvider
 		let moduleMatch = modulePattern.exec(text);
 		if(moduleMatch !== null)
 		{
-			position = AfterMatch(moduleMatch);
+			position = AfterMatch(moduleMatch.index + moduleMatch[0].length);
 		}
 
-		let importPattern = /^import\s+(?:qualified\s+)?(\S+)(?:\s+as\s+(\S+))?\s*?(\(\s*.*\s*\))?$/gm;
-		do
+		for(let importInfo of this.getImports(text))
 		{
-			let importMatch = importPattern.exec(text);
-			if(importMatch === null)
+			if(importInfo.module > module)
 			{
+				position = importInfo.range.offset;
 				break;
 			}
-			if(importMatch[1] > module)
-			{
-				position = importMatch.index;
-				break;	
-			}
-			position = AfterMatch(importMatch);
-		} while(true);
+			position = AfterMatch(importInfo.range.offset + importInfo.range.length);
+		}
 
 		let edit = new vscode.WorkspaceEdit();
 		edit.insert(
@@ -117,5 +113,27 @@ export default class ImportProvider implements vscode.CodeActionProvider
 			document.positionAt(position),
 			`import ${module}\n`); 
 		return vscode.workspace.applyEdit(edit);
+	}
+
+	private *getImports(text: string): Iterable<any>
+	{
+		let importPattern = /^import\s+(?:qualified\s)?(\S+)(?:\sas\s(\S+))?\s?(?:\(((?:.|\n)*?)\))?/gm;
+		do
+		{
+			let match = importPattern.exec(text);
+			if(match === null)
+			{
+				break;
+			}
+			yield {
+				module: match[1],
+				alias: match[2],
+				list: match[3],
+				range: {
+					offset: match.index,
+					length: match[0].length
+				}
+			};
+		} while(true);
 	}
 }
