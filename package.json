@@ -27,7 +27,31 @@
                     ".lhs"
                 ]
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Haskutil configuration settings",
+            "properties": {
+                "haskutil.supportedExtensions": {
+                    "type": "array",
+                    "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
+                    "default": [
+                        "BangPatterns",
+                        "DefaultSignatures",
+                        "FlexibleContexts",
+                        "FlexibleInstances",
+                        "FunctionalDependencies",
+                        "GADTs",
+                        "GeneralizedNewtypeDeriving",
+                        "MultiParamTypeClasses",
+                        "RankNTypes",
+                        "TypeFamilies",
+                        "TypeSynonymInstances",
+                        "UndecidableInstances"
+                    ]
+                }
+            }
+        }
     },
     "activationEvents": [
         "onLanguage:haskell"

@@ -5,6 +5,7 @@ Helpers for Haskell development using VSCode
 ## Features
 
 1. Add missing import
+2. Add LANGUAGE extension
 
 ## Dependencies
 
