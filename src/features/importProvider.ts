@@ -184,7 +184,7 @@ export default class ImportProvider implements CodeActionProvider
 	{
 		const imports = new Map();
 		const importPattern = /^import\s+(?:qualified\s)?(\S+)(?:\sas\s(\S+))?(?:\s*?\(((?:(?:\(.{1,3}?\))|.|\n)*?)\))?/gm;
-		const functionPattern = /(?:\d|\w(\((?:\.\.|(?:\d|\w|\,)*)\))?|(?:\(.+\)))+/gm;
+		const functionPattern = /(?:\d|\w|'(\((?:\.\.|(?:\d|\w|\,)*)\))?|(?:\(.+\)))+/gm;
 		for (let match; match = importPattern.exec(text);)
 		{
 			let moduleName = match[1];
