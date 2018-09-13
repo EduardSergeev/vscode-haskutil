@@ -82,53 +82,40 @@ export default class ImportProvider implements CodeActionProvider
 		let codeActions = [];
 		for (let result of searchResults)
 		{
-			{
-				let title = `Add "import ${result.module}" (for ${result.result})`;
-				let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
-				codeAction.command = {
-					title: title,
-					command: ImportProvider.commandId,
-					arguments: [
-						document,
-						{
-							module: result.module,
-						}						
-					]
-				};
-				codeActions.push(codeAction);
-			}
-			{
-				let title = `Add "import ${result.module} ( ${variableName} )" (for ${result.result})`;
-				let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
-				codeAction.command = {
-					title: title,
-					command: ImportProvider.commandId,
-					arguments: [
-						document,
-						{
-							module: result.module,
-							importElements: [variableName]
-						}						
-					]
-				};
-				codeActions.push(codeAction);
-			}
+			let title = `Add "import ${result.module}"`;
+			let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+			codeAction.command = {
+				title: title,
+				command: ImportProvider.commandId,
+				arguments: [
+					document,
+					result.module,
+				]
+			};
+			codeActions.push(codeAction);
+
+			title = `Add "import ${result.module} (${variableName})"`;
+			codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+			codeAction.command = {
+				title: title,
+				command: ImportProvider.commandId,
+				arguments: [
+					document,
+					result.module,
+					variableName
+				]
+			};
+			codeActions.push(codeAction);
 		}
 		return codeActions;
 	}
 
-	private runCodeAction(document: TextDocument, importDeclaration: ImportDeclaration): Thenable<boolean>
+	private runCodeAction(document: TextDocument, moduleName: string, elementName?: string): Thenable<boolean>
 	{
 		function afterMatch(offset)
 		{
 			let position = document.positionAt(offset);
 			return document.offsetAt(position.with(position.line + 1, 0));
-		}
-
-		function importToText(importDeclaration: ImportDeclaration)
-		{
-			let importList = importDeclaration.importElements ? ` (${importDeclaration.importElements.join(", ")})` : "";
-			return `import ${importDeclaration.module}${importList}`;
 		}
 
 		let text = document.getText();
@@ -144,58 +131,57 @@ export default class ImportProvider implements CodeActionProvider
 		let edit = new WorkspaceEdit();
 
 		let oldImports = this.getImports(text);
-		let oldImport = oldImports.get(importDeclaration.module);
-		if (oldImport)
+		let oldImport =
+			oldImports.find(decl => decl.module === moduleName && decl.importList !== null) ||
+			oldImports.find(decl => decl.module === moduleName);
+		if (oldImport && elementName)
 		{
-			let oldElements = oldImport.importElements;
-			for (let newElem of importDeclaration.importElements)
-			{
-				let index = oldElements.findIndex(oldElem =>
-				{
-					return newElem < oldElem;
-				});
-				index = index === -1 ? oldElements.length + 1 : index;
-				oldElements.splice(index, 0, newElem);
-			}
+			oldImport.addImportElement(elementName);
 			let oldRange = new Range(
 				document.positionAt(oldImport.offset),
 				document.positionAt(oldImport.offset + oldImport.length));
-			edit.replace(document.uri, oldRange, importToText(oldImport));
+			edit.replace(document.uri, oldRange, oldImport.text);
 		}
 		else
 		{
-			for (let importInfo of oldImports.values())
+			for (let importInfo of oldImports)
 			{
-				if (importInfo.module > importDeclaration.module)
+				if (importInfo.module > moduleName)
 				{
 					position = importInfo.offset;
 					break;
 				}
 				position = afterMatch(importInfo.offset + importInfo.length);
 			}
-			edit.insert(document.uri, document.positionAt(position), importToText(importDeclaration) + "\n");
+			let importDeclaration = new ImportDeclaration(moduleName);
+			if (elementName)
+			{
+				importDeclaration.addImportElement(elementName);
+			}
+			edit.insert(document.uri, document.positionAt(position), importDeclaration.text + "\n");
 		}
 
 		return vscode.workspace.applyEdit(edit);
 	}
 
 
-	private getImports(text: string): Map<string, ImportDeclaration>
+	private getImports(text: string): ImportDeclaration[]
 	{
-		const imports = new Map();
-		const importPattern = /^import\s+(?:qualified\s)?(\S+)(?:\sas\s(\S+))?(?:\s*?\(((?:(?:\(.{1,3}?\))|.|\n)*?)\))?/gm;
-		const functionPattern = /(?:\d|\w|'(\((?:\.\.|(?:\d|\w|\,)*)\))?|(?:\(.+\)))+/gm;
+		let imports = [];
+		const importPattern = /^import((?:\s+qualified\s+)|\s+)(\S+)(\s+as\s+(\S+))?(\s*?\(((?:(?:\(.*?\))|.|\n)*?)\))?(\s+hiding\s+\(((?:(?:\(.*?\))|.|\n)*?)\))?/gm;
 		for (let match; match = importPattern.exec(text);)
 		{
-			let moduleName = match[1];
-			imports.set(moduleName, {
-				module: moduleName,
-				alias: match[2],
-				importList: match[3],
-				importElements: match[3] ? match[3].match(functionPattern): null,
-				offset: match.index,
-				length: match[0].length
-			});
+			imports.push(new ImportDeclaration(
+				match[2],
+				{
+					qualified: match[1],
+					alias: match[3],
+					importList: match[5],
+					importElements: match[6],
+					hidingList: match[7],
+					offset: match.index,
+					length: match[0].length
+				}));
 		}
 		return imports;
 	}
@@ -208,13 +194,92 @@ interface SearchResult
 	result: string;
 }
 
-interface ImportDeclaration
+class ImportDeclaration
 {
-	module: string;
+	private _importElements?: string[] = [];
+	qualified: string = " ";
 	alias?: string;
 	importList?: string;
-	importElements?: string[];
+	hidingList?: string;
 	offset?: number;
 	length?: number;
+
+	constructor(
+		public module: string,
+		optional?: {
+			qualified?: string,
+			alias?: string,
+			importList?: string,
+			importElements?: string,
+			hidingList?: string,
+			offset?: number,
+			length?: number
+		})
+	{
+		if (optional)
+		{
+			this.qualified = optional.qualified;
+			this.alias = optional.alias;
+			this.importList = optional.importList;
+			this.importElements = optional.importElements;
+			this.hidingList = optional.hidingList;
+			this.offset = optional.offset;
+			this.length = optional.length;
+		}
+	}
+
+	public get importElements()
+	{
+		return this._importElements ? this._importElements.join(',') : null;
+	}
+
+	public set importElements(elementsString: string)
+	{
+		this._importElements = elementsString ? elementsString.split(',') : [];
+	}
+
+	public get importNames()
+	{
+		return this._importElements.map(e => e.trim());
+	}
+
+	public addImportElement(newElem: string)
+	{
+		let before = this.importElements;
+		if (this.importNames.length === 0 || this.importNames[0] === "")
+		{
+			this.importList = " (I)";
+			before = "I";
+			this._importElements = [];
+		}
+
+		let index = this.importNames.findIndex(oldElem =>
+		{
+			return newElem < oldElem;
+		});
+		index = index === -1 ? this.importNames.length : index;
+		if (index === 0)
+		{
+			if (this.importElements.length > 0)
+			{
+				this._importElements.splice(index, 1, `${newElem}, ${this._importElements[0]}`);
+			}
+			else
+			{
+				this._importElements.push(newElem);
+			}
+		}
+		else
+		{
+			this._importElements.splice(index, 0, ` ${newElem}`);
+		}
+
+		this.importList = this.importList.replace(before, this.importElements);
+	}
+
+	public get text()
+	{
+		return `import${this.qualified || ""}${this.module}${this.alias || ""}${this.importList || ""}${this.hidingList || ""}`;
+	}
 }
 
