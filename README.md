@@ -5,8 +5,11 @@ Helpers for Haskell development using VSCode
 
 ## Features
 
-1. Add missing import
-2. Add LANGUAGE extension
+1. Add missing import  
+![Add missing import](/gifs/AddImport.gif "Add missing import")
+
+2. Add LANGUAGE extension  
+![Add extension](/gifs/AddExtension.gif "Add extension")
 
 ## Dependencies
 
