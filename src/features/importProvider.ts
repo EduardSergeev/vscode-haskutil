@@ -5,6 +5,7 @@ import * as cp from 'child_process';
 import ChildProcess = cp.ChildProcess;
 import { CodeActionProvider, Disposable, DiagnosticCollection, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, Diagnostic, CodeActionKind, Command } from 'vscode';
 import * as vscode from 'vscode';
+import ExtensionProvider from './extensionProvider';
 
 
 export default class ImportProvider implements CodeActionProvider
@@ -121,11 +122,16 @@ export default class ImportProvider implements CodeActionProvider
 		let text = document.getText();
 		var position = 0;
 
-		let modulePattern = /^module(.|\n)+?where/gm;
-		let moduleMatch = modulePattern.exec(text);
-		if (moduleMatch !== null)
+		for (let match; match = ExtensionProvider.extensionPattern.exec(text);)
 		{
-			position = afterMatch(moduleMatch.index + moduleMatch[0].length);
+			position = afterMatch(match.index + match[0].length);
+		}
+
+		let modulePattern = /^module(.|\n)+?where/gm;
+		let match = modulePattern.exec(text);
+		if (match !== null)
+		{
+			position = afterMatch(match.index + match[0].length);
 		}
 
 		let edit = new WorkspaceEdit();

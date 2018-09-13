@@ -9,6 +9,8 @@ export default class ExtensionProvider implements CodeActionProvider
 	private static commandId: string = 'haskell.addExtension';
 	private command: Disposable;
 
+	public static extensionPattern = /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
+
 	public activate(subscriptions: Disposable[])
 	{
 		this.command = vscode.commands.registerCommand(ExtensionProvider.commandId, this.runCodeAction, this);
@@ -68,8 +70,7 @@ export default class ExtensionProvider implements CodeActionProvider
 		let text = document.getText();
     var position = 0;
 
-    const pattern = /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
-		for (let match; match = pattern.exec(text);)
+		for (let match; match = ExtensionProvider.extensionPattern.exec(text);)
 		{
       let oldExtension = match[1];
       if (oldExtension > newExtension)
