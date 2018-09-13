@@ -1,7 +1,7 @@
 # VSCode Haskutil
 [![Build Status](https://travis-ci.org/EduardSergeev/vscode-haskutil.svg?branch=master)](https://travis-ci.org/EduardSergeev/vscode-haskutil)
 
-Helpers for Haskell development using VSCode
+'QuickFix' actions for Haskell editor
 
 ## Features
 

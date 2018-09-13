@@ -1,7 +1,7 @@
 {
     "name": "haskutil",
     "displayName": "Haskutil",
-    "description": "Haskell utils",
+    "description": "'QuickFix' actions for Haskell editor",
     "version": "0.0.1",
     "publisher": "Edka",
     "repository": {
