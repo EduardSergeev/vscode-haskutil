@@ -37,6 +37,7 @@
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
                     "default": [
                         "BangPatterns",
+                        "DataKinds",
                         "DefaultSignatures",
                         "FlexibleContexts",
                         "FlexibleInstances",
@@ -45,9 +46,11 @@
                         "GeneralizedNewtypeDeriving",
                         "MultiParamTypeClasses",
                         "RankNTypes",
+                        "TemplateHaskell",
                         "TypeFamilies",
                         "TypeSynonymInstances",
-                        "UndecidableInstances"
+                        "UndecidableInstances",
+                        "TypeApplications"
                     ]
                 }
             }
