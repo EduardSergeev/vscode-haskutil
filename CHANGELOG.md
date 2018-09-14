@@ -1,7 +1,14 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
-- Initial release
+## [0.0.2] - 2018-09-14
+### Fixed:
+ * Insert imports after all `LANGUAGE` pragmas
+ * Show only exactly matched suggestion in `Add import`  
+   (previously `runErrorT`'s module would be included for `runE` variable)
+
+## [0.0.1] - 2018-09-13 
+### Added:
+ * Add missing `import` clause
+ * Add missing `LANGUAGE` pragma
