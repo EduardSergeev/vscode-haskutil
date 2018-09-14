@@ -43,7 +43,7 @@ export default class ImportProvider implements CodeActionProvider
 							let r = result.getQueryResult();
 							let i = r.indexOf(name);
 							let j = i + name.length;
-							return (i >= 0) && (i === 0 || r.charAt(i - 1) === " ") && (j === r.length || r.charAt(j) === " ");
+							return (i >= 0) && (i === 0 || r[i - 1] === " ") && (j === r.length || r[j] === " ");
 						}
 						else
 						{
@@ -137,7 +137,7 @@ export default class ImportProvider implements CodeActionProvider
 		let text = document.getText();
 		var position = 0;
 
-		for (let match; match = ExtensionProvider.extensionPattern.exec(text);)
+		for (let match, pattern = ExtensionProvider.extensionPattern; match = pattern.exec(text);)
 		{
 			position = afterMatch(match.index + match[0].length);
 		}
