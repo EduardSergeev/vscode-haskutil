@@ -12,7 +12,7 @@ export default class ImportProvider implements CodeActionProvider
 {
 	private static commandId: string = 'haskell.addImport';
 	private command: Disposable;
-	private hoogleSearch: (name: string, results) => void;
+	private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
 
 	public activate(subscriptions: Disposable[])
 	{
@@ -31,18 +31,33 @@ export default class ImportProvider implements CodeActionProvider
 
 	private search(name: string): Promise<SearchResult[]>
 	{
-		var result = new Promise<any>((resolve, reject) =>
+		let result = new Promise<SearchResult[]>((resolve, reject) =>
 		{
-			this.hoogleSearch(name, results =>
+			this.hoogleSearch(name, searchResult =>
 			{
-				resolve(results.results.map(result =>
-				{
-					return {
-						package: result.getPackageName(),
-						module: result.getModuleName().replace(/-/g, '.'),
-						result: result.result
-					};
-				}));
+				resolve(searchResult.results
+					.filter(result =>
+					{
+						if (!result.isModule() && !result.isPackage())
+						{
+							let r = result.getQueryResult();
+							let i = r.indexOf(name);
+							let j = i + name.length;
+							return (i >= 0) && (i === 0 || r.charAt(i - 1) === " ") && (j === r.length || r.charAt(j) === " ");
+						}
+						else
+						{
+							return false;
+						}
+					}).map(result =>
+					{
+						return {
+							package: result.getPackageName(),
+							module: result.getModuleName().replace(/-/g, '.'),
+							result: result.getQueryResult()
+						};
+					})
+				);
 			});
 		});
 		return result;
@@ -191,6 +206,20 @@ export default class ImportProvider implements CodeActionProvider
 		}
 		return imports;
 	}
+}
+
+interface HoogleSearchCallback
+{
+	(result: { results: HoogleResult[] }): void;
+}
+
+interface HoogleResult
+{
+	isModule(): boolean;
+	isPackage(): boolean;
+	getPackageName(): string;
+	getModuleName(): string;
+	getQueryResult(): string;
 }
 
 interface SearchResult
