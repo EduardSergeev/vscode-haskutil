@@ -60,8 +60,7 @@
         "onLanguage:haskell"
     ],
     "extensionDependencies": [
-        "jcanero.hoogle-vscode",
-        "Vans.haskero"
+        "jcanero.hoogle-vscode"
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
