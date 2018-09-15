@@ -44,7 +44,7 @@ export default class ExtensionProvider implements CodeActionProvider
         }
         
         let line = `{-# LANGUAGE ${extension} #-}`;
-        let title = `Add ${line}`;
+        let title = `Add: ${line}`;
 				let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 				codeAction.command = {
 					title: title,

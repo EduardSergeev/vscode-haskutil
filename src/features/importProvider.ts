@@ -95,7 +95,7 @@ export default class ImportProvider implements CodeActionProvider
 		let codeActions = [];
 		for (let result of searchResults)
 		{
-			let title = `Add "import ${result.module}"`;
+			let title = `Add: "import ${result.module}"`;
 			let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 			codeAction.command = {
 				title: title,
@@ -107,7 +107,7 @@ export default class ImportProvider implements CodeActionProvider
 			};
 			codeActions.push(codeAction);
 
-			title = `Add "import ${result.module} (${variableName})"`;
+			title = `Add: "import ${result.module} (${variableName})"`;
 			codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 			codeAction.command = {
 				title: title,
