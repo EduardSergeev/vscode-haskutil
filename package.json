@@ -13,6 +13,7 @@
     "categories": [
         "Other"
     ],
+    "license": "MIT",
     "main": "./out/extension",
     "contributes": {
         "languages": [
