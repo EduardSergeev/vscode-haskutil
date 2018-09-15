@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.0.3] - 2018-09-15
+### Added
+ * Additional supported `LANGUAGE` extensions
+### Changed
+ * Removed dependency on `Haskero`
+### Fixed:
+ * Broken ordering on `LANGUAGE` pragma insert
+ 
 
 ## [0.0.2] - 2018-09-14
 ### Fixed:

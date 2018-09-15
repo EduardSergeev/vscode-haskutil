@@ -9,7 +9,10 @@ export default class ExtensionProvider implements CodeActionProvider
 	private static commandId: string = 'haskell.addExtension';
 	private command: Disposable;
 
-	public static extensionPattern = /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
+	public static get extensionPattern()
+	{
+		return /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
+	}
 
 	public activate(subscriptions: Disposable[])
 	{
@@ -70,7 +73,7 @@ export default class ExtensionProvider implements CodeActionProvider
 		let text = document.getText();
     var position = 0;
 
-		for (let match; match = ExtensionProvider.extensionPattern.exec(text);)
+		for (let match, pattern = ExtensionProvider.extensionPattern; match = pattern.exec(text);)
 		{
       let oldExtension = match[1];
       if (oldExtension > newExtension)

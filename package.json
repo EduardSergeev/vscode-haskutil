@@ -2,7 +2,7 @@
     "name": "haskutil",
     "displayName": "Haskutil",
     "description": "'QuickFix' actions for Haskell editor",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "Edka",
     "repository": {
         "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -39,18 +39,26 @@
                         "BangPatterns",
                         "DataKinds",
                         "DefaultSignatures",
+                        "DeriveFunctor",
+                        "DeriveGeneric",
                         "FlexibleContexts",
                         "FlexibleInstances",
                         "FunctionalDependencies",
                         "GADTs",
                         "GeneralizedNewtypeDeriving",
+                        "KindSignatures",
                         "MultiParamTypeClasses",
+                        "NamedFieldPuns",
                         "RankNTypes",
+                        "RecordWildCards",
+                        "StandaloneDeriving",
                         "TemplateHaskell",
+                        "TupleSections",
                         "TypeFamilies",
                         "TypeSynonymInstances",
                         "UndecidableInstances",
-                        "TypeApplications"
+                        "TypeApplications",
+                        "ViewPatterns"
                     ]
                 }
             }
@@ -60,8 +68,7 @@
         "onLanguage:haskell"
     ],
     "extensionDependencies": [
-        "jcanero.hoogle-vscode",
-        "Vans.haskero"
+        "jcanero.hoogle-vscode"
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
