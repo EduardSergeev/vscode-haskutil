@@ -1,9 +1,6 @@
 'use strict';
 
-import * as path from 'path';
-import * as cp from 'child_process';
-import ChildProcess = cp.ChildProcess;
-import { CodeActionProvider, Disposable, DiagnosticCollection, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, Diagnostic, CodeActionKind, Command } from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
 import * as vscode from 'vscode';
 import ExtensionProvider from './extensionProvider';
 
@@ -31,7 +28,7 @@ export default class ImportProvider implements CodeActionProvider
 
 	private search(name: string): Promise<SearchResult[]>
 	{
-		let result = new Promise<SearchResult[]>((resolve, reject) =>
+		let result = new Promise<SearchResult[]>(resolve =>
 		{
 			this.hoogleSearch(name, searchResult =>
 			{
@@ -66,7 +63,7 @@ export default class ImportProvider implements CodeActionProvider
 	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
 	{
 		let codeActions = [];
-		for (let diagnostic of context.diagnostics)
+		for (let diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error))
 		{
 			let patterns = [
 				/Variable not in scope:\s+(\S+)/,
