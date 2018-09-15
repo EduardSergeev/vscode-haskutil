@@ -39,18 +39,26 @@
                         "BangPatterns",
                         "DataKinds",
                         "DefaultSignatures",
+                        "DeriveFunctor",
+                        "DeriveGeneric",
                         "FlexibleContexts",
                         "FlexibleInstances",
                         "FunctionalDependencies",
                         "GADTs",
                         "GeneralizedNewtypeDeriving",
+                        "KindSignatures",
                         "MultiParamTypeClasses",
+                        "NamedFieldPuns",
                         "RankNTypes",
+                        "RecordWildCards",
+                        "StandaloneDeriving",
                         "TemplateHaskell",
+                        "TupleSections",
                         "TypeFamilies",
                         "TypeSynonymInstances",
                         "UndecidableInstances",
-                        "TypeApplications"
+                        "TypeApplications",
+                        "ViewPatterns"
                     ]
                 }
             }
