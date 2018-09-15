@@ -5,7 +5,7 @@
 Available at [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
 
 ## Installation
-This extension uses diagnostics (errors) from `PROBLEM` window which is populated by other Haskell extension such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
+This extension uses diagnostics (errors) from `PROBLEMS` window which is populated by other Haskell extension such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
 
 ## Features
 
