@@ -10,10 +10,10 @@ This extension uses diagnostics (errors) from `PROBLEMS` window which is populat
 ## Features
 
 1. Add missing import  
-![Add missing import](/gifs/AddImport_sm.gif "Add missing import")
+![Add missing import](/images/AddImport_sm.gif "Add missing import")
 
 2. Add LANGUAGE extension  
-![Add extension](/gifs/AddExtension_sm.gif "Add extension")
+![Add extension](/images/AddExtension_sm.gif "Add extension")
 
 ## Dependencies
 
