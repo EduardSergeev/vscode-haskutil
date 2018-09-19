@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.0.4] - 2018-09-19
+### Added
+ * Sort `import` statements
+
 ## [0.0.3] - 2018-09-15
 ### Added
  * Additional supported `LANGUAGE` extensions
@@ -18,5 +22,5 @@ All notable changes to the "haskutil" extension will be documented in this file.
 
 ## [0.0.1] - 2018-09-13 
 ### Added:
- * Add missing `import` clause
+ * Add missing `import` statement
  * Add missing `LANGUAGE` pragma

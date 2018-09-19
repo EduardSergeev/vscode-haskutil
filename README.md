@@ -9,11 +9,16 @@ This extension uses diagnostics (errors) from `PROBLEMS` window which is populat
 
 ## Features
 
-1. Add missing import  
-![Add missing import](/images/AddImport_sm.gif "Add missing import")
+### Add missing import  
+   ![Add missing import](/images/AddImport_sm.gif "Add missing import")
 
-2. Add LANGUAGE extension  
-![Add extension](/images/AddExtension_sm.gif "Add extension")
+
+### Sort imports  
+   ![Sort imports](/images/SortImports_sm.gif "Sort imports")
+
+
+### Add LANGUAGE extension  
+   ![Add extension](/images/AddExtension_sm.gif "Add extension")
 
 ## Dependencies
 
