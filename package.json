@@ -2,7 +2,7 @@
     "name": "haskutil",
     "displayName": "Haskutil",
     "description": "'QuickFix' actions for Haskell editor",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "publisher": "Edka",
     "repository": {
         "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -33,6 +33,11 @@
             "type": "object",
             "title": "Haskutil configuration settings",
             "properties": {
+                "haskutil.alignImports": {
+                    "type": "boolean",
+                    "description": "Align imports when sorting or inserting",
+                    "default": false
+                },
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",

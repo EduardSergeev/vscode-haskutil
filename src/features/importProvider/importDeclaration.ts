@@ -24,7 +24,7 @@ export default class ImportDeclaration
 	{
 		if (optional)
 		{
-			this.qualified = optional.qualified;
+			this.qualified = optional.qualified || "";
 			this.alias = optional.alias;
 			this.importList = optional.importList;
 			this.importElements = optional.importElements;
