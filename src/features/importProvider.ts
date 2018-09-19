@@ -4,6 +4,7 @@ import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext,
 import * as vscode from 'vscode';
 import ExtensionProvider from './extensionProvider';
 import ImportDeclaration from './importProvider/importDeclaration';
+import SortImportProvider from './sortImportProvider';
 
 
 export default class ImportProvider implements CodeActionProvider
@@ -177,6 +178,10 @@ export default class ImportProvider implements CodeActionProvider
 			{
 				importDeclaration.addImportElement(elementName);
 			}
+
+			// Align import if necessary
+			SortImportProvider.ensureAligned(importDeclaration, oldImports);
+
 			edit.insert(document.uri, document.positionAt(position), importDeclaration.text + "\n");
 		}
 

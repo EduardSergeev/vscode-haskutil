@@ -33,6 +33,11 @@
             "type": "object",
             "title": "Haskutil configuration settings",
             "properties": {
+                "haskutil.alignImports": {
+                    "type": "boolean",
+                    "description": "Align imports when sorting or inserting",
+                    "default": false
+                },
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
