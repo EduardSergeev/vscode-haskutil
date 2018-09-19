@@ -5,19 +5,20 @@ import * as vscode from 'vscode';
 import ExtensionProvider from './extensionProvider';
 import ImportDeclaration from './importProvider/importDeclaration';
 import SortImportProvider from './sortImportProvider';
+import ImportProvider from './importProvider';
 
 
-export default class ImportProvider implements CodeActionProvider
+export default class QualifiedImportProvider implements CodeActionProvider
 {
-	private static commandId: string = 'haskell.addImport';
+	private commandId: string = 'haskell.addQualifiedImport';
 	private command: Disposable;
-	private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
+  private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
 
 	public activate(subscriptions: Disposable[])
-	{
-		this.command = vscode.commands.registerCommand(ImportProvider.commandId, this.runCodeAction, this);
-		subscriptions.push(this);
-
+  {
+		this.command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
+    subscriptions.push(this);
+    
 		let hoogle = vscode.extensions.getExtension('jcanero.hoogle-vscode');
 		let hoogleApi = hoogle.exports;
 		this.hoogleSearch = hoogleApi.search;
@@ -26,9 +27,9 @@ export default class ImportProvider implements CodeActionProvider
 	public dispose(): void
 	{
 		this.command.dispose();
-	}
-
-	private search(name: string): Promise<SearchResult[]>
+  }
+  
+  protected search(name: string): Promise<SearchResult[]>
 	{
 		let result = new Promise<SearchResult[]>(resolve =>
 		{
@@ -44,8 +45,7 @@ export default class ImportProvider implements CodeActionProvider
 							let j = i + name.length;
 							return (i >= 0) &&
 								(i === 0 || r[i - 1] === " " || r[i - 1] === '(') &&
-								(j === r.length || r[j] === " " || r[j] === ")");	
-						}
+								(j === r.length || r[j] === " " || r[j] === ")");						}
 						else
 						{
 							return false;
@@ -70,10 +70,8 @@ export default class ImportProvider implements CodeActionProvider
 		for (let diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error))
 		{
 			let patterns = [
-				/Variable not in scope:\s+(\S+)/,
-				/Not in scope: type constructor or class `(\S+)'/
+        /Not in scope:[^`]*`([^.]+)\.([^']+)'/
 			];
-			var name = "";
 			for (let pattern of patterns)
 			{
 				let match = pattern.exec(diagnostic.message);
@@ -81,10 +79,10 @@ export default class ImportProvider implements CodeActionProvider
 				{
 					continue;
 				}
-				name = match[1];
+				let [,alias,name] = match;
 
 				let results = await this.search(name);
-				codeActions = codeActions.concat(this.addImportForVariable(document, name, results));
+				codeActions = codeActions.concat(this.addImportForVariable(document, ` as ${alias}`, results));
 				codeActions.forEach(action =>
 				{
 					action.diagnostics = [diagnostic];
@@ -94,32 +92,20 @@ export default class ImportProvider implements CodeActionProvider
 		return codeActions;
 	}
 
-	private addImportForVariable(document: TextDocument, variableName: string, searchResults: SearchResult[]): CodeAction[]
+	private addImportForVariable(document: TextDocument, alias: string, searchResults: SearchResult[]): CodeAction[]
 	{
 		let codeActions = [];
 		for (let result of searchResults)
 		{
-			let title = `Add: "import ${result.module}"`;
+			let title = `Add: "import qualified ${result.module}${alias}"`;
 			let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 			codeAction.command = {
 				title: title,
-				command: ImportProvider.commandId,
+				command: this.commandId,
 				arguments: [
 					document,
-					result.module,
-				]
-			};
-			codeActions.push(codeAction);
-
-			title = `Add: "import ${result.module} (${variableName})"`;
-			codeAction = new CodeAction(title, CodeActionKind.QuickFix);
-			codeAction.command = {
-				title: title,
-				command: ImportProvider.commandId,
-				arguments: [
-					document,
-					result.module,
-					variableName
+          result.module,
+          alias
 				]
 			};
 			codeActions.push(codeAction);
@@ -127,7 +113,7 @@ export default class ImportProvider implements CodeActionProvider
 		return codeActions;
 	}
 
-	private runCodeAction(document: TextDocument, moduleName: string, elementName?: string): Thenable<boolean>
+	private runCodeAction(document: TextDocument, moduleName: string, alias?: string, elementName?: string): Thenable<boolean>
 	{
 		function afterMatch(offset)
 		{
@@ -175,7 +161,12 @@ export default class ImportProvider implements CodeActionProvider
 				}
 				position = afterMatch(importInfo.offset + importInfo.length);
 			}
-			let importDeclaration = new ImportDeclaration(moduleName);
+      let importDeclaration = new ImportDeclaration(moduleName);
+      if (alias)
+      {
+        importDeclaration.qualified = " qualified ";
+        importDeclaration.alias = alias;
+      }
 			if (elementName)
 			{
 				importDeclaration.addImportElement(elementName);
