@@ -47,7 +47,7 @@
                     "type": "boolean",
                     "description": "Organize imports on save",
                     "default": false
-                },                
+                },
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",

@@ -4,8 +4,8 @@
 'QuickFix' actions for Haskell editor  
 Available at [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
 
-## Installation
-This extension uses diagnostics (errors and warnings) from `PROBLEMS` window which is populated by other Haskell extension such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
+## Requirements
+This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
 
 ## Features
 
