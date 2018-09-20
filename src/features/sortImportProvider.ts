@@ -7,7 +7,7 @@ import ImportDeclaration from './importProvider/importDeclaration';
 
 export default class SortImportProvider implements CodeActionProvider
 {
-	private static commandId: string = 'haskell.sortImports';
+	public static commandId: string = 'haskell.sortImports';
   private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "unsortedImports";
@@ -47,7 +47,19 @@ export default class SortImportProvider implements CodeActionProvider
     var extSettings = vscode.workspace.getConfiguration("haskutil");
     return extSettings.get("alignImports");
   }
-  
+
+  private static get shouldSortImports(): boolean
+  {
+    var extSettings = vscode.workspace.getConfiguration("haskutil");
+    return extSettings.get("sortImports");
+  }
+
+  private static get shouldOrganizeImportsOnSave(): boolean
+  {
+    var extSettings = vscode.workspace.getConfiguration("haskutil");
+    return extSettings.get("organiseImportsOnSave");
+  }
+
   private checkImports(document: TextDocument)
   {
     const imports = ImportDeclaration.getImports(document.getText());
@@ -67,27 +79,37 @@ export default class SortImportProvider implements CodeActionProvider
     }
 
     let pred = "";
-    for (const imp of imports)
+    if (SortImportProvider.shouldSortImports)
     {
-      const curr = imp.module + (imp.importList || "");
-      if (curr < pred)
+      for (const imp of imports)
       {
-        messages.unshift("unsorted");
-        break;
+        const curr = imp.module + (imp.importList || "");
+        if (curr < pred)
+        {
+          messages.unshift("unsorted");
+          break;
+        }
+        pred = curr;
       }
-      pred = curr;
     }
 
     if (messages.length > 0)
     {
-      const lastImport = imports[imports.length - 1];
-      const range = new Range(
-        document.positionAt(imports[0].offset),
-        document.positionAt(lastImport.offset + lastImport.length));
-      const message = `Imports are ${messages.join(" and ")}`;
-      const diagnostic = new Diagnostic(range, message, DiagnosticSeverity.Hint);
-      diagnostic.code = SortImportProvider.diagnosticCode;
-      this.diagnosticCollection.set(document.uri, [diagnostic]);
+      if (SortImportProvider.shouldOrganizeImportsOnSave)
+      {
+        this.runCodeAction(document);
+      }
+      else
+      {
+        const lastImport = imports[imports.length - 1];
+        const range = new Range(
+          document.positionAt(imports[0].offset),
+          document.positionAt(lastImport.offset + lastImport.length));
+        const message = `Imports are ${messages.join(" and ")}`;
+        const diagnostic = new Diagnostic(range, message, DiagnosticSeverity.Hint);
+        diagnostic.code = SortImportProvider.diagnosticCode;
+        this.diagnosticCollection.set(document.uri, [diagnostic]);
+      }
     }
     else
     {
@@ -118,9 +140,11 @@ export default class SortImportProvider implements CodeActionProvider
 	private runCodeAction(document: TextDocument): Thenable<boolean>
   {
     const oldImports = ImportDeclaration.getImports(document.getText());
-    let newImports = oldImports
-      .map(i => i)
-      .sort((l, r) => (l.module + (l.importList || "")).localeCompare(r.module + (r.importList || "")));
+    let newImports = oldImports.map(i => i);
+    if (SortImportProvider.shouldSortImports)
+    {
+      newImports.sort((l, r) => (l.module + (l.importList || "")).localeCompare(r.module + (r.importList || "")));
+    }
     if (SortImportProvider.shouldAlignImports)
     {
       newImports = SortImportProvider.alignImports(newImports);

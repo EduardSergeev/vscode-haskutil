@@ -35,9 +35,19 @@
             "properties": {
                 "haskutil.alignImports": {
                     "type": "boolean",
-                    "description": "Align imports when sorting or inserting",
-                    "default": false
+                    "description": "Align imports when organizing imports",
+                    "default": true
                 },
+                "haskutil.sortImports": {
+                    "type": "boolean",
+                    "description": "Sort imports when organizing imports",
+                    "default": true
+                },
+                "haskutil.organiseImportsOnSave": {
+                    "type": "boolean",
+                    "description": "Organize imports on save",
+                    "default": false
+                },                
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
