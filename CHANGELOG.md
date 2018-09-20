@@ -1,9 +1,16 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+
+## [0.1.0] - 2018-09-20
+### Changed
+ * Organise imports (sort and align) 
+ * Add top-level signature (documented)
+
 ## [0.0.4] - 2018-09-19
 ### Added
  * Sort `import` statements
+ * Add top-level signature (undocumented)
 
 ## [0.0.3] - 2018-09-15
 ### Added
