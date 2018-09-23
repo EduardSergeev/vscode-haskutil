@@ -1,6 +1,6 @@
 'use strict';
 
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity } from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 
@@ -12,6 +12,33 @@ export default class SortImportProvider implements CodeActionProvider
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "unsortedImports";
 
+  
+  private static get shouldAlignImports(): boolean
+  {
+    return SortImportProvider.configuration.get("alignImports");
+  }
+
+  private static get shouldPadImports(): boolean
+  {
+    return SortImportProvider.configuration.get("alwaysPadImports");
+  }
+
+  private static get shouldSortImports(): boolean
+  {
+    return SortImportProvider.configuration.get("sortImports");
+  }
+
+  private static get shouldOrganizeImportsOnSave(): boolean
+  {
+    return SortImportProvider.configuration.get("organiseImportsOnSave");
+  }
+
+  private static get configuration(): WorkspaceConfiguration
+  {
+    return vscode.workspace.getConfiguration("haskutil");
+  }  
+
+  
 	public activate(subscriptions: Disposable[])
 	{
 		this.command = vscode.commands.registerCommand(SortImportProvider.commandId, this.runCodeAction, this);
@@ -42,24 +69,6 @@ export default class SortImportProvider implements CodeActionProvider
     return newImport;
   }
 
-  private static get shouldAlignImports(): boolean
-  {
-    var extSettings = vscode.workspace.getConfiguration("haskutil");
-    return extSettings.get("alignImports");
-  }
-
-  private static get shouldSortImports(): boolean
-  {
-    var extSettings = vscode.workspace.getConfiguration("haskutil");
-    return extSettings.get("sortImports");
-  }
-
-  private static get shouldOrganizeImportsOnSave(): boolean
-  {
-    var extSettings = vscode.workspace.getConfiguration("haskutil");
-    return extSettings.get("organiseImportsOnSave");
-  }
-
   private checkImports(document: TextDocument)
   {
     const imports = ImportDeclaration.getImports(document.getText());
@@ -67,9 +76,12 @@ export default class SortImportProvider implements CodeActionProvider
     
     const aligned =
       imports.length === 0 || (
-        imports.some(imp => imp.qualified.trim() === "qualified") &&
+        (SortImportProvider.shouldPadImports ||
+          imports.some(imp => imp.qualified.trim() === "qualified")
+        ) &&
         imports.every(imp => imp.qualified.length === " qualified ".length)
       ) || (
+        !SortImportProvider.shouldPadImports &&
         imports.every(imp => imp.qualified.trim() === "") &&
         imports.every(imp => imp.qualified.length === " ".length)
       );
@@ -163,7 +175,7 @@ export default class SortImportProvider implements CodeActionProvider
   {
     const isQualified = imp => imp.qualified.trim() === "qualified";
 
-    return imports.some(isQualified) ?
+    return SortImportProvider.shouldPadImports || imports.some(isQualified) ?
       imports.map(imp =>
       {
         if (isQualified(imp))

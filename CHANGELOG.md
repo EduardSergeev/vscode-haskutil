@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.2.0] - 2018-09-23
+### Added
+ * Configuration of the padding of `import` in `qualified` area
+   (should we always pad with 9 spaces even if there is no `qualified` import)
 
 ## [0.1.0] - 2018-09-20
 ### Changed
