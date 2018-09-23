@@ -1,8 +1,10 @@
 # VSCode Haskutil
 [![Build Status](https://travis-ci.org/EduardSergeev/vscode-haskutil.svg?branch=master)](https://travis-ci.org/EduardSergeev/vscode-haskutil)
+[![vscode-ghc-simple on Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/edka.haskutil.svg)](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
+
 
 'QuickFix' actions for Haskell editor  
-Available at [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
+
 
 ## Requirements
 This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
@@ -24,7 +26,7 @@ Sorting and alignment is configurable via `haskutil.sortImports` and `haskutil.a
 Adds `LANGUAGE` pragma suggested by error. List of supported pragmas is defined by `haskutil.supportedExtensions`.
 
 ### Add top-level signature
-![Add top-level signature](  /images/AddSignature_sm.gif "Add top-level signature")  
+![Add top-level signature](/images/AddSignature_sm.gif "Add top-level signature")  
 Adds signature suggested by warning.
 
 ## Dependencies
