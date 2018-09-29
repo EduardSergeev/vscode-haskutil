@@ -1,6 +1,6 @@
 'use strict';
 
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration } from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration, TextDocumentWillSaveEvent } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 
@@ -47,7 +47,8 @@ export default class SortImportProvider implements CodeActionProvider
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
 		vscode.workspace.onDidOpenTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onDidCloseTextDocument(doc => this.diagnosticCollection.delete(doc.uri), null, subscriptions);
-		vscode.workspace.onDidSaveTextDocument(this.checkImports, this);
+    vscode.workspace.onDidSaveTextDocument(this.checkImports, this);
+    vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this);
     vscode.workspace.textDocuments.forEach(this.checkImports, this);
   }
 
@@ -56,17 +57,6 @@ export default class SortImportProvider implements CodeActionProvider
 		this.diagnosticCollection.clear();
     this.diagnosticCollection.dispose();
     this.command.dispose();
-  }
-
-  public static ensureAligned(newImport: ImportDeclaration, existingImports: ImportDeclaration[]): ImportDeclaration
-  {
-    if (SortImportProvider.shouldAlignImports)
-    {
-      let allImports = existingImports.map(imp => imp);
-      allImports.unshift(newImport);
-      SortImportProvider.alignImports(allImports);
-    }
-    return newImport;
   }
 
   private checkImports(document: TextDocument)
@@ -107,21 +97,14 @@ export default class SortImportProvider implements CodeActionProvider
 
     if (messages.length > 0)
     {
-      if (SortImportProvider.shouldOrganizeImportsOnSave)
-      {
-        this.runCodeAction(document);
-      }
-      else
-      {
-        const lastImport = imports[imports.length - 1];
-        const range = new Range(
-          document.positionAt(imports[0].offset),
-          document.positionAt(lastImport.offset + lastImport.length));
-        const message = `Imports are ${messages.join(" and ")}`;
-        const diagnostic = new Diagnostic(range, message, DiagnosticSeverity.Hint);
-        diagnostic.code = SortImportProvider.diagnosticCode;
-        this.diagnosticCollection.set(document.uri, [diagnostic]);
-      }
+      const lastImport = imports[imports.length - 1];
+      const range = new Range(
+        document.positionAt(imports[0].offset),
+        document.positionAt(lastImport.offset + lastImport.length));
+      const message = `Imports are ${messages.join(" and ")}`;
+      const diagnostic = new Diagnostic(range, message, DiagnosticSeverity.Hint);
+      diagnostic.code = SortImportProvider.diagnosticCode;
+      this.diagnosticCollection.set(document.uri, [diagnostic]);
     }
     else
     {
@@ -170,7 +153,26 @@ export default class SortImportProvider implements CodeActionProvider
     }
     return vscode.workspace.applyEdit(edit);
   }
-  
+
+  private ensureOrganized(event: TextDocumentWillSaveEvent)
+  {
+    if (SortImportProvider.shouldOrganizeImportsOnSave)
+    {
+      event.waitUntil(this.runCodeAction(event.document));
+    }
+  }
+
+  public static ensureAligned(newImport: ImportDeclaration, existingImports: ImportDeclaration[]): ImportDeclaration
+  {
+    if (SortImportProvider.shouldAlignImports)
+    {
+      let allImports = existingImports.map(imp => imp);
+      allImports.unshift(newImport);
+      SortImportProvider.alignImports(allImports);
+    }
+    return newImport;
+  }
+
   private static alignImports(imports: ImportDeclaration[]): ImportDeclaration[]
   {
     const isQualified = imp => imp.qualified.trim() === "qualified";
