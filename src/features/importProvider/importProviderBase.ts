@@ -114,7 +114,7 @@ export default class ImportProviderBase
 		{
 			for (const importInfo of oldImports)
 			{
-				if (importInfo.module > moduleName)
+				if (importInfo.module + (importInfo.importList || "") > moduleName)
 				{
 					position = importInfo.offset;
 					break;
