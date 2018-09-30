@@ -22,19 +22,19 @@ export default class TopLevelSignatureProvider implements CodeActionProvider
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
   {
-    let codeActions = [];
-    for (let diagnostic of context.diagnostics)
+    const pattern = /Top-level binding with no type signature:\s+([^]+)/;
+    const codeActions = [];
+    for (const diagnostic of context.diagnostics)
     {
-      let pattern = /Top-level binding with no type signature:\s+([^]+)/;
-      let match = pattern.exec(diagnostic.message);
+      const match = pattern.exec(diagnostic.message);
       if (match === null)
       {
         continue;
       }
 
-      let signature = match[1].trim();
-      let title = `Add: ${signature}`;
-      let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+      const signature = match[1].trim();
+      const title = `Add: ${signature}`;
+      const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
         title: title,
         command: TopLevelSignatureProvider.commandId,
@@ -52,7 +52,7 @@ export default class TopLevelSignatureProvider implements CodeActionProvider
 
   private runCodeAction(document: TextDocument, signature: string, range: Range): Thenable<boolean>
   {
-    let edit = new WorkspaceEdit();
+    const edit = new WorkspaceEdit();
     edit.insert(document.uri, range.start, `${signature}\n`);
     return vscode.workspace.applyEdit(edit);
   }

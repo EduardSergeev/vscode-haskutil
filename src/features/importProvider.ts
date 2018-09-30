@@ -2,7 +2,7 @@
 
 import { CodeActionProvider, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, CodeActionKind } from 'vscode';
 import * as vscode from 'vscode';
-import ImportProviderBase, { SearchResult } from './importProviderBase';
+import ImportProviderBase, { SearchResult } from './importProvider/importProviderBase';
 
 
 export default class ImportProvider extends ImportProviderBase implements CodeActionProvider
@@ -15,23 +15,22 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
 	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
 	{
 		let codeActions = [];
-		for (let diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error))
+		for (const diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error))
 		{
-			let patterns = [
+			const patterns = [
 				/Variable not in scope:\s+(\S+)/,
 				/Not in scope: type constructor or class `(\S+)'/
 			];
-			var name = "";
-			for (let pattern of patterns)
+			for (const pattern of patterns)
 			{
-				let match = pattern.exec(diagnostic.message);
+				const match = pattern.exec(diagnostic.message);
 				if (match === null)
 				{
 					continue;
 				}
-				name = match[1];
+				const name = match[1];
 
-				let results = await this.search(name);
+				const results = await this.search(name);
 				codeActions = codeActions.concat(this.addImportForVariable(document, name, results));
 				codeActions.forEach(action =>
 				{
@@ -44,8 +43,8 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
 
 	private addImportForVariable(document: TextDocument, variableName: string, searchResults: SearchResult[]): CodeAction[]
 	{
-		let codeActions = [];
-		for (let result of searchResults)
+		const codeActions = [];
+		for (const result of searchResults)
 		{
 			let title = `Add: "import ${result.module}"`;
 			let codeAction = new CodeAction(title, CodeActionKind.QuickFix);

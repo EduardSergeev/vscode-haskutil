@@ -97,8 +97,8 @@ export default class ImportDeclaration
   
   public static getImports(text: string): ImportDeclaration[]
 	{
-		let imports = [];
 		const importPattern = /^import((?:\s+qualified\s+)|\s+)(\S+)(\s+as\s+(\S+))?(\s*?\(((?:(?:\(.*?\))|.|\n)*?)\))?(\s+hiding\s+\(((?:(?:\(.*?\))|.|\n)*?)\))?/gm;
+		const imports = [];
 		for (let match; match = importPattern.exec(text);)
 		{
 			imports.push(new ImportDeclaration(

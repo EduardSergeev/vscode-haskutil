@@ -23,69 +23,69 @@ export default class ExtensionProvider implements CodeActionProvider
 	public dispose(): void
 	{
 		this.command.dispose();
-  }
+	}
   
-  private static get Extensions(): string[]
-  {
-    var extSettings = vscode.workspace.getConfiguration("haskutil");
-    return extSettings.get("supportedExtensions");
-  }
+	private static get Extensions(): string[]
+	{
+		const extSettings = vscode.workspace.getConfiguration("haskutil");
+		return extSettings.get("supportedExtensions");
+	}
   
-  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
-  {
-		let codeActions = [];
-		for (let diagnostic of context.diagnostics)
+	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
+	{
+		const codeActions = [];
+		for (const diagnostic of context.diagnostics)
 		{
-			for (let extension of ExtensionProvider.Extensions)
+			for (const extension of ExtensionProvider.Extensions)
 			{
 				if (!diagnostic.message.includes(extension))
 				{
 					continue;
-        }
+				}
         
-        let line = `{-# LANGUAGE ${extension} #-}`;
-        let title = `Add: ${line}`;
-				let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+				const line = `{-# LANGUAGE ${extension} #-}`;
+				const title = `Add: ${line}`;
+				const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 				codeAction.command = {
 					title: title,
 					command: ExtensionProvider.commandId,
 					arguments: [
-            document,
-            extension,
-						line					
+						document,
+						extension,
+						line
 					]
-        };
-        codeAction.diagnostics = [diagnostic];
+				};
+				codeAction.diagnostics = [diagnostic];
 				codeActions.push(codeAction);
 			}
 		}
-		return codeActions;    
-  }
+		return codeActions;
+	}
 
-  private runCodeAction(document: TextDocument, newExtension: string, extensionLine: string): Thenable<boolean>
-  {
+	private runCodeAction(document: TextDocument, newExtension: string, extensionLine: string): Thenable<boolean>
+	{
 		function afterMatch(offset)
 		{
-			let position = document.positionAt(offset);
+			const position = document.positionAt(offset);
 			return document.offsetAt(position.with(position.line + 1, 0));
-    }
+		}
     
-		let text = document.getText();
-    var position = 0;
+		const text = document.getText();
+		let position = 0;
 
 		for (let match, pattern = ExtensionProvider.extensionPattern; match = pattern.exec(text);)
 		{
-      let oldExtension = match[1];
-      if (oldExtension > newExtension)
-      {
-        position = match.index;
-        break; 
-      }
-      position = afterMatch(match.index + match[0].length);
-		}    
+			const oldExtension = match[1];
+			if (oldExtension > newExtension)
+			{
+				position = match.index;
+				break;
+			}
+			position = afterMatch(match.index + match[0].length);
+		}
 
-		let edit = new WorkspaceEdit();
-    edit.insert(document.uri, document.positionAt(position), extensionLine + "\n");
-		return vscode.workspace.applyEdit(edit);    
-  }
+		const edit = new WorkspaceEdit();
+		edit.insert(document.uri, document.positionAt(position), extensionLine + "\n");
+		return vscode.workspace.applyEdit(edit);
+	}
 }

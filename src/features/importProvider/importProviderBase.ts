@@ -2,9 +2,9 @@
 
 import { Disposable, TextDocument, Range, WorkspaceEdit } from 'vscode';
 import * as vscode from 'vscode';
-import ExtensionProvider from './extensionProvider';
-import ImportDeclaration from './importProvider/importDeclaration';
-import SortImportProvider from './sortImportProvider';
+import ExtensionProvider from '../extensionProvider';
+import ImportDeclaration from './importDeclaration';
+import OrganizeImportProvider from '../organizeImportProvider';
 
 
 export interface SearchResult
@@ -16,6 +16,7 @@ export interface SearchResult
 
 export default class ImportProviderBase
 {
+	private static modulePattern = /^module(.|\n)+?where/m;
 	private command: Disposable;
   private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
 
@@ -28,8 +29,8 @@ export default class ImportProviderBase
 		this.command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
     subscriptions.push(this);
     
-		let hoogle = vscode.extensions.getExtension('jcanero.hoogle-vscode');
-		let hoogleApi = hoogle.exports;
+		const hoogle = vscode.extensions.getExtension('jcanero.hoogle-vscode');
+		const hoogleApi = hoogle.exports;
 		this.hoogleSearch = hoogleApi.search;
 	}
 
@@ -40,7 +41,7 @@ export default class ImportProviderBase
   
   protected search(name: string): Promise<SearchResult[]>
 	{
-		let result = new Promise<SearchResult[]>(resolve =>
+		const result = new Promise<SearchResult[]>(resolve =>
 		{
 			this.hoogleSearch(name, searchResult =>
 			{
@@ -49,9 +50,9 @@ export default class ImportProviderBase
 					{
 						if (!result.isModule() && !result.isPackage())
 						{
-							let r = result.getQueryResult();
-							let i = r.indexOf(name);
-							let j = i + name.length;
+							const r = result.getQueryResult();
+							const i = r.indexOf(name);
+							const j = i + name.length;
 							return (i >= 0) &&
 								(i === 0 || r[i - 1] === " " || r[i - 1] === '(') &&
 								(j === r.length || r[j] === " " || r[j] === ")");						}
@@ -77,42 +78,41 @@ export default class ImportProviderBase
 	{
 		function afterMatch(offset)
 		{
-			let position = document.positionAt(offset);
+			const position = document.positionAt(offset);
 			return document.offsetAt(position.with(position.line + 1, 0));
 		}
 
-		let text = document.getText();
-		var position = 0;
+		const text = document.getText();
+		let position = 0;
 
 		for (let match, pattern = ExtensionProvider.extensionPattern; match = pattern.exec(text);)
 		{
 			position = afterMatch(match.index + match[0].length);
 		}
 
-		let modulePattern = /^module(.|\n)+?where/gm;
-		let match = modulePattern.exec(text);
+		const match = ImportProviderBase.modulePattern.exec(text);
 		if (match !== null)
 		{
 			position = afterMatch(match.index + match[0].length);
 		}
 
-		let edit = new WorkspaceEdit();
+		const edit = new WorkspaceEdit();
 
-		let oldImports = ImportDeclaration.getImports(text);
-		let oldImport =
+		const oldImports = ImportDeclaration.getImports(text);
+		const oldImport =
 			oldImports.find(decl => decl.module === moduleName && decl.importList !== null) ||
 			oldImports.find(decl => decl.module === moduleName);
 		if (oldImport && options.elementName)
 		{
 			oldImport.addImportElement(options.elementName);
-			let oldRange = new Range(
+			const oldRange = new Range(
 				document.positionAt(oldImport.offset),
 				document.positionAt(oldImport.offset + oldImport.length));
 			edit.replace(document.uri, oldRange, oldImport.text);
 		}
 		else
 		{
-			for (let importInfo of oldImports)
+			for (const importInfo of oldImports)
 			{
 				if (importInfo.module > moduleName)
 				{
@@ -121,7 +121,7 @@ export default class ImportProviderBase
 				}
 				position = afterMatch(importInfo.offset + importInfo.length);
 			}
-      let importDeclaration = new ImportDeclaration(moduleName);
+      const importDeclaration = new ImportDeclaration(moduleName);
       if (options.alias)
       {
         importDeclaration.qualified = " qualified ";
@@ -133,7 +133,7 @@ export default class ImportProviderBase
 			}
 
 			// Align import if necessary
-			SortImportProvider.ensureAligned(importDeclaration, oldImports);
+			OrganizeImportProvider.ensureAligned(importDeclaration, oldImports);
 
 			edit.insert(document.uri, document.positionAt(position), importDeclaration.text + "\n");
 		}
