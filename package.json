@@ -73,6 +73,11 @@
                     "description": "Organize extensions on save",
                     "default": false
                 },
+                "haskutil.organiseExtensionOnInsert": {
+                    "type": "boolean",
+                    "description": "Organize extensions when adding new extensions",
+                    "default": true
+                },                
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
