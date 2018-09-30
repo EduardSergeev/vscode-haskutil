@@ -7,10 +7,10 @@ import ImportDeclaration from './importProvider/importDeclaration';
 
 export default class OrganizeImportProvider implements CodeActionProvider
 {
-	public static commandId: string = 'haskell.sortImports';
+	public static commandId: string = 'haskell.organizeImports';
   private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
-  private static diagnosticCode: string = "unsortedImports";
+  private static diagnosticCode: string = "haskutil.unorganizedImports";
 
   
   private static get shouldAlignImports(): boolean

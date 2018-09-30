@@ -53,6 +53,26 @@
                     "description": "Organize imports on save",
                     "default": false
                 },
+                "haskutil.splitExtensions": {
+                    "type": "boolean",
+                    "description": "Make sure there is one extension per LANGUAGE pragma when organizing extensions",
+                    "default": true
+                },
+                "haskutil.alignExtensions": {
+                    "type": "boolean",
+                    "description": "Make sure of LANGUAGE extension pragma are of the same length when organizing extensions",
+                    "default": true
+                },
+                "haskutil.sortExtensions": {
+                    "type": "boolean",
+                    "description": "Make sure LANGUAGE extension pragmas are sorted when organizing imports",
+                    "default": true
+                },
+                "haskutil.organiseExtensionOnSave": {
+                    "type": "boolean",
+                    "description": "Organize extensions on save",
+                    "default": false
+                },
                 "haskutil.supportedExtensions": {
                     "type": "array",
                     "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
