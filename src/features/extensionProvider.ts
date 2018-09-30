@@ -1,7 +1,8 @@
 'use strict';
 
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
+import OrganizeExtensionProvider from './organizeExtensionProvider';
 
 
 export default class ExtensionProvider implements CodeActionProvider
@@ -24,19 +25,28 @@ export default class ExtensionProvider implements CodeActionProvider
 	{
 		this.command.dispose();
 	}
+
+	private static get shouldOrganizeExtensionsOnInsert(): boolean
+  {
+    return ExtensionProvider.configuration.get("organiseExtensionOnInsert");
+  }
   
-	private static get Extensions(): string[]
+	private static get extensions(): string[]
 	{
-		const extSettings = vscode.workspace.getConfiguration("haskutil");
-		return extSettings.get("supportedExtensions");
+		return ExtensionProvider.configuration.get("supportedExtensions");
 	}
-  
+	
+  private static get configuration(): WorkspaceConfiguration
+  {
+    return vscode.workspace.getConfiguration("haskutil");
+  }   
+
 	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
 	{
 		const codeActions = [];
 		for (const diagnostic of context.diagnostics)
 		{
-			for (const extension of ExtensionProvider.Extensions)
+			for (const extension of ExtensionProvider.extensions)
 			{
 				if (!diagnostic.message.includes(extension))
 				{
@@ -62,7 +72,7 @@ export default class ExtensionProvider implements CodeActionProvider
 		return codeActions;
 	}
 
-	private runCodeAction(document: TextDocument, newExtension: string, extensionLine: string): Thenable<boolean>
+	private async runCodeAction(document: TextDocument, newExtension: string, extensionLine: string)
 	{
 		function afterMatch(offset)
 		{
@@ -86,6 +96,11 @@ export default class ExtensionProvider implements CodeActionProvider
 
 		const edit = new WorkspaceEdit();
 		edit.insert(document.uri, document.positionAt(position), extensionLine + "\n");
-		return vscode.workspace.applyEdit(edit);
+		await vscode.workspace.applyEdit(edit);
+
+		if (ExtensionProvider.shouldOrganizeExtensionsOnInsert)
+		{
+			vscode.commands.executeCommand(OrganizeExtensionProvider.commandId, document);
+		}
 	}
 }

@@ -1,14 +1,15 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
-## [0.2.0] - 2018-09-23
+## [0.2.0] - 2018-09-30
 ### Added
+ * Organize LANGUAGE extensions (split, align and sort)
  * Configuration of the padding of `import` in `qualified` area
    (should we always pad with 9 spaces even if there is no `qualified` import)
 
 ## [0.1.0] - 2018-09-20
 ### Changed
- * Organise imports (sort and align) 
+ * Organize imports (sort and align) 
  * Add top-level signature (documented)
 
 ## [0.0.4] - 2018-09-19
