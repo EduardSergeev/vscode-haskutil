@@ -1,0 +1,70 @@
+'use strict';
+
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
+import * as vscode from 'vscode';
+
+
+export default class TypedHoleProvider implements CodeActionProvider
+{
+  private static commandId: string = 'haskell.fillTypeHoleSignature';
+  private command: Disposable;
+  
+  public activate(subscriptions: Disposable[])
+  {
+    this.command = vscode.commands.registerCommand(TypedHoleProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(this);
+  }
+
+  public dispose(): void
+  {
+    this.command.dispose();
+  }
+
+  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
+  {
+    const errorPattern = /\* Found hole:/;
+    const fillPattern = /^\s+([^\s]+)\s::/gm;
+    const codeActions = [];
+    for (const diagnostic of context.diagnostics)
+    {
+      const match = errorPattern.exec(diagnostic.message);
+      if (match === null)
+      {
+        continue;
+      }
+
+      let fillMatch;
+      while (fillMatch = fillPattern.exec(diagnostic.message))
+      {
+        const fill = fillMatch[1];
+        const title = `Fill with: ${fill}`;
+        const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+        codeAction.command = {
+          title: title,
+          command: TypedHoleProvider.commandId,
+          arguments: [
+            document,
+            fill,
+            this.ensureRange(diagnostic.range)
+          ]
+        };
+        codeAction.diagnostics = [diagnostic];
+        codeActions.push(codeAction);
+      }
+    }
+    return codeActions;
+  }
+
+  private runCodeAction(document: TextDocument, fill: string, range: Range): Thenable<boolean>
+  {
+    const edit = new WorkspaceEdit();
+    edit.replace(document.uri, range, fill);
+    return vscode.workspace.applyEdit(edit);
+  }
+
+  private ensureRange(range: Range)
+  {
+    return range.isEmpty ? range.with({ end: range.end.with({ character: range.end.character + 1 }) }) : range;
+  }
+}
+
