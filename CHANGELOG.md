@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.3.0] - 2019-03-24
+### Added
+ * Fill typed hole with GHC suggestion
+
 ## [0.2.2] - 2019-03-10
 ### Fixed
  * Bump dependencies to fix security warning in `node.extend`
