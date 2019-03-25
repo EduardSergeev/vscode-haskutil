@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.3.1] - 2019-03-25
+### Changed
+ * Minor fix: remove redundant workaround
+
 ## [0.3.0] - 2019-03-24
 ### Added
  * Fill typed hole with GHC suggestion

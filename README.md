@@ -10,12 +10,12 @@
 This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero). Please install either of them along with this extension.
 
 ## Features
- * Add missing imports
+ * Add missing import
  * Organize imports
  * Add missing LANGUAGE extension
  * Organize LANGUAGE extensions
  * Add top-level signature
- * Fill typed hole 
+ * Fill typed hole
 
 ### Add missing import  
 ![Add missing import](/images/AddImport_sm.gif "Add missing import")  

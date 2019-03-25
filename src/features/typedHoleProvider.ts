@@ -33,8 +33,7 @@ export default class TypedHoleProvider implements CodeActionProvider
         continue;
       }
 
-      let fillMatch;
-      while (fillMatch = fillPattern.exec(diagnostic.message))
+      for (let fillMatch; fillMatch = fillPattern.exec(diagnostic.message);)
       {
         const fill = fillMatch[1];
         const title = `Fill with: ${fill}`;
@@ -45,7 +44,7 @@ export default class TypedHoleProvider implements CodeActionProvider
           arguments: [
             document,
             fill,
-            this.ensureRange(diagnostic.range)
+            diagnostic.range
           ]
         };
         codeAction.diagnostics = [diagnostic];
@@ -60,11 +59,6 @@ export default class TypedHoleProvider implements CodeActionProvider
     const edit = new WorkspaceEdit();
     edit.replace(document.uri, range, fill);
     return vscode.workspace.applyEdit(edit);
-  }
-
-  private ensureRange(range: Range)
-  {
-    return range.isEmpty ? range.with({ end: range.end.with({ character: range.end.character + 1 }) }) : range;
   }
 }
 
