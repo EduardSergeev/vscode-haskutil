@@ -39,7 +39,8 @@ Adds signature suggested by warning.
 
 ### Fill typed hole
 ![Fill typed hole](/images/FillTypedHole_sm.gif "Fill types hole")  
-Replaces typed hole with one of the `valid hole fits` from the warning
+Replaces [typed hole](https://downloads.haskell.org/~ghc/8.6.4/docs/html/users_guide/glasgow_exts.html#typed-holes) with one of the `valid hole fits` from the warning.  
+Similarly replaces [type wildcard](https://downloads.haskell.org/~ghc/8.6.4/docs/html/users_guide/glasgow_exts.html#type-wildcards) with inferred type.
 
 ## Dependencies
 
