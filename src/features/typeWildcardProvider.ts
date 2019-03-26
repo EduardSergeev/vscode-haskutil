@@ -4,14 +4,14 @@ import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext,
 import * as vscode from 'vscode';
 
 
-export default class TypedHoleProvider implements CodeActionProvider
+export default class TypeWildcardProvider implements CodeActionProvider
 {
-  private static commandId: string = 'haskell.fillTypeHoleSignature';
+  private static commandId: string = 'haskell.fillTypeWildcard';
   private command: Disposable;
   
   public activate(subscriptions: Disposable[])
   {
-    this.command = vscode.commands.registerCommand(TypedHoleProvider.commandId, this.runCodeAction, this);
+    this.command = vscode.commands.registerCommand(TypeWildcardProvider.commandId, this.runCodeAction, this);
     subscriptions.push(this);
   }
 
@@ -22,8 +22,8 @@ export default class TypedHoleProvider implements CodeActionProvider
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
   {
-    const errorPattern = /\* Found hole: ([^\s]+?) ::/;
-    const fillPattern = /^\s+([^\s]+)\s::/gm;
+    const errorPattern = /\* Found type wildcard `(.+?)'/;
+    const fillPattern = /standing for `(.+?)'/;
     const codeActions = [];
     for (const diagnostic of context.diagnostics)
     {
@@ -32,16 +32,27 @@ export default class TypedHoleProvider implements CodeActionProvider
       {
         continue;
       }
-      const hole = match[1];
+      const wildcard = match[1];
 
-      for (let fillMatch; fillMatch = fillPattern.exec(diagnostic.message);)
+      let fillMatch = fillPattern.exec(diagnostic.message);
+      if(fillMatch)
       {
-        const fill = fillMatch[1];
-        const title = `Fill \`${hole}' with: \`${fill}'`;
+        let fill = fillMatch[1];
+        let offset = document.offsetAt(diagnostic.range.end);
+        while (document.getText(new Range(document.positionAt(offset), document.positionAt(offset + 1))).match(/\s/))
+        {
+          offset++;
+        }
+        let next = document.getText(new Range(document.positionAt(offset), document.positionAt(offset + 2)));
+        if (fill.indexOf(" -> ") > -1 && next === "->")
+        {
+          fill = `(${fill})`;
+        }
+        const title = `Replace \`${wildcard}' with: \`${fill}'`;
         const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
         codeAction.command = {
           title: title,
-          command: TypedHoleProvider.commandId,
+          command: TypeWildcardProvider.commandId,
           arguments: [
             document,
             fill,

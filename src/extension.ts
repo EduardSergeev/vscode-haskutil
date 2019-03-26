@@ -7,6 +7,7 @@ import ExtensionProvider from './features/extensionProvider';
 import OrganizeExtensionProvider from './features/organizeExtensionProvider';
 import TopLevelSignatureProvider from './features/topLevelSignatureProvider';
 import TypedHoleProvider from './features/typedHoleProvider';
+import TypeWildcardProvider from './features/typeWildcardProvider';
 
 export function activate(context: vscode.ExtensionContext)
 {
@@ -18,6 +19,7 @@ export function activate(context: vscode.ExtensionContext)
 		new OrganizeExtensionProvider(),
 		new TopLevelSignatureProvider(),
 		new TypedHoleProvider(),
+		new TypeWildcardProvider(),
 	];
 	for (const provider of providers)
 	{
