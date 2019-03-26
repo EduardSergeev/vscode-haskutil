@@ -22,7 +22,7 @@ export default class TypedHoleProvider implements CodeActionProvider
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
   {
-    const errorPattern = /\* Found hole:/;
+    const errorPattern = /\* Found hole: ([^\s]+?) ::/;
     const fillPattern = /^\s+([^\s]+)\s::/gm;
     const codeActions = [];
     for (const diagnostic of context.diagnostics)
@@ -32,11 +32,12 @@ export default class TypedHoleProvider implements CodeActionProvider
       {
         continue;
       }
+      const hole = match[1];
 
       for (let fillMatch; fillMatch = fillPattern.exec(diagnostic.message);)
       {
         const fill = fillMatch[1];
-        const title = `Fill with: ${fill}`;
+        const title = `Fill \`${hole}' with: \`${fill}'`;
         const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
         codeAction.command = {
           title: title,
