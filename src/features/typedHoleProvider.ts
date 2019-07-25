@@ -22,7 +22,7 @@ export default class TypedHoleProvider implements CodeActionProvider
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
   {
-    const errorPattern = /\* Found hole: ([^\s]+?) ::/;
+    const errorPattern = / Found hole: ([^\s]+?) ::/;
     const fillPattern = /^\s+([^\s]+)\s::/gm;
     const codeActions = [];
     for (const diagnostic of context.diagnostics)
