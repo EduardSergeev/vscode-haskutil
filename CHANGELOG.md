@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.4.5] - 2019-07-26
+### Fixed
+ * Fix type wildcard error detection on Linux
+
 ## [0.4.4] - 2019-07-26
 ### Fixed
  * Fix type hole error detection on Linux
