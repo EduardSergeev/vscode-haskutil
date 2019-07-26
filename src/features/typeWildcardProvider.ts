@@ -22,7 +22,7 @@ export default class TypeWildcardProvider implements CodeActionProvider
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
   {
-    const errorPattern = /\* Found type wildcard `(.+?)'/;
+    const errorPattern = / Found type wildcard `(.+?)'/;
     const fillPattern = /standing for `(.+?)'/;
     const codeActions = [];
     for (const diagnostic of context.diagnostics)
