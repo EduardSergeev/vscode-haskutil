@@ -19,7 +19,8 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
 		{
 			const patterns = [
 				/Variable not in scope:\s+(\S+)/,
-				/Not in scope: type constructor or class `(\S+)'/
+				/Not in scope: type constructor or class `(\S+)'/,
+				/Not in scope: type constructor or class ‘(\S+)’/
 			];
 			for (const pattern of patterns)
 			{
