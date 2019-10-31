@@ -56,7 +56,8 @@ export default class OrganizeImportProvider implements CodeActionProvider
       vscode.window.showWarningMessage(
         "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
         "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) " +
-        "or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero) to enable all features.");
+        "or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero) " +
+        "or [ghcide](https://github.com/digital-asset/ghcide) to enable all features.");
     }
   }
 
@@ -71,7 +72,8 @@ export default class OrganizeImportProvider implements CodeActionProvider
   {
     const dependency =
       vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
-      vscode.extensions.getExtension('Vans.haskero');
+      vscode.extensions.getExtension('Vans.haskero') ||
+      vscode.extensions.getExtension('DigitalAssetHoldingsLLC.ghcide');
     return dependency !== undefined;    
   }
 
