@@ -11,19 +11,24 @@ import TypeWildcardProvider from './features/typeWildcardProvider';
 
 export function activate(context: vscode.ExtensionContext)
 {
-	const providers = [
-		new ImportProvider(),
-		new QualifiedImportProvider(),
-		new OrganizeImportProvider(),
-		new ExtensionProvider(),
-		new OrganizeExtensionProvider(),
-		new TopLevelSignatureProvider(),
-		new TypedHoleProvider(),
-		new TypeWildcardProvider(),
-	];
-	for (const provider of providers)
+	const features = {
+		addImport: new ImportProvider(),
+		addQualifiedImport: new QualifiedImportProvider(),
+		organizeImports: new OrganizeImportProvider(),
+		addExtension: new ExtensionProvider(),
+		organizeExtensions: new OrganizeExtensionProvider(),
+		addSignature: new TopLevelSignatureProvider(),
+		fillTypeHole: new TypedHoleProvider(),
+		fillTypeWildcard: new TypeWildcardProvider(),
+	};
+	
+	for (const feature in features)
 	{
-		provider.activate(context.subscriptions);
-		vscode.languages.registerCodeActionsProvider('haskell', provider);
+		if (vscode.workspace.getConfiguration('haskutil').feature[feature])
+		{
+			const provider = features[feature];
+			provider.activate(context.subscriptions);
+			vscode.languages.registerCodeActionsProvider('haskell', provider);
+		}
 	}
 }

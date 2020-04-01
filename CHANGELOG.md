@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.5.0] - 2020-04-01
+### Added
+ * Settings for turning on/off individual features
+### Fixed
+ * Fix 'Not in scope' error detection (different platforms)
+ * Make LANGUAGE pragma handling case insencitive 
+
 ## [0.4.5] - 2019-07-26
 ### Fixed
  * Fix type wildcard error detection on Linux

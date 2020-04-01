@@ -162,7 +162,8 @@ export default class OrganizeExtensionProvider implements CodeActionProvider
       const range = extension.getRange(document);
       edit.delete(document.uri, range.with({ end: range.end.with(range.end.line + 1, 0) }));
 
-      const extensions = extension.extensionNames.map(name => new ExtensionDeclaration(`${name} `));
+      const extensions = extension.extensionNames.map(name =>
+        new ExtensionDeclaration(extension.header, `${name} `));
       extensions.sort((l, r) => r.text.localeCompare(l.text));
       for (const newExtension of extensions)
       {
@@ -177,7 +178,7 @@ export default class OrganizeExtensionProvider implements CodeActionProvider
     const oldExtensions = ExtensionDeclaration.getExtensions(document.getText());
     const length = Math.max(...oldExtensions.map(extension => extension.extensions.length));
     const newExtensions = oldExtensions.map(extension =>
-      new ExtensionDeclaration(extension.extensions.concat(" ".repeat(length - extension.extensions.length))));
+      new ExtensionDeclaration(extension.header, extension.extensions.concat(" ".repeat(length - extension.extensions.length))));
     
     var edit = new WorkspaceEdit();
     for (let i = oldExtensions.length - 1; i >= 0; i--)

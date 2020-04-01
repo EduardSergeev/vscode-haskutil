@@ -2,7 +2,7 @@
     "name": "haskutil",
     "displayName": "Haskutil",
     "description": "'QuickFix' actions for Haskell editor",
-    "version": "0.4.5",
+    "version": "0.5.0",
     "publisher": "Edka",
     "repository": {
         "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -33,6 +33,54 @@
             "type": "object",
             "title": "Haskutil configuration settings",
             "properties": {
+                "haskutil.feature.addImport": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add import` feature"
+                },
+                "haskutil.feature.addQualifiedImport": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add qualified import` feature"
+                },
+                "haskutil.feature.organizeImports": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Organize import` feature"
+                },
+                "haskutil.feature.addExtension": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add extension` feature"
+                },
+                "haskutil.feature.organizeExtensions": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Organize extensions` feature"
+                },
+                "haskutil.feature.addSignature": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add top-level signature` feature"
+                },
+                "haskutil.feature.fillTypeHole": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Fill type hole` feature"
+                },
+                "haskutil.feature.fillTypeWildcard": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Fill type wildcard` feature"
+                },
                 "haskutil.alignImports": {
                     "type": "boolean",
                     "description": "Align imports when organizing imports",
@@ -124,10 +172,10 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/mocha": "^5.2.7",
-        "@types/node": "^12.6.8",
-        "tslint": "^5.18.0",
-        "typescript": "^3.4.5",
-        "vscode": "^1.1.35"
+        "@types/mocha": "^7.0.2",
+        "@types/node": "^13.9.8",
+        "tslint": "^6.1.0",
+        "typescript": "^3.8.3",
+        "vscode": "^1.1.36"
     }
 }
