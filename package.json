@@ -33,6 +33,54 @@
             "type": "object",
             "title": "Haskutil configuration settings",
             "properties": {
+                "haskutil.feature.addImport": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add import` feature"
+                },
+                "haskutil.feature.addQualifiedImport": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add qualified import` feature"
+                },
+                "haskutil.feature.organizeImports": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Organize import` feature"
+                },
+                "haskutil.feature.addExtension": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add extension` feature"
+                },
+                "haskutil.feature.organizeExtensions": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Organize extensions` feature"
+                },
+                "haskutil.feature.addSignature": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Add top-level signature` feature"
+                },
+                "haskutil.feature.fillTypeHole": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Fill type hole` feature"
+                },
+                "haskutil.feature.fillTypeWildcard": {
+                    "type": "boolean",
+                    "default": true,
+                    "scope": "resource",
+                    "description": "Enable `Fill type wildcard` feature"
+                },
                 "haskutil.alignImports": {
                     "type": "boolean",
                     "description": "Align imports when organizing imports",
