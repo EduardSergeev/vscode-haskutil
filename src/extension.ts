@@ -1,4 +1,4 @@
-import * as vscode from 'vscode'; 
+import * as vscode from 'vscode';
 
 import ImportProvider from './features/importProvider';
 import QualifiedImportProvider from './features/qualifiedImportProvider';
@@ -9,8 +9,7 @@ import TopLevelSignatureProvider from './features/topLevelSignatureProvider';
 import TypedHoleProvider from './features/typedHoleProvider';
 import TypeWildcardProvider from './features/typeWildcardProvider';
 
-export function activate(context: vscode.ExtensionContext)
-{
+export function activate(context: vscode.ExtensionContext) {
 	const features = {
 		addImport: new ImportProvider(),
 		addQualifiedImport: new QualifiedImportProvider(),
@@ -21,11 +20,9 @@ export function activate(context: vscode.ExtensionContext)
 		fillTypeHole: new TypedHoleProvider(),
 		fillTypeWildcard: new TypeWildcardProvider(),
 	};
-	
-	for (const feature in features)
-	{
-		if (vscode.workspace.getConfiguration('haskutil').feature[feature])
-		{
+
+	for (const feature in features) {
+		if (vscode.workspace.getConfiguration('haskutil').feature[feature]) {
 			const provider = features[feature];
 			provider.activate(context.subscriptions);
 			vscode.languages.registerCodeActionsProvider('haskell', provider);

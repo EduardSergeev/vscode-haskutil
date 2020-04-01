@@ -5,35 +5,28 @@ import * as vscode from 'vscode';
 import ImportProviderBase, { SearchResult } from './importProvider/importProviderBase';
 
 
-export default class ImportProvider extends ImportProviderBase implements CodeActionProvider
-{
-  constructor()
-  {
-    super('haskell.addImport');
-  }	
+export default class ImportProvider extends ImportProviderBase implements CodeActionProvider {
+	constructor() {
+		super('haskell.addImport');
+	}
 
-	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any>
-	{
+	public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
 		let codeActions = [];
-		for (const diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error))
-		{
+		for (const diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error)) {
 			const patterns = [
 				/Variable not in scope:\s+(\S+)/,
 				/Not in scope: type constructor or class [`‘](\S+)['’]/
 			];
-			for (const pattern of patterns)
-			{
+			for (const pattern of patterns) {
 				const match = pattern.exec(diagnostic.message);
-				if (match === null)
-				{
+				if (match === null) {
 					continue;
 				}
 				const name = match[1];
 
 				const results = await this.search(name);
 				codeActions = codeActions.concat(this.addImportForVariable(document, name, results));
-				codeActions.forEach(action =>
-				{
+				codeActions.forEach(action => {
 					action.diagnostics = [diagnostic];
 				});
 			}
@@ -41,11 +34,9 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
 		return codeActions;
 	}
 
-	private addImportForVariable(document: TextDocument, variableName: string, searchResults: SearchResult[]): CodeAction[]
-	{
+	private addImportForVariable(document: TextDocument, variableName: string, searchResults: SearchResult[]): CodeAction[] {
 		const codeActions = [];
-		for (const result of searchResults)
-		{
+		for (const result of searchResults) {
 			let title = `Add: "import ${result.module}"`;
 			let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
 			codeAction.command = {

@@ -1,7 +1,6 @@
 import { Range, TextDocument } from "vscode";
 
-export default class ImportDeclaration
-{
+export default class ImportDeclaration {
 	private _importElements?: string[] = [];
 	qualified: string = " ";
 	alias?: string;
@@ -20,10 +19,8 @@ export default class ImportDeclaration
 			hidingList?: string,
 			offset?: number,
 			length?: number
-		})
-	{
-		if (optional)
-		{
+		}) {
+		if (optional) {
 			this.qualified = optional.qualified || "";
 			this.alias = optional.alias;
 			this.importList = optional.importList;
@@ -34,73 +31,59 @@ export default class ImportDeclaration
 		}
 	}
 
-	public get importElements()
-	{
+	public get importElements() {
 		return this._importElements ? this._importElements.join(',') : null;
 	}
 
-	public set importElements(elementsString: string)
-	{
+	public set importElements(elementsString: string) {
 		this._importElements = elementsString ? elementsString.split(',') : [];
 	}
 
-	public get importNames()
-	{
+	public get importNames() {
 		return this._importElements.map(e => e.trim());
 	}
 
-	public addImportElement(newElem: string)
-	{
+	public addImportElement(newElem: string) {
 		let before = this.importElements;
-		if (this.importNames.length === 0 || this.importNames[0] === "")
-		{
+		if (this.importNames.length === 0 || this.importNames[0] === "") {
 			this.importList = " (I)";
 			before = "I";
 			this._importElements = [];
 		}
 
-		let index = this.importNames.findIndex(oldElem =>
-		{
+		let index = this.importNames.findIndex(oldElem => {
 			return newElem < oldElem;
 		});
 		index = index === -1 ? this.importNames.length : index;
-		if (index === 0)
-		{
-			if (this.importElements.length > 0)
-			{
+		if (index === 0) {
+			if (this.importElements.length > 0) {
 				this._importElements.splice(index, 1, `${newElem}, ${this._importElements[0]}`);
 			}
-			else
-			{
+			else {
 				this._importElements.push(newElem);
 			}
 		}
-		else
-		{
+		else {
 			this._importElements.splice(index, 0, ` ${newElem}`);
 		}
 
 		this.importList = this.importList.replace(before, this.importElements);
 	}
 
-	public get text()
-	{
+	public get text() {
 		return `import${this.qualified || ""}${this.module}${this.alias || ""}${this.importList || ""}${this.hidingList || ""}`;
-  }
+	}
 
-  public getRange(document: TextDocument): Range
-  {
-    return new Range(
-      document.positionAt(this.offset),
-      document.positionAt(this.offset + this.length));       
-  }
-  
-  public static getImports(text: string): ImportDeclaration[]
-	{
+	public getRange(document: TextDocument): Range {
+		return new Range(
+			document.positionAt(this.offset),
+			document.positionAt(this.offset + this.length));
+	}
+
+	public static getImports(text: string): ImportDeclaration[] {
 		const importPattern = /^import((?:\s+qualified\s+)|\s+)(\S+)(\s+as\s+(\S+))?(\s*?\(((?:(?:\(.*?\))|.|\n)*?)\))?(\s+hiding\s+\(((?:(?:\(.*?\))|.|\n)*?)\))?/gm;
 		const imports = [];
-		for (let match; match = importPattern.exec(text);)
-		{
+		for (let match; match = importPattern.exec(text);) {
 			imports.push(new ImportDeclaration(
 				match[2],
 				{
