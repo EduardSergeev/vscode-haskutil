@@ -47,8 +47,9 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     if (!this.checkDependencyInstalled()) {
       vscode.window.showWarningMessage(
         "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
-        "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple) " +
-        "or [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero) ");
+        "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
+        "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
+        "or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid)");
     }
   }
 
@@ -61,7 +62,8 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   private checkDependencyInstalled() {
     const dependency =
       vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
-      vscode.extensions.getExtension('Vans.haskero');
+      vscode.extensions.getExtension('Vans.haskero') ||
+      vscode.extensions.getExtension('ndmitchell.haskell-ghcid');
     return dependency !== undefined;
   }
 
