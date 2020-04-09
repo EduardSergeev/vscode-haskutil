@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.6.0] - 2020-04-10
+### Added
+ * Add [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid) as an option for base extension populating PROBLEMS 
+
 ## [0.5.3] - 2020-04-09
 ### Fixed
  * Background color of Marketplace banner
