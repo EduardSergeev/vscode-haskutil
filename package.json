@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -15,7 +15,8 @@
   ],
   "license": "MIT",
   "galleryBanner": {
-    "theme": "dark"
+    "theme": "dark",
+    "color": "#444"
   },
   "main": "./out/extension",
   "contributes": {

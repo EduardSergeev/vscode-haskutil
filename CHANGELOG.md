@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.5.3] - 2020-04-09
+### Fixed
+ * Background color of Marketplace banner
+
 ## [0.5.2] - 2020-04-09
 ### Fixed
  * Fix detection of missing qualified import on Linux
