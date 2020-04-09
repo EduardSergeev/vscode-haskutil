@@ -26,7 +26,7 @@ export default class TypeWildcardProvider implements CodeActionProvider {
       if (match === null) {
         continue;
       }
-      const wildcard = match[1];
+      let wildcard = match[1];
 
       let fillMatch = fillPattern.exec(diagnostic.message);
       if (fillMatch) {
@@ -35,14 +35,28 @@ export default class TypeWildcardProvider implements CodeActionProvider {
         while (document.getText(new Range(document.positionAt(offset), document.positionAt(offset + 1))).match(/\s/)) {
           offset++;
         }
+
         let next = document.getText(new Range(document.positionAt(offset), document.positionAt(offset + 2)));
         if (fill.indexOf(" -> ") > -1 && next === "->") {
           fill = `(${fill})`;
         }
+
+        const line = document.lineAt(diagnostic.range.start);
+        if(fill === "()") {
+          fill = "";
+          const wilcardMatch = line.text.match(/_\s*=>\s*/) || line.text.match(/,\s*_\s*/) || line.text.match(/\s*_\s*,/);
+          if(wilcardMatch) {
+            wildcard = wilcardMatch[0];
+          }
+        }
+        if(line.text.match(/\(.*_.*\)/) && fill.match(/^\(.*\)$/)) {
+          fill = fill.slice(1, -1);
+        }
+
         const title = `Replace \`${wildcard}' with: \`${fill}'`;
         const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
-        const wildcardPosition = document.positionAt(document.offsetAt(diagnostic.range.start) + document.getText(diagnostic.range).indexOf("_"));
-        const range = new Range(wildcardPosition, wildcardPosition.with({ character: wildcardPosition.character + 1}));
+        const wildcardPosition = document.positionAt(document.offsetAt(line.range.start) + line.text.indexOf(wildcard));
+        const range = new Range(wildcardPosition, wildcardPosition.with({ character: wildcardPosition.character + wildcard.length}));
         codeAction.command = {
           title: title,
           command: TypeWildcardProvider.commandId,
