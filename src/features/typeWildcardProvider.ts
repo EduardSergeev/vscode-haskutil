@@ -41,13 +41,15 @@ export default class TypeWildcardProvider implements CodeActionProvider {
         }
         const title = `Replace \`${wildcard}' with: \`${fill}'`;
         const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
+        const wildcardPosition = document.positionAt(document.offsetAt(diagnostic.range.start) + document.getText(diagnostic.range).indexOf("_"));
+        const range = new Range(wildcardPosition, wildcardPosition.with({ character: wildcardPosition.character + 1}));
         codeAction.command = {
           title: title,
           command: TypeWildcardProvider.commandId,
           arguments: [
             document,
             fill,
-            diagnostic.range
+            range
           ]
         };
         codeAction.diagnostics = [diagnostic];
