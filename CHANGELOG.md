@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.5.2] - 2020-04-09
+### Fixed
+ * Fix detection of missing qualified import on Linux
+
 ## [0.5.1] - 2020-04-09
 ### Fixed
  * Fix wildcard replacement under GHC 8.8
