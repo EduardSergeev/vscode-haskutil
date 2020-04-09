@@ -1,181 +1,181 @@
 {
-    "name": "haskutil",
-    "displayName": "Haskutil",
-    "description": "'QuickFix' actions for Haskell editor",
-    "version": "0.5.0",
-    "publisher": "Edka",
-    "repository": {
-        "url": "https://github.com/EduardSergeev/vscode-haskutil"
-    },
-    "engines": {
-        "vscode": "^1.26.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "license": "MIT",
-    "main": "./out/extension",
-    "contributes": {
-        "languages": [
-            {
-                "id": "haskell",
-                "aliases": [
-                    "Haskell",
-                    "haskell"
-                ],
-                "extensions": [
-                    ".hs",
-                    ".lhs"
-                ]
-            }
+  "name": "haskutil",
+  "displayName": "Haskutil",
+  "description": "'QuickFix' actions for Haskell editor",
+  "version": "0.5.1",
+  "publisher": "Edka",
+  "repository": {
+    "url": "https://github.com/EduardSergeev/vscode-haskutil"
+  },
+  "engines": {
+    "vscode": "^1.26.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "license": "MIT",
+  "main": "./out/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "haskell",
+        "aliases": [
+          "Haskell",
+          "haskell"
         ],
-        "configuration": {
-            "type": "object",
-            "title": "Haskutil configuration settings",
-            "properties": {
-                "haskutil.feature.addImport": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Add import` feature"
-                },
-                "haskutil.feature.addQualifiedImport": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Add qualified import` feature"
-                },
-                "haskutil.feature.organizeImports": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Organize import` feature"
-                },
-                "haskutil.feature.addExtension": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Add extension` feature"
-                },
-                "haskutil.feature.organizeExtensions": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Organize extensions` feature"
-                },
-                "haskutil.feature.addSignature": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Add top-level signature` feature"
-                },
-                "haskutil.feature.fillTypeHole": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Fill type hole` feature"
-                },
-                "haskutil.feature.fillTypeWildcard": {
-                    "type": "boolean",
-                    "default": true,
-                    "scope": "resource",
-                    "description": "Enable `Fill type wildcard` feature"
-                },
-                "haskutil.alignImports": {
-                    "type": "boolean",
-                    "description": "Align imports when organizing imports",
-                    "default": true
-                },
-                "haskutil.alwaysPadImports": {
-                    "type": "boolean",
-                    "description": "Always pad after `import` regardless if there is `qualified` import or not",
-                    "default": false
-                },
-                "haskutil.sortImports": {
-                    "type": "boolean",
-                    "description": "Sort imports when organizing imports",
-                    "default": true
-                },
-                "haskutil.organiseImportsOnSave": {
-                    "type": "boolean",
-                    "description": "Organize imports on save",
-                    "default": false
-                },
-                "haskutil.splitExtensions": {
-                    "type": "boolean",
-                    "description": "Make sure there is one extension per LANGUAGE pragma when organizing extensions",
-                    "default": true
-                },
-                "haskutil.alignExtensions": {
-                    "type": "boolean",
-                    "description": "Make sure of LANGUAGE extension pragma are of the same length when organizing extensions",
-                    "default": true
-                },
-                "haskutil.sortExtensions": {
-                    "type": "boolean",
-                    "description": "Make sure LANGUAGE extension pragmas are sorted when organizing imports",
-                    "default": true
-                },
-                "haskutil.organiseExtensionOnSave": {
-                    "type": "boolean",
-                    "description": "Organize extensions on save",
-                    "default": false
-                },
-                "haskutil.organiseExtensionOnInsert": {
-                    "type": "boolean",
-                    "description": "Organize extensions when adding new extensions",
-                    "default": true
-                },
-                "haskutil.supportedExtensions": {
-                    "type": "array",
-                    "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
-                    "default": [
-                        "BangPatterns",
-                        "DataKinds",
-                        "DefaultSignatures",
-                        "DeriveFunctor",
-                        "DeriveGeneric",
-                        "FlexibleContexts",
-                        "FlexibleInstances",
-                        "FunctionalDependencies",
-                        "GADTs",
-                        "GeneralizedNewtypeDeriving",
-                        "KindSignatures",
-                        "MultiParamTypeClasses",
-                        "NamedFieldPuns",
-                        "RankNTypes",
-                        "RecordWildCards",
-                        "StandaloneDeriving",
-                        "TemplateHaskell",
-                        "TupleSections",
-                        "TypeFamilies",
-                        "TypeSynonymInstances",
-                        "UndecidableInstances",
-                        "TypeApplications",
-                        "ViewPatterns"
-                    ]
-                }
-            }
+        "extensions": [
+          ".hs",
+          ".lhs"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Haskutil configuration settings",
+      "properties": {
+        "haskutil.feature.addImport": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Add import` feature"
+        },
+        "haskutil.feature.addQualifiedImport": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Add qualified import` feature"
+        },
+        "haskutil.feature.organizeImports": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Organize import` feature"
+        },
+        "haskutil.feature.addExtension": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Add extension` feature"
+        },
+        "haskutil.feature.organizeExtensions": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Organize extensions` feature"
+        },
+        "haskutil.feature.addSignature": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Add top-level signature` feature"
+        },
+        "haskutil.feature.fillTypeHole": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Fill type hole` feature"
+        },
+        "haskutil.feature.fillTypeWildcard": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Fill type wildcard` feature"
+        },
+        "haskutil.alignImports": {
+          "type": "boolean",
+          "description": "Align imports when organizing imports",
+          "default": true
+        },
+        "haskutil.alwaysPadImports": {
+          "type": "boolean",
+          "description": "Always pad after `import` regardless if there is `qualified` import or not",
+          "default": false
+        },
+        "haskutil.sortImports": {
+          "type": "boolean",
+          "description": "Sort imports when organizing imports",
+          "default": true
+        },
+        "haskutil.organiseImportsOnSave": {
+          "type": "boolean",
+          "description": "Organize imports on save",
+          "default": false
+        },
+        "haskutil.splitExtensions": {
+          "type": "boolean",
+          "description": "Make sure there is one extension per LANGUAGE pragma when organizing extensions",
+          "default": true
+        },
+        "haskutil.alignExtensions": {
+          "type": "boolean",
+          "description": "Make sure of LANGUAGE extension pragma are of the same length when organizing extensions",
+          "default": true
+        },
+        "haskutil.sortExtensions": {
+          "type": "boolean",
+          "description": "Make sure LANGUAGE extension pragmas are sorted when organizing imports",
+          "default": true
+        },
+        "haskutil.organiseExtensionOnSave": {
+          "type": "boolean",
+          "description": "Organize extensions on save",
+          "default": false
+        },
+        "haskutil.organiseExtensionOnInsert": {
+          "type": "boolean",
+          "description": "Organize extensions when adding new extensions",
+          "default": true
+        },
+        "haskutil.supportedExtensions": {
+          "type": "array",
+          "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
+          "default": [
+            "BangPatterns",
+            "DataKinds",
+            "DefaultSignatures",
+            "DeriveFunctor",
+            "DeriveGeneric",
+            "FlexibleContexts",
+            "FlexibleInstances",
+            "FunctionalDependencies",
+            "GADTs",
+            "GeneralizedNewtypeDeriving",
+            "KindSignatures",
+            "MultiParamTypeClasses",
+            "NamedFieldPuns",
+            "RankNTypes",
+            "RecordWildCards",
+            "StandaloneDeriving",
+            "TemplateHaskell",
+            "TupleSections",
+            "TypeFamilies",
+            "TypeSynonymInstances",
+            "UndecidableInstances",
+            "TypeApplications",
+            "ViewPatterns"
+          ]
         }
-    },
-    "activationEvents": [
-        "onLanguage:haskell"
-    ],
-    "extensionDependencies": [
-        "jcanero.hoogle-vscode"
-    ],
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "@types/mocha": "^7.0.2",
-        "@types/node": "^13.9.8",
-        "tslint": "^6.1.0",
-        "typescript": "^3.8.3",
-        "vscode": "^1.1.36"
+      }
     }
+  },
+  "activationEvents": [
+    "onLanguage:haskell"
+  ],
+  "extensionDependencies": [
+    "jcanero.hoogle-vscode"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.8",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3",
+    "vscode": "^1.1.36"
+  }
 }

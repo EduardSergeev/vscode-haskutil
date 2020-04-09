@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "haskutil" extension will be documented in this file.
 
+## [0.5.1] - 2020-04-09
+### Fixed
+ * Fix wildcard replacement under GHC 8.8
+ * Better handling of wildcards (nested parenthesis and `()` as replacement)
+
 ## [0.5.0] - 2020-04-01
 ### Added
  * Settings for turning on/off individual features
