@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.9.0] - 2020-04-14
+### Added
+ * Documentation on configurations settings
+### Changed
+ * Adjust configuration settings
+   * Merge `addQualifiedImport` into `addImport`
+   * Merge `fillTypeWildcard` into `fillTypeHole`
+   * Rename `removeUnusedImport` -> `removeUnusedImports`
+   * Rename `organiseImportsOnSave` -> `organizeImportsOnSave`
+   * Rename `organiseExtensionOnSave` -> `organizeExtensionsOnSave`
+   * Rename `organiseExtensionOnInsert` -> `organizeExtensionsOnInsert`
+
 ## [0.8.0] - 2020-04-13
 ### Added
  * Align remaining imports when removing unused imports
