@@ -28,7 +28,7 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
     for (const uri of e.uris) {
       const document = await vscode.workspace.openTextDocument(uri);
       const unusedImports = this.getUnusedImports(document);
-      if (unusedImports.length > 0 && !this.diagnosticCollection.has(uri)) {
+      if (unusedImports.length) {
         const imports = ImportDeclaration.getImports(document.getText());
         const lastImport = imports[imports.length - 1];
         const range = new Range(
@@ -37,9 +37,11 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
         const message = "There are unused imports which can be deleted";
         const diagnostic = new Diagnostic(range, message, DiagnosticSeverity.Hint);
         diagnostic.code = RemoveUnusedImportProvider.diagnosticCode;
-        this.diagnosticCollection.set(document.uri, [diagnostic]);
+        if(!this.diagnosticCollection.has(document.uri) || !this.diagnosticCollection.get(document.uri)[0].range.isEqual(diagnostic.range)) {
+          this.diagnosticCollection.set(document.uri, [diagnostic]);
+        }
       }
-      else if (unusedImports.length === 0 && this.diagnosticCollection.has(uri)) {
+      else if (!unusedImports.length && this.diagnosticCollection.has(document.uri)) {
         this.diagnosticCollection.delete(document.uri);
       }
     }

@@ -1,7 +1,11 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
-## [0.6.0] - 2020-04-12
+## [0.7.1] - 2020-04-13
+### Fixed
+ * Adjust Unused imports diagnostic range when imports are edited/moved
+
+## [0.7.0] - 2020-04-12
 ### Added
  * Add `Remove unused imports` feature
 
