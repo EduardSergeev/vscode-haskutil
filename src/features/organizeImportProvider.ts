@@ -43,28 +43,12 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     vscode.workspace.onDidSaveTextDocument(this.checkImports, this);
     vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this);
     vscode.workspace.textDocuments.forEach(this.checkImports, this);
-
-    if (!this.checkDependencyInstalled()) {
-      vscode.window.showWarningMessage(
-        "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
-        "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
-        "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
-        "or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid)");
-    }
   }
 
   public dispose(): void {
     this.diagnosticCollection.clear();
     this.diagnosticCollection.dispose();
     this.command.dispose();
-  }
-
-  private checkDependencyInstalled() {
-    const dependency =
-      vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
-      vscode.extensions.getExtension('Vans.haskero') ||
-      vscode.extensions.getExtension('ndmitchell.haskell-ghcid');
-    return dependency !== undefined;
   }
 
   private checkImports(document: TextDocument) {

@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -104,6 +104,12 @@
           "type": "boolean",
           "description": "Organize imports on save",
           "default": false
+        },
+        "haskutil.feature.removeUnusedImport": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Remove unused imports` feature"
         },
         "haskutil.splitExtensions": {
           "type": "boolean",

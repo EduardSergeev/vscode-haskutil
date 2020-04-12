@@ -12,6 +12,7 @@ This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which 
 ## Features
  * [Add missing import](#add-missing-import)
  * [Organize imports](#organize-imports)
+ * [Remove unused imports](#remove-unused-imports)
  * [Add missing LANGUAGE extension](#add-missing-language-extension)
  * [Organize LANGUAGE extensions](#organize-language-extensions)
  * [Add top-level signature](#add-top-level-signature)
@@ -25,7 +26,11 @@ Uses [Hoogle](https://www.haskell.org/hoogle/) to search for matching modules. C
 
 ### Organize imports  
 ![Organize imports](/images/OrganizeImports_sm.gif "Organize imports")  
-Sorting and alignment are configurable via `haskutil.sortImports` and `haskutil.alignImports` respectively. Imports can also be organized on file save with `haskutil.organiseImportsOnSave: true` (dafault is `false`). 
+Sorting and alignment are configurable via `haskutil.sortImports` and `haskutil.alignImports` respectively. Imports can also be organized on file save with `haskutil.organiseImportsOnSave: true` (dafault is `false`).
+
+### Remove unused imports
+![Remove unused imports](/images/RemoveUnusedImports_sm.gif "Remove unused imports")  
+Removes unused imports identified by warnings.
 
 ### Add missing LANGUAGE extension  
 ![Add extension](/images/AddExtension_sm.gif "Add extension")  
@@ -33,7 +38,7 @@ Adds `LANGUAGE` pragma suggested by error. List of supported pragmas is defined 
 
 ### Organize LANGUAGE extensions  
 ![Organize extensions](/images/OrganizeExtensions_sm.gif "Organize extensions")  
-Splitting, sorting and alignment of extensions are configurable via `haskutil.splitExtensions`, `haskutil.sortExtensions` and `haskutil.alignExtensions` respectively. Extensions can also be organized on file save with `haskutil.organiseExtensionOnSave: true` (dafault is `false`). 
+Splitting, sorting and alignment of extensions are configurable via `haskutil.splitExtensions`, `haskutil.sortExtensions` and `haskutil.alignExtensions` respectively. Extensions can also be organized on file save with `haskutil.organiseExtensionOnSave: true` (dafault is `false`).
 
 ### Add top-level signature
 ![Add top-level signature](/images/AddSignature_sm.gif "Add top-level signature")  
