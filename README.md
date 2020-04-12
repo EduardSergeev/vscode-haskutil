@@ -30,7 +30,7 @@ Sorting and alignment are configurable via `haskutil.sortImports` and `haskutil.
 
 ### Remove unused imports
 ![Remove unused imports](/images/RemoveUnusedImports_sm.gif "Remove unused imports")  
-Removes unused imports identified by warnings.
+Removes unused imports identified by warnings. `haskutil.alignImports` controls if remaning imports are also aligned.
 
 ### Add missing LANGUAGE extension  
 ![Add extension](/images/AddExtension_sm.gif "Add extension")  
