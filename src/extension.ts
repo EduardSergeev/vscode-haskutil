@@ -8,6 +8,7 @@ import OrganizeExtensionProvider from './features/organizeExtensionProvider';
 import TopLevelSignatureProvider from './features/topLevelSignatureProvider';
 import TypedHoleProvider from './features/typedHoleProvider';
 import TypeWildcardProvider from './features/typeWildcardProvider';
+import RemoveUnusedImportProvider from './features/removeUnusedImportProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   const dependency =
@@ -31,6 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
     addSignature: new TopLevelSignatureProvider(),
     fillTypeHole: new TypedHoleProvider(),
     fillTypeWildcard: new TypeWildcardProvider(),
+    removeUnusedImport: new RemoveUnusedImportProvider(),
   };
 
   for (const feature in features) {

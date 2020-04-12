@@ -105,6 +105,12 @@
           "description": "Organize imports on save",
           "default": false
         },
+        "haskutil.feature.removeUnusedImport": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "description": "Enable `Remove unused imports` feature"
+        },
         "haskutil.splitExtensions": {
           "type": "boolean",
           "description": "Make sure there is one extension per LANGUAGE pragma when organizing extensions",

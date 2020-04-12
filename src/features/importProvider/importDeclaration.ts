@@ -51,9 +51,7 @@ export default class ImportDeclaration {
       this._importElements = [];
     }
 
-    let index = this.importNames.findIndex(oldElem => {
-      return newElem < oldElem;
-    });
+    let index = this.importNames.findIndex(oldElem => newElem < oldElem);
     index = index === -1 ? this.importNames.length : index;
     if (index === 0) {
       if (this.importElements.length > 0) {
@@ -67,6 +65,16 @@ export default class ImportDeclaration {
       this._importElements.splice(index, 0, ` ${newElem}`);
     }
 
+    this.importList = this.importList.replace(before, this.importElements);
+  }
+
+  public removeElement(elem: string) {
+    const before = this.importElements;
+    const index = this.importNames.findIndex(oldElem => oldElem === elem);
+    this._importElements.splice(index, 1);
+    if(index === 0 && this._importElements.length > 0) {
+      this._importElements[0] = this._importElements[0].trimLeft();
+    }
     this.importList = this.importList.replace(before, this.importElements);
   }
 
