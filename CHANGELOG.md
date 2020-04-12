@@ -1,5 +1,9 @@
 # Change Log
-All notable changes to the "haskutil" extension will be documented in this file.
+All notable changes to the "Haskutil" extension will be documented in this file.
+
+## [0.6.0] - 2020-04-12
+### Added
+ * Add `Remove unused imports` feature
 
 ## [0.6.0] - 2020-04-10
 ### Added
