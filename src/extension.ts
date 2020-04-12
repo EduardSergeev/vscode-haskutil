@@ -10,6 +10,18 @@ import TypedHoleProvider from './features/typedHoleProvider';
 import TypeWildcardProvider from './features/typeWildcardProvider';
 
 export function activate(context: vscode.ExtensionContext) {
+  const dependency =
+    vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
+    vscode.extensions.getExtension('Vans.haskero') ||
+    vscode.extensions.getExtension('ndmitchell.haskell-ghcid');
+  if(!dependency) {
+    vscode.window.showWarningMessage(
+      "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
+      "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
+      "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
+      "or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid)");
+  }
+
   const features = {
     addImport: new ImportProvider(),
     addQualifiedImport: new QualifiedImportProvider(),
