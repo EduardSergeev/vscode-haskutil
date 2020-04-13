@@ -12,7 +12,7 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   private static diagnosticCode: string = "haskutil.unorganizedImports";
 
 
-  private static get shouldAlignImports(): boolean {
+  public static get shouldAlignImports(): boolean {
     return OrganizeImportProvider.configuration.get("alignImports");
   }
 
@@ -148,7 +148,7 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     return newImport;
   }
 
-  private static alignImports(imports: ImportDeclaration[]): ImportDeclaration[] {
+  public static alignImports(imports: ImportDeclaration[]): ImportDeclaration[] {
     const isQualified = imp => imp.qualified.trim() === "qualified";
 
     return OrganizeImportProvider.shouldPadImports || imports.some(isQualified) ?
