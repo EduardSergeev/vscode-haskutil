@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -41,104 +41,92 @@
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Add import` feature"
-        },
-        "haskutil.feature.addQualifiedImport": {
-          "type": "boolean",
-          "default": true,
-          "scope": "resource",
-          "description": "Enable `Add qualified import` feature"
+          "markdownDescription": "Enable [Add missing import](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#add-missing-import) feature"
         },
         "haskutil.feature.organizeImports": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Organize import` feature"
+          "markdownDescription": "Enable [Organize imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-imports) feature"
+        },
+        "haskutil.feature.removeUnusedImports": {
+          "type": "boolean",
+          "default": true,
+          "scope": "resource",
+          "markdownDescription": "Enable [Remove unused imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#remove-unused-imports) feature"
         },
         "haskutil.feature.addExtension": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Add extension` feature"
+          "markdownDescription": "Enable [Add missing LANGUAGE extension](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#add-missing-language-extension) feature"
         },
         "haskutil.feature.organizeExtensions": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Organize extensions` feature"
+          "markdownDescription": "Enable [Organize LANGUAGE extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions) feature"
         },
         "haskutil.feature.addSignature": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Add top-level signature` feature"
+          "markdownDescription": "Enable [Add top-level signature](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#add-top-level-signature) feature"
         },
         "haskutil.feature.fillTypeHole": {
           "type": "boolean",
           "default": true,
           "scope": "resource",
-          "description": "Enable `Fill type hole` feature"
-        },
-        "haskutil.feature.fillTypeWildcard": {
-          "type": "boolean",
-          "default": true,
-          "scope": "resource",
-          "description": "Enable `Fill type wildcard` feature"
+          "markdownDescription": "Enable [Fill type hole](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#fill-typed-hole) feature"
         },
         "haskutil.alignImports": {
           "type": "boolean",
-          "description": "Align imports when organizing imports",
+          "markdownDescription": "Align imports when [organizing imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-imports) or [removing unused imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#remove-unused-imports)",
           "default": true
         },
         "haskutil.alwaysPadImports": {
           "type": "boolean",
-          "description": "Always pad after `import` regardless if there is `qualified` import or not",
+          "markdownDescription": "Always pad after `import` regardless if there is `qualified` import or not",
           "default": false
         },
         "haskutil.sortImports": {
           "type": "boolean",
-          "description": "Sort imports when organizing imports",
+          "markdownDescription": "Sort imports when [organizing imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-imports)",
           "default": true
         },
-        "haskutil.organiseImportsOnSave": {
+        "haskutil.organizeImportsOnSave": {
           "type": "boolean",
-          "description": "Organize imports on save",
+          "markdownDescription": "[Organize imports](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-imports) when saving the document",
           "default": false
-        },
-        "haskutil.feature.removeUnusedImport": {
-          "type": "boolean",
-          "default": true,
-          "scope": "resource",
-          "description": "Enable `Remove unused imports` feature"
         },
         "haskutil.splitExtensions": {
           "type": "boolean",
-          "description": "Make sure there is one extension per LANGUAGE pragma when organizing extensions",
+          "markdownDescription": "Make sure there is one extension per `LANGUAGE` pragma when [organizing extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions)",
           "default": true
         },
         "haskutil.alignExtensions": {
           "type": "boolean",
-          "description": "Make sure of LANGUAGE extension pragma are of the same length when organizing extensions",
+          "markdownDescription": "Make sure `LANGUAGE` extension pragmas are of the same length when [organizing extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions)",
           "default": true
         },
         "haskutil.sortExtensions": {
           "type": "boolean",
-          "description": "Make sure LANGUAGE extension pragmas are sorted when organizing imports",
+          "markdownDescription": "Make sure `LANGUAGE` extension pragmas are sorted when [organizing extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions)",
           "default": true
         },
-        "haskutil.organiseExtensionOnSave": {
+        "haskutil.organizeExtensionsOnSave": {
           "type": "boolean",
-          "description": "Organize extensions on save",
+          "markdownDescription": "[Organize extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions) when saving the document",
           "default": false
         },
-        "haskutil.organiseExtensionOnInsert": {
+        "haskutil.organizeExtensionsOnInsert": {
           "type": "boolean",
-          "description": "Organize extensions when adding new extensions",
+          "markdownDescription": "[Organize extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#organize-language-extensions) when adding new extensions",
           "default": true
         },
         "haskutil.supportedExtensions": {
           "type": "array",
-          "description": "Haskell LANGUAGE extensions specified in GHC's error messages",
+          "markdownDescription": "Haskell `LANGUAGE` extensions specified in GHC's error messages which triggers QuickFix prompt for [adding missing LANGUAGE extensions](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil#add-missing-language-extension)",
           "default": [
             "BangPatterns",
             "DataKinds",
