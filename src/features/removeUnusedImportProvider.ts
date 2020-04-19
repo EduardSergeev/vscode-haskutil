@@ -1,6 +1,6 @@
 'use strict';
 
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, DiagnosticChangeEvent } from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, DiagnosticChangeEvent, Uri } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 import OrganizeImportProvider from './organizeImportProvider';
@@ -28,14 +28,9 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
 
   private async didChangeDiagnostics(e: DiagnosticChangeEvent) {
     for (const uri of e.uris) {
-      const document = await vscode.workspace.openTextDocument(uri);
-
-      if (! documentInScope(document)) {
-        continue;
-      }
-
-      const unusedImports = this.getUnusedImports(document);
+      const unusedImports = this.getUnusedImports(uri);
       if (unusedImports.length) {
+        const document = await vscode.workspace.openTextDocument(uri);
         const imports = ImportDeclaration.getImports(document.getText());
         const lastImport = imports[imports.length - 1];
         const range = new Range(
@@ -48,8 +43,8 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
           this.diagnosticCollection.set(document.uri, [diagnostic]);
         }
       }
-      else if (!unusedImports.length && this.diagnosticCollection.has(document.uri)) {
-        this.diagnosticCollection.delete(document.uri);
+      else if (!unusedImports.length && this.diagnosticCollection.has(uri)) {
+        this.diagnosticCollection.delete(uri);
       }
     }
   }
@@ -80,7 +75,8 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
     const edit = new WorkspaceEdit();
     let imports = ImportDeclaration.getImports(document.getText());
     const toBeDeleted = [];
-    for (const [range, start,,, list] of this.getUnusedImports(document)) {
+    for (const [range,,, list] of this.getUnusedImports(document.uri)) {
+      const start = document.offsetAt(range.start);
       const oldImportIndex = imports.findIndex(i => i.offset === start);
       const oldImport = imports[oldImportIndex];
       if(list) {
@@ -103,8 +99,8 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
     return vscode.workspace.applyEdit(edit);
   }
 
-  private getUnusedImports(document: TextDocument): [Range, number, ...string[]][] {
-    const diagnostics = vscode.languages.getDiagnostics(document.uri);
+  private getUnusedImports(uri: Uri): [Range, ...string[]][] {
+    const diagnostics = vscode.languages.getDiagnostics(uri);
     return diagnostics
       .map(d => [
         d.range,
@@ -113,7 +109,6 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
       .filter(([,m]) => m)
       .map(([range, match]) => [
         range,
-        document.offsetAt(range.start),
         ...match
       ]);
   }
