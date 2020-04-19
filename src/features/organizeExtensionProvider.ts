@@ -3,6 +3,7 @@
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration, TextDocumentWillSaveEvent } from 'vscode';
 import * as vscode from 'vscode';
 import ExtensionDeclaration from './extensionProvider/extensionDeclaration';
+import { documentInScope } from './utils';
 
 
 export default class OrganizeExtensionProvider implements CodeActionProvider {
@@ -51,6 +52,10 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
   }
 
   private checkExtensions(document: TextDocument) {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     const extensions = ExtensionDeclaration.getExtensions(document.getText());
 
     let unorganized =
@@ -89,6 +94,10 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     let codeActions = [];
     for (let diagnostic of context.diagnostics.filter(d => d.code === OrganizeExtensionProvider.diagnosticCode)) {
       let title = "Organize extensions";
@@ -119,6 +128,10 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
   }
 
   private ensureOrganized(event: TextDocumentWillSaveEvent) {
+    if (! documentInScope(event.document)) {
+      return;
+    }
+
     if (OrganizeExtensionProvider.shouldOrganizeExtensionsOnSave) {
       event.waitUntil(this.runCodeAction(event.document));
     }

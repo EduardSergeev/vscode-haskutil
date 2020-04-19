@@ -4,6 +4,7 @@ import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext,
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 import OrganizeImportProvider from './organizeImportProvider';
+import { documentInScope } from './utils';
 
 
 export default class RemoveUnusedImportProvider implements CodeActionProvider {
@@ -28,6 +29,11 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
   private async didChangeDiagnostics(e: DiagnosticChangeEvent) {
     for (const uri of e.uris) {
       const document = await vscode.workspace.openTextDocument(uri);
+
+      if (! documentInScope(document)) {
+        continue;
+      }
+
       const unusedImports = this.getUnusedImports(document);
       if (unusedImports.length) {
         const imports = ImportDeclaration.getImports(document.getText());
@@ -49,6 +55,10 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     let codeActions = [];
     for (let diagnostic of context.diagnostics.filter(d => d.code === RemoveUnusedImportProvider.diagnosticCode)) {
       let title = "Remove unused imports";

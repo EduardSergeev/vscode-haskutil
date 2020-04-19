@@ -3,6 +3,7 @@
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration, TextDocumentWillSaveEvent } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
+import { documentInScope } from './utils';
 
 
 export default class OrganizeImportProvider implements CodeActionProvider {
@@ -52,6 +53,10 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   }
 
   private checkImports(document: TextDocument) {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     const imports = ImportDeclaration.getImports(document.getText());
     let messages = [];
 
@@ -134,6 +139,10 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   }
 
   private ensureOrganized(event: TextDocumentWillSaveEvent) {
+    if (! documentInScope(event.document)) {
+      return;
+    }
+
     if (OrganizeImportProvider.shouldOrganizeImportsOnSave) {
       event.waitUntil(this.runCodeAction(event.document));
     }

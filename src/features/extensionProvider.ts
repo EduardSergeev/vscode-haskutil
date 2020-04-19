@@ -3,6 +3,7 @@
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
 import OrganizeExtensionProvider from './organizeExtensionProvider';
+import { documentInScope } from './utils';
 
 
 export default class ExtensionProvider implements CodeActionProvider {
@@ -35,6 +36,10 @@ export default class ExtensionProvider implements CodeActionProvider {
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     const codeActions = [];
     for (const diagnostic of context.diagnostics) {
       for (const extension of ExtensionProvider.extensions) {

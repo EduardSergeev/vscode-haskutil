@@ -3,6 +3,7 @@
 import { CodeActionProvider, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, CodeActionKind } from 'vscode';
 import * as vscode from 'vscode';
 import ImportProviderBase, { SearchResult } from './importProvider/importProviderBase';
+import { documentInScope } from './utils';
 
 
 export default class ImportProvider extends ImportProviderBase implements CodeActionProvider {
@@ -11,6 +12,10 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     let codeActions = [];
     for (const diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error)) {
       const patterns = [

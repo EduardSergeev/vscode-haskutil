@@ -2,6 +2,7 @@
 
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
 import * as vscode from 'vscode';
+import { documentInScope } from './utils';
 
 
 export default class TypedHoleProvider implements CodeActionProvider {
@@ -18,6 +19,10 @@ export default class TypedHoleProvider implements CodeActionProvider {
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
+    if (! documentInScope(document)) {
+      return;
+    }
+
     const errorPattern = / Found hole: ([^\s]+?) ::/;
     const fillPattern = /^\s+([^\s]+)\s::/gm;
     const codeActions = [];
