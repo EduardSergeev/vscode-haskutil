@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.8.1] - 2020-04-20
+### Fixed
+ * Untitled files re-opening themselves after closing ([#28](https://github.com/EduardSergeev/vscode-haskutil/pull/28) - thanks to [dramforever](https://github.com/dramforever) for contribution)
+ * Haskutil complaining about non-Haskell files with unorganized imports
+ * Organize import can produce code that the extension considers unorganized ([#26](https://github.com/EduardSergeev/vscode-haskutil/issues/26))
+
 ## [0.8.0] - 2020-04-13
 ### Added
  * Align remaining imports when removing unused imports
@@ -32,8 +38,8 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 ### Added
  * Settings for turning on/off individual features
 ### Fixed
- * Fix 'Not in scope' error detection (different platforms)
- * Make LANGUAGE pragma handling case insencitive 
+ * Fix 'Not in scope' error detection (different platforms) ([#16](https://github.com/EduardSergeev/vscode-haskutil/pull/16) - thanks to [serras](https://github.com/serras) for contribution)
+ * Make LANGUAGE pragma handling case insensitive 
 
 ## [0.4.5] - 2019-07-26
 ### Fixed
