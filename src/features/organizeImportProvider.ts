@@ -123,7 +123,11 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     const oldImports = ImportDeclaration.getImports(document.getText());
     let newImports = oldImports.map(i => i);
     if (OrganizeImportProvider.shouldSortImports) {
-      newImports.sort((l, r) => (l.module + (l.importList || "")).localeCompare(r.module + (r.importList || "")));
+      newImports.sort((l, r) => {
+        const ls = l.module + (l.importList || "");
+        const rs = r.module + (r.importList || "");
+        return ls < rs ? -1 : (ls === rs ? 0 : 1);
+      });
     }
     if (OrganizeImportProvider.shouldAlignImports) {
       newImports = OrganizeImportProvider.alignImports(newImports);
