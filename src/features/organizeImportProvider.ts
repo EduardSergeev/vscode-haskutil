@@ -40,9 +40,9 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
     vscode.workspace.onDidOpenTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onDidCloseTextDocument(doc => this.diagnosticCollection.delete(doc.uri), null, subscriptions);
-    vscode.workspace.onDidSaveTextDocument(this.checkImports, this);
-    vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this);
-    vscode.workspace.textDocuments.forEach(this.checkImports, this);
+    vscode.workspace.onDidSaveTextDocument(this.checkImports, this, subscriptions);
+    vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this, subscriptions);
+    vscode.workspace.textDocuments.filter(d => d.languageId === 'haskell').forEach(this.checkImports, this);
   }
 
   public dispose(): void {
@@ -52,6 +52,10 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   }
 
   private checkImports(document: TextDocument) {
+    // We subscribe to multiple events which can be fired for any language, not just `Haskell` 
+    if (document.languageId !== 'haskell') {
+      return;
+    }
     const imports = ImportDeclaration.getImports(document.getText());
     let messages = [];
 
