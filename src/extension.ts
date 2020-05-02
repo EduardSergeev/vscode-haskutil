@@ -21,7 +21,8 @@ export function activate(context: vscode.ExtensionContext) {
       "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
       "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
       "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
-      "or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid)");
+      "[ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid), " +
+      "or [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide)");
   }
 
   const features = {
