@@ -14,7 +14,8 @@ export function activate(context: vscode.ExtensionContext) {
   const dependency =
     vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
     vscode.extensions.getExtension('Vans.haskero') ||
-    vscode.extensions.getExtension('ndmitchell.haskell-ghcid');
+    vscode.extensions.getExtension('ndmitchell.haskell-ghcid') ||
+    vscode.extensions.getExtension('digitalassetholdingsllc.ghcide');
   if(!dependency) {
     vscode.window.showWarningMessage(
       "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
