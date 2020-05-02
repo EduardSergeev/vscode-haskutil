@@ -14,13 +14,15 @@ export function activate(context: vscode.ExtensionContext) {
   const dependency =
     vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
     vscode.extensions.getExtension('Vans.haskero') ||
-    vscode.extensions.getExtension('ndmitchell.haskell-ghcid');
+    vscode.extensions.getExtension('ndmitchell.haskell-ghcid') ||
+    vscode.extensions.getExtension('digitalassetholdingsllc.ghcide');
   if(!dependency) {
     vscode.window.showWarningMessage(
       "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
       "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
       "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
-      "or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid)");
+      "[ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid), " +
+      "or [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide)");
   }
 
   const features = {
