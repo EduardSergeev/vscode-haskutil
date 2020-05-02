@@ -7,7 +7,7 @@
 
 
 ## Requirements
-This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero) or [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid). Please install one of them along with this extension.
+This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid) or [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide). Please install one of them along with this extension.
 
 ## Features
  * [Add missing import](#add-missing-import)
