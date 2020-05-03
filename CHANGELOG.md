@@ -3,6 +3,7 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.9.1] - 2020-05-04
 ### Fixed
+ * Exclude unrelated files from .vsix package
  * CHANGLELOG (add missing contributer)
 
 ## [0.9.0] - 2020-05-04

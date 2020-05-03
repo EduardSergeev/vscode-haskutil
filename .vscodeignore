@@ -1,6 +1,8 @@
 .vscode/**
 .vscode-test/**
-out/test/**
+.nyc_output
+out/test
+out/coverage
 out/**/*.map
 src/**
 .gitignore
