@@ -1,9 +1,13 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.9.1] - 2020-05-04
+### Fixed
+ * CHANGLELOG (add missing contributer)
+
 ## [0.9.0] - 2020-05-04
 ### Added
- * Add [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide) as an option for base extension populating PROBLEMS
+ * Add [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide) as an option for base extension populating PROBLEMS ([#29](https://github.com/EduardSergeev/vscode-haskutil/pull/29) - thanks to [ArturGajowy](https://github.com/ArturGajowy) for contribution)
 
 ## [0.8.1] - 2020-04-20
 ### Fixed
