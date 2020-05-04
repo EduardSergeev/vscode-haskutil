@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
 
 
-export async function runQuickfixTest(beforePath: string, afterPath: string, diagnosticCount: number, ...titles: string[]) {
-  const doc = await didChangeDiagnostics(beforePath, diagnosticCount, async () => {
-    const doc = await vscode.workspace.openTextDocument(beforePath);
+export async function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]) {
+  const before = path.join(__dirname, '../../input/before/', file);
+  const after = path.join(__dirname, '../../input/after', file);
+  const doc = await didChangeDiagnostics(before, diagnosticCount, async () => {
+    const doc = await vscode.workspace.openTextDocument(before);
     await vscode.window.showTextDocument(doc);
     return doc;
   });
@@ -15,8 +18,8 @@ export async function runQuickfixTest(beforePath: string, afterPath: string, dia
 
   await runQuickFixes(quickFixes);
   
-  const after = await vscode.workspace.openTextDocument(afterPath);
-  assert.strictEqual(doc.getText(), after.getText());
+  const expected = await vscode.workspace.openTextDocument(after);
+  assert.strictEqual(doc.getText(), expected.getText());
 
   vscode.commands.executeCommand('workbench.action.closeActiveEditor');
   // TODO: Find appropriate event to watch on
