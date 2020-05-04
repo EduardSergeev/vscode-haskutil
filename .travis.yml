@@ -17,7 +17,7 @@ jobs:
 
 script: npm install && npm test
 
-after_success: npm run coverage
+after_success: npm run coveralls
 
 cache: npm
 

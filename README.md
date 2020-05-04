@@ -1,6 +1,7 @@
 # VSCode Haskutil
 [![Build Status](https://travis-ci.org/EduardSergeev/vscode-haskutil.svg?branch=master)](https://travis-ci.org/EduardSergeev/vscode-haskutil)
 [![vscode-ghc-simple on Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/edka.haskutil.svg)](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
+[![Coverage Status](https://coveralls.io/repos/github/EduardSergeev/vscode-haskutil/badge.svg?branch=master)](https://coveralls.io/github/EduardSergeev/vscode-haskutil?branch=master)
 
 
 'QuickFix' actions for Haskell editor  
