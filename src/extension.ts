@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-
 import ImportProvider from './features/importProvider';
 import QualifiedImportProvider from './features/qualifiedImportProvider';
 import OrganizeImportProvider from './features/organizeImportProvider';
@@ -10,21 +9,8 @@ import TypedHoleProvider from './features/typedHoleProvider';
 import TypeWildcardProvider from './features/typeWildcardProvider';
 import RemoveUnusedImportProvider from './features/removeUnusedImportProvider';
 
-export function activate(context: vscode.ExtensionContext) {
-  const dependency =
-    vscode.extensions.getExtension('dramforever.vscode-ghc-simple') ||
-    vscode.extensions.getExtension('Vans.haskero') ||
-    vscode.extensions.getExtension('ndmitchell.haskell-ghcid') ||
-    vscode.extensions.getExtension('digitalassetholdingsllc.ghcide');
-  if(!dependency) {
-    vscode.window.showWarningMessage(
-      "Dependent extension which populates diagnostics (Errors and Warnings) is not installed.\n" +
-      "Please install either [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), " +
-      "[Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), " +
-      "[ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid), " +
-      "or [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide)");
-  }
 
+export function activate(context: vscode.ExtensionContext) {
   const features = {
     addImport: new ImportProvider(),
     addQualifiedImport: new QualifiedImportProvider(),
@@ -37,6 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
     removeUnusedImport: new RemoveUnusedImportProvider(),
   };
 
+  checkDependencies();
+
   for (const feature in features) {
     if (vscode.workspace.getConfiguration('haskutil').feature[feature]) {
       const provider = features[feature];
@@ -44,4 +32,23 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.languages.registerCodeActionsProvider('haskell', provider);
     }
   }
+}
+
+function checkDependencies() {
+  const dependencies = [
+    ['dramforever.vscode-ghc-simple', 'Simple GHC'],
+    ['Vans.haskero', 'Haskero'],
+    ['ndmitchell.haskell-ghcid', 'ghcid'],
+    ['digitalassetholdingsllc.ghcide', 'ghcide']
+  ];
+  const installed = new Set(vscode.extensions.all.map(e => e.id));
+  if(!dependencies.find(([id]) => installed.has(id))) {
+    const ml = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
+    const items = dependencies.map(ml);
+    vscode.window.showWarningMessage(`Dependency is not installed.
+      Extension which populates diagnostics (Errors and Warnings) is not installed.
+      Please install either ${items.slice(0, -1).join(', ')} or ${items.pop()}
+      to get the full set of QuickFix actions provided by ${ml(['edka.haskutil','Haskutil'])}.
+    `);
+  }  
 }
