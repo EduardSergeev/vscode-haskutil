@@ -17,7 +17,12 @@ export async function runQuickfixTest(beforePath: string, afterPath: string, dia
   
   const after = await vscode.workspace.openTextDocument(afterPath);
   assert.strictEqual(doc.getText(), after.getText());
-  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+
+  vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+  // TODO: Find appropriate event to watch on
+  await new Promise<void>((resolve, _) => {
+    setTimeout(_ => resolve(), 2000);
+  });
 }
 
 export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
