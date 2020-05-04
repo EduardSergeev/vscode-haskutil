@@ -61,3 +61,17 @@ export async function didEvent<T, E>(
     result = await action();
   });
 }
+
+export async function outputGHCiLog() {
+    vscode.window.onDidChangeVisibleTextEditors(editors => {
+      for (const editor of editors) {
+        if (editor.document.fileName.startsWith('extension-output')) {
+          const firstLine = editor.document.lineAt(0).text;
+          if (!firstLine || firstLine.startsWith('Starting GHCi with')) {
+            console.log(`\nGHCi Output:\n\n${editor.document.getText()}`);
+          }
+        }
+      }
+    }, this);
+    await vscode.commands.executeCommand('vscode-ghc-simple.openOutput');
+}
