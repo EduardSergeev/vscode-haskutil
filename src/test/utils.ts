@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Range, Position, CodeAction, TextDocument } from 'vscode';
+import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
 
 
@@ -48,18 +48,17 @@ export async function didChangeDiagnostics<T>(fsPath: string, count: number, act
 }
 
 
-export async function didEvent<T, E>(
-  event: (arg0: (e: E) => void) => any, predicate: (e: E) => Boolean,
-  action: () => Thenable<T>): Promise<T> {
-  return new Promise<T>(async (resolve, _) => {
-    let result: T;
-    const disposable = event(e => {
+export async function didEvent<TResult, TEvent>(
+  subscribe: (arg: (event: TEvent) => void) => Disposable, predicate: (event: TEvent) => Boolean,
+  action: () => Thenable<TResult>): Promise<TResult> {
+  return new Promise<TResult>(async (resolve, _) => {
+    const result = action();
+    const disposable = subscribe(async e => {
       if(predicate(e)) {
         disposable.dispose();
-        resolve(result);
+        resolve(await result);
       }
     });
-    result = await action();
   });
 }
 
