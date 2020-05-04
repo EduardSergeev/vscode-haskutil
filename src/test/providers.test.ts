@@ -2,10 +2,11 @@ import { runQuickfixTest, outputGHCiLog } from './utils';
 
 
 suite("ExtensionProvider", function () {
-  test("Add missing import", () => {
-    runQuickfixTest('ImportProvider.hs', 1,
+  test("Add missing import", async () => {
+    await runQuickfixTest('ImportProvider.hs', 3,
+      'Add: "import Data.Maybe"',
+      'Add: "import Data.List (tails)"',
       'Add: "import Data.List (sort)"',
-      'Add: "import Data.Maybe"'
     );
   });
 
