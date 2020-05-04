@@ -20,11 +20,18 @@ async function main() {
     const vscodeExecutablePath = await downloadAndUnzipVSCode();
     const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
-    // Use cp.spawn / cp.exec for custom setup
-    cp.spawnSync(cliPath, ['--install-extension', 'jcanero.hoogle-vscode'], {
-      encoding: 'utf-8',
-      stdio: 'inherit'
-    });
+    // Install dependent extensions
+    const dependencies = [
+      'jcanero.hoogle-vscode',
+      'dramforever.vscode-ghc-simple'
+    ];
+    for(const extension of dependencies) {
+      cp.spawnSync(cliPath, ['--install-extension', extension], {
+        encoding: 'utf-8',
+        stdio: 'inherit'
+      });
+    }
+    
     // Download VS Code, unzip it and run the integration test
     await runTests({
       vscodeExecutablePath,
