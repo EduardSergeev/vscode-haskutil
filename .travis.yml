@@ -1,17 +1,31 @@
-sudo: false
+ 
+language: node_js
+node_js: 8
 
-os:
-  - osx
-  - linux
+jobs:
+  include:
+  - os: linux
+    language: haskell
+    ghc: 
+      - "8.8"
+    install:
+      - |
+        export DISPLAY=':99.0'
+        /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+  - os: osx
+    if: branch = master
 
-services:
-  - xvfb
+script: npm install && npm test
 
-install:
-  - npm install
-  - npm run vscode:prepublish
-  - npm install -g vsce
+after_success: npm run coveralls
 
-script:
-  - npm test --silent
-  - vsce package
+cache: npm
+
+addons:
+  apt:
+    packages:
+    - libsecret-1-dev
+  homebrew:
+    packages:
+    - ghc@8.8
+    update: true
