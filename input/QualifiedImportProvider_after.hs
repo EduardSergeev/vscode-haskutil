@@ -1,5 +1,4 @@
-import Data.List (sort)
+import qualified Data.ByteString as BS
 
-foo :: Ord a => [a] -> [a]
 foo xs =
-  sort xs 
+  BS.pack xs
