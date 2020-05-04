@@ -46,11 +46,4 @@ suite("ExtensionProvider", function () {
   test("Add top-level signature", async () => {
     await runQuickfixTest('TopLevelSignatureProvider.hs', 1);
   });
-  
-
-  teardown(async () => {
-    if(this.ctx.currentTest.isFailed()) {
-      await outputGHCiLog();
-    }
-  });
 });
