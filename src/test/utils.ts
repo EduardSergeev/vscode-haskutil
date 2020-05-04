@@ -3,13 +3,14 @@ import { Range, Position, CodeAction, TextDocument } from 'vscode';
 import { assert } from 'chai';
 
 
-export async function runQuickfixTest(beforePath: string, afterPath: string, diagnosticCount: number) {
+export async function runQuickfixTest(beforePath: string, afterPath: string, diagnosticCount: number, ...titles: string[]) {
   const doc = await didChangeDiagnostics(beforePath, diagnosticCount, async () => {
     const doc = await vscode.workspace.openTextDocument(beforePath);
     await vscode.window.showTextDocument(doc);
     return doc;
   });
-  const quickFixes = await getQuickFixes(doc);
+  const quickFixes = await getQuickFixes(doc).then(qfs =>
+    qfs.filter(qf => !titles.length || titles.includes(qf.title)));
   assert.isNotEmpty(quickFixes);
 
   await runQuickFixes(quickFixes);
@@ -28,7 +29,7 @@ export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
 
 export async function runQuickFixes(quickFixes: CodeAction[]) {
   for(const quickFix of quickFixes) {
-    console.log(`Executing: ${quickFix.title}`);
+    console.log(`Executing: '${quickFix.title}'`);
     await vscode.commands.executeCommand(
       quickFix.command.command,
       ...quickFix.command.arguments
