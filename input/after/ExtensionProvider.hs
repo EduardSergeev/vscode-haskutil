@@ -1,4 +1,5 @@
+{-# LANGUAGE TupleSections    #-}
 {-# LANGUAGE TypeApplications #-}
 
 foo xs =
-  read @ Int xs
+  map (, True) . read @ [Int] $ xs

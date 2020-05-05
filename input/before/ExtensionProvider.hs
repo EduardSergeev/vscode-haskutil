@@ -1,3 +1,3 @@
 
 foo xs =
-  read @ Int xs
+  map (, True) . read @ [Int] $ xs
