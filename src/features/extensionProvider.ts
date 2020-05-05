@@ -84,7 +84,7 @@ export default class ExtensionProvider implements CodeActionProvider {
     await vscode.workspace.applyEdit(edit);
 
     if (ExtensionProvider.shouldOrganizeExtensionsOnInsert) {
-      vscode.commands.executeCommand(OrganizeExtensionProvider.commandId, document);
+      await vscode.commands.executeCommand(OrganizeExtensionProvider.commandId, document);
     }
   }
 }
