@@ -7,7 +7,6 @@ import ImportDeclaration from './importProvider/importDeclaration';
 
 export default class OrganizeImportProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.organizeImports';
-  private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unorganizedImports";
 
@@ -34,21 +33,16 @@ export default class OrganizeImportProvider implements CodeActionProvider {
 
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(OrganizeImportProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(OrganizeImportProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
 
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+    subscriptions.push(this.diagnosticCollection);
     vscode.workspace.onDidOpenTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onDidCloseTextDocument(doc => this.diagnosticCollection.delete(doc.uri), null, subscriptions);
     vscode.workspace.onDidSaveTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this, subscriptions);
     vscode.workspace.textDocuments.filter(d => d.languageId === 'haskell').forEach(this.checkImports, this);
-  }
-
-  public dispose(): void {
-    this.diagnosticCollection.clear();
-    this.diagnosticCollection.dispose();
-    this.command.dispose();
   }
 
   private checkImports(document: TextDocument) {

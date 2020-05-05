@@ -6,15 +6,10 @@ import * as vscode from 'vscode';
 
 export default class TypedHoleProvider implements CodeActionProvider {
   private static commandId: string = 'haskell.fillTypeHoleSignature';
-  private command: Disposable;
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(TypedHoleProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
-  }
-
-  public dispose(): void {
-    this.command.dispose();
+    const command = vscode.commands.registerCommand(TypedHoleProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {

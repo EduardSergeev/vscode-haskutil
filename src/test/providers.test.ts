@@ -26,7 +26,7 @@ suite("ExtensionProvider", function () {
   });
   
   test("Add missing extension", async () => {
-    await runQuickfixTest('ExtensionProvider.hs', 1);
+    await runQuickfixTest('ExtensionProvider.hs', 2);
   });
 
   test("Organize extensions", async () => {

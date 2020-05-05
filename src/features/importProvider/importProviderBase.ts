@@ -15,23 +15,18 @@ export interface SearchResult {
 
 export default class ImportProviderBase {
   private static modulePattern = /^module(.|\n)+?where/m;
-  private command: Disposable;
   private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
 
   constructor(protected commandId: string) {
   }
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
 
     const hoogle = vscode.extensions.getExtension('jcanero.hoogle-vscode');
     const hoogleApi = hoogle.exports;
     this.hoogleSearch = hoogleApi.search;
-  }
-
-  public dispose(): void {
-    this.command.dispose();
   }
 
   protected search(name: string): Promise<SearchResult[]> {

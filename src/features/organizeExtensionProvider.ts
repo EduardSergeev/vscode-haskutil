@@ -7,7 +7,6 @@ import ExtensionDeclaration from './extensionProvider/extensionDeclaration';
 
 export default class OrganizeExtensionProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.organizeExtensions';
-  private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unorganizedExtensions";
 
@@ -33,21 +32,16 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
 
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(OrganizeExtensionProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(OrganizeExtensionProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
 
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+    subscriptions.push(this.diagnosticCollection);
     vscode.workspace.onDidOpenTextDocument(this.checkExtensions, this, subscriptions);
     vscode.workspace.onDidCloseTextDocument(doc => this.diagnosticCollection.delete(doc.uri), null, subscriptions);
-    vscode.workspace.onDidSaveTextDocument(this.checkExtensions, this);
-    vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this);
+    vscode.workspace.onDidSaveTextDocument(this.checkExtensions, this, subscriptions);
+    vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this, subscriptions);
     vscode.workspace.textDocuments.forEach(this.checkExtensions, this);
-  }
-
-  public dispose(): void {
-    this.diagnosticCollection.clear();
-    this.diagnosticCollection.dispose();
-    this.command.dispose();
   }
 
   private checkExtensions(document: TextDocument) {

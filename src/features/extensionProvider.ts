@@ -7,19 +7,14 @@ import OrganizeExtensionProvider from './organizeExtensionProvider';
 
 export default class ExtensionProvider implements CodeActionProvider {
   private static commandId: string = 'haskell.addExtension';
-  private command: Disposable;
 
   public static get extensionPattern() {
     return /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
   }
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(ExtensionProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
-  }
-
-  public dispose(): void {
-    this.command.dispose();
+    const command = vscode.commands.registerCommand(ExtensionProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
   }
 
   private static get shouldOrganizeExtensionsOnInsert(): boolean {

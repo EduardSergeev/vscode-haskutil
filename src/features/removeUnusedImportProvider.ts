@@ -8,21 +8,15 @@ import OrganizeImportProvider from './organizeImportProvider';
 
 export default class RemoveUnusedImportProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.removeUnusedImports';
-  private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unusedImports";
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(RemoveUnusedImportProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(RemoveUnusedImportProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+    subscriptions.push(this.diagnosticCollection);
     vscode.languages.onDidChangeDiagnostics(this.didChangeDiagnostics, this, subscriptions);
-  }
-
-  public dispose(): void {
-    this.diagnosticCollection.clear();
-    this.diagnosticCollection.dispose();
-    this.command.dispose();
   }
 
   private async didChangeDiagnostics(e: DiagnosticChangeEvent) {
