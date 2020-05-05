@@ -1,4 +1,5 @@
-import { runQuickfixTest, outputGHCiLog } from './utils';
+import * as vscode from 'vscode';
+import { runQuickfixTest } from './utils';
 
 
 suite("ExtensionProvider", function () {

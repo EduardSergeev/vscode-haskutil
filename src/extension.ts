@@ -41,14 +41,13 @@ function checkDependencies() {
     ['ndmitchell.haskell-ghcid', 'ghcid'],
     ['digitalassetholdingsllc.ghcide', 'ghcide']
   ];
-  const installed = new Set(vscode.extensions.all.map(e => e.id));
-  if(!dependencies.find(([id]) => installed.has(id))) {
-    const ml = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
-    const items = dependencies.map(ml);
+  if(!dependencies.find(([id]) => vscode.extensions.getExtension(id))) {
+    const toLink = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
+    const items = dependencies.map(toLink);
     vscode.window.showWarningMessage(`Dependency is not installed.
       Extension which populates diagnostics (Errors and Warnings) is not installed.
       Please install either ${items.slice(0, -1).join(', ')} or ${items.pop()}
-      to get the full set of QuickFix actions provided by ${ml(['edka.haskutil','Haskutil'])}.
+      to get the full set of QuickFix actions provided by ${toLink(['edka.haskutil','Haskutil'])}.
     `);
   }  
 }
