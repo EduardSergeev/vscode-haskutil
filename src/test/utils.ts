@@ -14,11 +14,17 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
     await vscode.window.showTextDocument(doc);
     return doc;
   });
-  const quickFixes = await getQuickFixes(doc).then(qfs =>
-    qfs.filter(qf => !titles.length || titles.includes(qf.title)));
-  assert.isNotEmpty(quickFixes);
+  const diagnostics = vscode.languages.getDiagnostics(doc.uri);
+  const quickFixes = await getQuickFixes(doc);
+  const applicableQuickFixes = quickFixes.filter(qf => !titles.length || titles.includes(qf.title));
+  assert.isNotEmpty(applicableQuickFixes, `
+    Could not find any applicable QuickFixes.
+    Available: '${quickFixes.map(qf => qf.title).join(', ')}'
+    Requested: '${titles.join(', ')}'
+    Diagnostics: '${diagnostics.map(d => d.message).join('\n')}'
+  `);
 
-  await runQuickFixes(quickFixes);
+  await runQuickFixes(applicableQuickFixes);
 
   const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
   assert.strictEqual(doc.getText(), expected);
@@ -35,7 +41,9 @@ export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
 
 export async function runQuickFixes(quickFixes: CodeAction[]) {
   for(const quickFix of quickFixes) {
-    console.log(`Executing: '${quickFix.title}'`);
+    console.log(`
+      Executing: '${quickFix.title}'`
+    );
     await vscode.commands.executeCommand(
       quickFix.command.command,
       ...quickFix.command.arguments
