@@ -2,12 +2,11 @@ import * as vscode from 'vscode';
 import { runQuickfixTest } from './utils';
 
 
-suite("Features", function () {
-  setup(async () => {
-    const config = vscode.workspace.getConfiguration('hoogle-vscode');
-    await config.update('verbose', true);
-  });
-
+suite("ExtensionProvider", function () {
+  test("Organize imports", async () => {
+    await runQuickfixTest('OrganizeImportProvider.hs', 1);
+  });  
+  
   test("Add missing import", async () => {
     await runQuickfixTest('ImportProvider.hs', 3,
       'Add: "import Data.Maybe"',
@@ -21,10 +20,6 @@ suite("Features", function () {
       'Add: "import qualified Data.ByteString as BS"'
     );
   });
-
-  test("Organize imports", async () => {
-    await runQuickfixTest('OrganizeImportProvider.hs', 1);
-  });  
 
   test("Remove unused imports", async () => {
     await runQuickfixTest('UnusedImportProvider.hs', 3);
