@@ -15,16 +15,16 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
     return doc;
   });
   const diagnostics = vscode.languages.getDiagnostics(doc.uri);
-  const quickFixes = await getQuickFixes(doc);
-  const applicableQuickFixes = quickFixes.filter(qf => !titles.length || titles.includes(qf.title));
-  assert.isNotEmpty(applicableQuickFixes, `
+  const available = await getQuickFixes(doc);
+  const applicable = available.filter(qf => !titles.length || titles.includes(qf.title));
+  assert.isNotEmpty(applicable, `
     Could not find any applicable QuickFixes.
-    Available: '${quickFixes.map(qf => qf.title).join(', ')}'
+    Available: '${available.map(qf => qf.title).join(', ')}'
     Requested: '${titles.join(', ')}'
     Diagnostics: '${diagnostics.map(d => d.message).join('\n')}'
   `);
 
-  await runQuickFixes(applicableQuickFixes);
+  await runQuickFixes(applicable);
 
   const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
   assert.strictEqual(doc.getText(), expected);

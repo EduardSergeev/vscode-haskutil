@@ -2,7 +2,12 @@ import * as vscode from 'vscode';
 import { runQuickfixTest } from './utils';
 
 
-suite("ExtensionProvider", function () {
+suite("Features", function () {
+  setup(async () => {
+    const config = vscode.workspace.getConfiguration('hoogle-vscode');
+    await config.update('verbose', true);
+  });
+
   test("Add missing import", async () => {
     await runQuickfixTest('ImportProvider.hs', 3,
       'Add: "import Data.Maybe"',

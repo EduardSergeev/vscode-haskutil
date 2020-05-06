@@ -17,6 +17,8 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = __dirname;
 
+    const inputPath = path.resolve(extensionDevelopmentPath, 'input')
+
     const vscodeExecutablePath = await downloadAndUnzipVSCode();
     const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
@@ -38,6 +40,7 @@ async function main() {
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs: [
+        inputPath,
         '--new-window',
         '--disable-gpu',
         '--disable-updates',
