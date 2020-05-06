@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import * as path from 'path';
+import * as util from 'util';
 import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
 
@@ -17,22 +19,17 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
   assert.isNotEmpty(quickFixes);
 
   await runQuickFixes(quickFixes);
-  
-  const expected = await vscode.workspace.openTextDocument(after);
-  assert.strictEqual(doc.getText(), expected.getText());
 
+  const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
+  assert.strictEqual(doc.getText(), expected);
   vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-  // TODO: Find appropriate event to watch on
-  await new Promise<void>((resolve, _) => {
-    setTimeout(_ => resolve(), 2000);
-  });
 }
 
 export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
   return await vscode.commands.executeCommand(
     'vscode.executeCodeActionProvider',
     doc.uri,
-    new Range(new Position(0,0), new Position(doc.lineCount - 1, 0))
+    new Range(new Position(0, 0), new Position(doc.lineCount - 1, 0))
   );
 }
 
@@ -51,14 +48,15 @@ export async function didChangeDiagnostics<T>(fsPath: string, count: number, act
     vscode.languages.onDidChangeDiagnostics,
     e => {
       const uri = e.uris.find(uri => uri.fsPath === fsPath);
-      return uri && vscode.languages.getDiagnostics(uri).length >= count;
+      return uri && vscode.languages.getDiagnostics(uri).length === count;
     },
     action);
 }
 
 
 export async function didEvent<TResult, TEvent>(
-  subscribe: (arg: (event: TEvent) => void) => Disposable, predicate: (event: TEvent) => Boolean,
+  subscribe: (arg: (event: TEvent) => void) => Disposable,
+  predicate: (event: TEvent) => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
   return new Promise<TResult>(async (resolve, _) => {
     const result = action();

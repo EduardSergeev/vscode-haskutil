@@ -22,7 +22,7 @@ suite("ExtensionProvider", function () {
   });  
 
   test("Remove unused imports", async () => {
-    await runQuickfixTest('UnusedImportProvider.hs', 1);
+    await runQuickfixTest('UnusedImportProvider.hs', 3);
   });
   
   test("Add missing extension", async () => {
