@@ -3,33 +3,13 @@
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration, TextDocumentWillSaveEvent } from 'vscode';
 import * as vscode from 'vscode';
 import ExtensionDeclaration from './extensionProvider/extensionDeclaration';
+import Configuration from '../configuration';
 
 
 export default class OrganizeExtensionProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.organizeExtensions';
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unorganizedExtensions";
-
-  private static get shouldSplitExtensions(): boolean {
-    return OrganizeExtensionProvider.configuration.get("splitExtensions");
-  }
-
-  private static get shouldAlignExtensions(): boolean {
-    return OrganizeExtensionProvider.configuration.get("alignExtensions");
-  }
-
-  private static get shouldSortExtensions(): boolean {
-    return OrganizeExtensionProvider.configuration.get("sortExtensions");
-  }
-
-  private static get shouldOrganizeExtensionsOnSave(): boolean {
-    return OrganizeExtensionProvider.configuration.get("organiseExtensionOnSave");
-  }
-
-  private static get configuration(): WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration("haskutil");
-  }
-
 
   public activate(subscriptions: Disposable[]) {
     const command = vscode.commands.registerCommand(OrganizeExtensionProvider.commandId, this.runCodeAction, this);
@@ -53,10 +33,10 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
     const aligned =
       extensions.length === 0 ||
       extensions.every(extension => extension.extensions.length === extensions[0].extensions.length);
-    unorganized = unorganized || OrganizeExtensionProvider.shouldAlignExtensions && !aligned;
+    unorganized = unorganized || Configuration.shouldAlignExtensions && !aligned;
 
     let pred = "";
-    if (OrganizeExtensionProvider.shouldSortExtensions) {
+    if (Configuration.shouldSortExtensions) {
       for (const extension of extensions) {
         const curr = extension.extensions;
         if (curr < pred) {
@@ -101,19 +81,19 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
   }
 
   private async runCodeAction(document: TextDocument) {
-    if (OrganizeExtensionProvider.shouldSplitExtensions) {
+    if (Configuration.shouldSplitExtensions) {
       await this.splitExtensions(document);
     }
-    if (OrganizeExtensionProvider.shouldAlignExtensions) {
+    if (Configuration.shouldAlignExtensions) {
       await this.alignExtensions(document);
     }
-    if (OrganizeExtensionProvider.shouldSortExtensions) {
+    if (Configuration.shouldSortExtensions) {
       await this.sortExtensions(document);
     }
   }
 
   private ensureOrganized(event: TextDocumentWillSaveEvent) {
-    if (OrganizeExtensionProvider.shouldOrganizeExtensionsOnSave) {
+    if (Configuration.shouldOrganizeExtensionsOnSave) {
       event.waitUntil(this.runCodeAction(event.document));
     }
   }

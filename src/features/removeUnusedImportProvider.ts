@@ -1,9 +1,8 @@
-'use strict';
-
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, DiagnosticChangeEvent, Uri } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 import OrganizeImportProvider from './organizeImportProvider';
+import Configuration from '../configuration';
 
 
 export default class RemoveUnusedImportProvider implements CodeActionProvider {
@@ -75,7 +74,7 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
         toBeDeleted.push(range);
       }
     }
-    if (OrganizeImportProvider.shouldAlignImports) {
+    if (Configuration.shouldAlignImports) {
       imports = OrganizeImportProvider.alignImports(imports);
     }
     for (const imp of imports) {

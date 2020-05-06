@@ -105,6 +105,11 @@
           "description": "Organize imports on save",
           "default": false
         },
+        "haskutil.organiseImportsOnInsert": {
+          "type": "boolean",
+          "description": "Organize imports when adding new import",
+          "default": true
+        },
         "haskutil.feature.removeUnusedImport": {
           "type": "boolean",
           "default": true,
