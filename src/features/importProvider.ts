@@ -1,7 +1,4 @@
-'use strict';
-
-import { CodeActionProvider, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, CodeActionKind } from 'vscode';
-import * as vscode from 'vscode';
+import { CodeActionProvider, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, CodeActionKind, DiagnosticSeverity, Diagnostic } from 'vscode';
 import ImportProviderBase, { SearchResult } from './importProvider/importProviderBase';
 
 
@@ -10,31 +7,25 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
     super('haskell.addImport');
   }
 
-  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
-    let codeActions = [];
-    for (const diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error)) {
-      const patterns = [
-        /Variable not in scope:\s+(\S+)/,
-        /Not in scope: type constructor or class [`‘](\S+)['’]/
-      ];
-      for (const pattern of patterns) {
-        const match = pattern.exec(diagnostic.message);
-        if (match === null) {
-          continue;
-        }
-        const name = match[1];
-
-        const results = await this.search(name);
-        codeActions = codeActions.concat(this.addImportForVariable(document, name, results));
-        codeActions.forEach(action => {
-          action.diagnostics = [diagnostic];
-        });
-      }
-    }
-    return codeActions;
+  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
+    const patterns = [
+      /Variable not in scope:\s+(\S+)/,
+      /Not in scope: type constructor or class [`‘](\S+)['’]/
+    ];
+    const codeActions = await Promise.all(context.diagnostics
+      .filter(d => range.contains(d.range) && d.severity === DiagnosticSeverity.Error)
+      .flatMap(diagnostic =>
+        patterns.map(pattern => pattern.exec(diagnostic.message))
+        .filter(match => match)
+        .flatMap(async ([, name]) =>
+          this.addImportForVariable(document, diagnostic, name, await this.search(name))
+        )
+      )
+    );
+    return codeActions.flat();
   }
 
-  private addImportForVariable(document: TextDocument, variableName: string, searchResults: SearchResult[]): CodeAction[] {
+  private addImportForVariable(document: TextDocument, diagnostic: Diagnostic, variableName: string, searchResults: SearchResult[]): CodeAction[] {
     const codeActions = [];
     for (const result of searchResults) {
       let title = `Add: "import ${result.module}"`;
@@ -45,8 +36,9 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
         arguments: [
           document,
           result.module,
-        ]
+        ],
       };
+      codeAction.diagnostics = [diagnostic];
       codeActions.push(codeAction);
 
       title = `Add: "import ${result.module} (${variableName})"`;
@@ -62,6 +54,7 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
           }
         ]
       };
+      codeAction.diagnostics = [diagnostic];
       codeActions.push(codeAction);
     }
     return codeActions;

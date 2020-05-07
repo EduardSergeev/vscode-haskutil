@@ -181,7 +181,7 @@
   ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "rm -rf ./out && tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && mocha ./out/test/runTest.js",
     "coverage": "nyc npm test",

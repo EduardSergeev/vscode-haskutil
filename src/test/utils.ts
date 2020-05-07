@@ -4,6 +4,7 @@ import * as path from 'path';
 import * as util from 'util';
 import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
+import { promisify } from 'util';
 
 
 export async function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]) {
@@ -28,7 +29,18 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
 
   const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
   assert.strictEqual(doc.getText(), expected);
-  vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+}
+
+export async function warmup() {
+  const before = path.join(__dirname, '../../input/Welcome.hs');
+  const doc = await didChangeDiagnostics(before, 3, async () => {
+    const doc = await vscode.workspace.openTextDocument(before);
+    await vscode.window.showTextDocument(doc);
+    return doc;
+  });
+  await getQuickFixes(doc);
+  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
 }
 
 export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
