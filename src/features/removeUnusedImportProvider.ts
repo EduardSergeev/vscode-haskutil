@@ -43,7 +43,10 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
     let codeActions = [];
-    for (let diagnostic of context.diagnostics.filter(d => d.code === RemoveUnusedImportProvider.diagnosticCode)) {
+    const diagnostics = context.diagnostics.filter(d =>
+      range.contains(d.range) && d.code === RemoveUnusedImportProvider.diagnosticCode
+    );
+    for (let diagnostic of diagnostics) {
       let title = "Remove unused imports";
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {

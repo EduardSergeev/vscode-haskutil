@@ -13,7 +13,10 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
     const pattern = /Not in scope:[^`]*[`‘]([^.]+)\.([^'’]+)['’]/;
     let codeActions = [];
-    for (let diagnostic of context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error)) {
+    const diagnostics = context.diagnostics.filter(d =>
+      range.contains(d.range) && d.severity === vscode.DiagnosticSeverity.Error
+    );
+    for (let diagnostic of diagnostics) {
       const match = pattern.exec(diagnostic.message);
       if (match === null) {
         continue;

@@ -1,9 +1,8 @@
-'use strict';
-
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
 import OrganizeExtensionProvider from './organizeExtensionProvider';
 import Configuration from '../configuration';
+import { promisify } from 'util';
 
 
 export default class ExtensionProvider implements CodeActionProvider {
@@ -18,9 +17,9 @@ export default class ExtensionProvider implements CodeActionProvider {
     subscriptions.push(command);
   }
 
-  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
+  public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): CodeAction[] {
     const codeActions = [];
-    for (const diagnostic of context.diagnostics) {
+    for (const diagnostic of context.diagnostics.filter(d => range.contains(d.range))) {
       for (const extension of Configuration.supportedExtensions) {
         if (!diagnostic.message.includes(extension)) {
           continue;

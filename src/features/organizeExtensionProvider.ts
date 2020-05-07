@@ -64,7 +64,10 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
     let codeActions = [];
-    for (let diagnostic of context.diagnostics.filter(d => d.code === OrganizeExtensionProvider.diagnosticCode)) {
+    const diagnostics = context.diagnostics.filter(d =>
+      range.contains(d.range) && d.code === OrganizeExtensionProvider.diagnosticCode
+    );
+    for (let diagnostic of diagnostics) {
       let title = "Organize extensions";
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
