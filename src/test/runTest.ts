@@ -33,7 +33,7 @@ async function main() {
     }
     
     // Download VS Code, unzip it and run the integration test
-    await runTests({
+    const result = await runTests({
       vscodeExecutablePath,
       extensionDevelopmentPath,
       extensionTestsPath,
@@ -48,10 +48,11 @@ async function main() {
         '--disable-telemetry',
       ]
     });
+    return result;
   } catch (err) {
     console.error(err);
     console.error('Failed to run tests');
-    process.exit(1);
+    return 1;
   }
 }
 
