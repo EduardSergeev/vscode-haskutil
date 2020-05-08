@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.0] - 2020-05-09
+### Added
+ * `haskutil.organiseImportsOnInsert` configuration option
+ ### Fixed
+ * Run multiple Hoogle requests in parallel
+
 ## [0.9.2] - 2020-05-04
 ### Added
  * Test coverage
