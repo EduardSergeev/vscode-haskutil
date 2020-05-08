@@ -1,43 +1,26 @@
-'use strict';
-
-import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, WorkspaceConfiguration } from 'vscode';
 import * as vscode from 'vscode';
+import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
 import OrganizeExtensionProvider from './organizeExtensionProvider';
+import Configuration from '../configuration';
+import { promisify } from 'util';
 
 
 export default class ExtensionProvider implements CodeActionProvider {
   private static commandId: string = 'haskell.addExtension';
-  private command: Disposable;
 
   public static get extensionPattern() {
     return /^{-#\s+LANGUAGE\s+([^#]+)#-}/gm;
   }
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(ExtensionProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(ExtensionProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
   }
 
-  public dispose(): void {
-    this.command.dispose();
-  }
-
-  private static get shouldOrganizeExtensionsOnInsert(): boolean {
-    return ExtensionProvider.configuration.get("organiseExtensionOnInsert");
-  }
-
-  private static get extensions(): string[] {
-    return ExtensionProvider.configuration.get("supportedExtensions");
-  }
-
-  private static get configuration(): WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration("haskutil");
-  }
-
-  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
+  public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): CodeAction[] {
     const codeActions = [];
     for (const diagnostic of context.diagnostics) {
-      for (const extension of ExtensionProvider.extensions) {
+      for (const extension of Configuration.supportedExtensions) {
         if (!diagnostic.message.includes(extension)) {
           continue;
         }
@@ -83,8 +66,8 @@ export default class ExtensionProvider implements CodeActionProvider {
     edit.insert(document.uri, document.positionAt(position), extensionLine + "\n");
     await vscode.workspace.applyEdit(edit);
 
-    if (ExtensionProvider.shouldOrganizeExtensionsOnInsert) {
-      vscode.commands.executeCommand(OrganizeExtensionProvider.commandId, document);
+    if (Configuration.shouldOrganiseExtensionOnInsert) {
+      await vscode.commands.executeCommand(OrganizeExtensionProvider.commandId, document);
     }
   }
 }

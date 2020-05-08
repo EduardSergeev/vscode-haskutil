@@ -1,54 +1,25 @@
-'use strict';
-
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, WorkspaceConfiguration, TextDocumentWillSaveEvent } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
+import Configuration from '../configuration';
 
 
 export default class OrganizeImportProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.organizeImports';
-  private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unorganizedImports";
 
-
-  public static get shouldAlignImports(): boolean {
-    return OrganizeImportProvider.configuration.get("alignImports");
-  }
-
-  private static get shouldPadImports(): boolean {
-    return OrganizeImportProvider.configuration.get("alwaysPadImports");
-  }
-
-  private static get shouldSortImports(): boolean {
-    return OrganizeImportProvider.configuration.get("sortImports");
-  }
-
-  private static get shouldOrganizeImportsOnSave(): boolean {
-    return OrganizeImportProvider.configuration.get("organiseImportsOnSave");
-  }
-
-  private static get configuration(): WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration("haskutil");
-  }
-
-
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(OrganizeImportProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(OrganizeImportProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
 
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+    subscriptions.push(this.diagnosticCollection);
     vscode.workspace.onDidOpenTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onDidCloseTextDocument(doc => this.diagnosticCollection.delete(doc.uri), null, subscriptions);
     vscode.workspace.onDidSaveTextDocument(this.checkImports, this, subscriptions);
     vscode.workspace.onWillSaveTextDocument(this.ensureOrganized, this, subscriptions);
     vscode.workspace.textDocuments.filter(d => d.languageId === 'haskell').forEach(this.checkImports, this);
-  }
-
-  public dispose(): void {
-    this.diagnosticCollection.clear();
-    this.diagnosticCollection.dispose();
-    this.command.dispose();
   }
 
   private checkImports(document: TextDocument) {
@@ -61,21 +32,21 @@ export default class OrganizeImportProvider implements CodeActionProvider {
 
     const aligned =
       imports.length === 0 || (
-        (OrganizeImportProvider.shouldPadImports ||
+        (Configuration.shouldPadImports ||
           imports.some(imp => imp.qualified.trim() === "qualified")
         ) &&
         imports.every(imp => imp.qualified.length === " qualified ".length)
       ) || (
-        !OrganizeImportProvider.shouldPadImports &&
+        !Configuration.shouldPadImports &&
         imports.every(imp => imp.qualified.trim() === "") &&
         imports.every(imp => imp.qualified.length === " ".length)
       );
-    if (!aligned && OrganizeImportProvider.shouldAlignImports) {
+    if (!aligned && Configuration.shouldAlignImports) {
       messages = ["not aligned"];
     }
 
     let pred = "";
-    if (OrganizeImportProvider.shouldSortImports) {
+    if (Configuration.shouldSortImports) {
       for (const imp of imports) {
         const curr = imp.module + (imp.importList || "");
         if (curr < pred) {
@@ -103,7 +74,8 @@ export default class OrganizeImportProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
     let codeActions = [];
-    for (let diagnostic of context.diagnostics.filter(d => d.code === OrganizeImportProvider.diagnosticCode)) {
+    const diagnostics = context.diagnostics.filter(d => d.code === OrganizeImportProvider.diagnosticCode);
+    for (let diagnostic of diagnostics) {
       let title = "Organize imports";
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
@@ -122,14 +94,14 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   private runCodeAction(document: TextDocument): Thenable<boolean> {
     const oldImports = ImportDeclaration.getImports(document.getText());
     let newImports = oldImports.map(i => i);
-    if (OrganizeImportProvider.shouldSortImports) {
+    if (Configuration.shouldSortImports) {
       newImports.sort((l, r) => {
         const ls = l.module + (l.importList || "");
         const rs = r.module + (r.importList || "");
         return ls < rs ? -1 : (ls === rs ? 0 : 1);
       });
     }
-    if (OrganizeImportProvider.shouldAlignImports) {
+    if (Configuration.shouldAlignImports) {
       newImports = OrganizeImportProvider.alignImports(newImports);
     }
 
@@ -142,13 +114,13 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   }
 
   private ensureOrganized(event: TextDocumentWillSaveEvent) {
-    if (OrganizeImportProvider.shouldOrganizeImportsOnSave) {
+    if (Configuration.shouldOrganizeImportsOnSave) {
       event.waitUntil(this.runCodeAction(event.document));
     }
   }
 
   public static ensureAligned(newImport: ImportDeclaration, existingImports: ImportDeclaration[]): ImportDeclaration {
-    if (OrganizeImportProvider.shouldAlignImports) {
+    if (Configuration.shouldAlignImports) {
       let allImports = existingImports.map(imp => imp);
       allImports.unshift(newImport);
       OrganizeImportProvider.alignImports(allImports);
@@ -159,7 +131,7 @@ export default class OrganizeImportProvider implements CodeActionProvider {
   public static alignImports(imports: ImportDeclaration[]): ImportDeclaration[] {
     const isQualified = imp => imp.qualified.trim() === "qualified";
 
-    return OrganizeImportProvider.shouldPadImports || imports.some(isQualified) ?
+    return Configuration.shouldPadImports || imports.some(isQualified) ?
       imports.map(imp => {
         if (isQualified(imp)) {
           imp.qualified = " qualified ";

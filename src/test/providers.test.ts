@@ -1,7 +1,11 @@
-import { runQuickfixTest, outputGHCiLog } from './utils';
+import * as vscode from 'vscode';
+import { runQuickfixTest, warmup } from './utils';
 
 
 suite("ExtensionProvider", function () {
+
+  suiteSetup(warmup);
+
   test("Add missing import", async () => {
     await runQuickfixTest('ImportProvider.hs', 3,
       'Add: "import Data.Maybe"',
@@ -21,11 +25,11 @@ suite("ExtensionProvider", function () {
   });  
 
   test("Remove unused imports", async () => {
-    await runQuickfixTest('UnusedImportProvider.hs', 1);
+    await runQuickfixTest('UnusedImportProvider.hs', 3);
   });
   
   test("Add missing extension", async () => {
-    await runQuickfixTest('ExtensionProvider.hs', 1);
+    await runQuickfixTest('ExtensionProvider.hs', 2);
   });
 
   test("Organize extensions", async () => {

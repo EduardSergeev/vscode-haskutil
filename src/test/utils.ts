@@ -1,7 +1,10 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import * as path from 'path';
+import * as util from 'util';
 import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
+import { promisify } from 'util';
 
 
 export async function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]) {
@@ -12,33 +15,47 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
     await vscode.window.showTextDocument(doc);
     return doc;
   });
-  const quickFixes = await getQuickFixes(doc).then(qfs =>
-    qfs.filter(qf => !titles.length || titles.includes(qf.title)));
-  assert.isNotEmpty(quickFixes);
+  const diagnostics = vscode.languages.getDiagnostics(doc.uri);
+  const available = await getQuickFixes(doc);
+  const applicable = available.filter(qf => !titles.length || titles.includes(qf.title));
+  assert.isNotEmpty(applicable, `
+    Could not find any applicable QuickFixes.
+    Available: '${available.map(qf => qf.title).join(', ')}'
+    Requested: '${titles.join(', ')}'
+    Diagnostics: '${diagnostics.map(d => d.message).join('\n')}'
+  `);
 
-  await runQuickFixes(quickFixes);
-  
-  const expected = await vscode.workspace.openTextDocument(after);
-  assert.strictEqual(doc.getText(), expected.getText());
+  await runQuickFixes(applicable);
 
-  vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-  // TODO: Find appropriate event to watch on
-  await new Promise<void>((resolve, _) => {
-    setTimeout(_ => resolve(), 2000);
+  const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
+  assert.strictEqual(doc.getText(), expected);
+  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+}
+
+export async function warmup() {
+  const before = path.join(__dirname, '../../input/Welcome.hs');
+  const doc = await didChangeDiagnostics(before, 3, async () => {
+    const doc = await vscode.workspace.openTextDocument(before);
+    await vscode.window.showTextDocument(doc);
+    return doc;
   });
+  await getQuickFixes(doc);
+  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
 }
 
 export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {
   return await vscode.commands.executeCommand(
     'vscode.executeCodeActionProvider',
     doc.uri,
-    new Range(new Position(0,0), new Position(doc.lineCount - 1, 0))
+    new Range(new Position(0, 0), new Position(doc.lineCount - 1, 0))
   );
 }
 
 export async function runQuickFixes(quickFixes: CodeAction[]) {
   for(const quickFix of quickFixes) {
-    console.log(`Executing: '${quickFix.title}'`);
+    console.log(`
+      Executing: '${quickFix.title}'`
+    );
     await vscode.commands.executeCommand(
       quickFix.command.command,
       ...quickFix.command.arguments
@@ -51,14 +68,15 @@ export async function didChangeDiagnostics<T>(fsPath: string, count: number, act
     vscode.languages.onDidChangeDiagnostics,
     e => {
       const uri = e.uris.find(uri => uri.fsPath === fsPath);
-      return uri && vscode.languages.getDiagnostics(uri).length >= count;
+      return uri && vscode.languages.getDiagnostics(uri).length === count;
     },
     action);
 }
 
 
 export async function didEvent<TResult, TEvent>(
-  subscribe: (arg: (event: TEvent) => void) => Disposable, predicate: (event: TEvent) => Boolean,
+  subscribe: (arg: (event: TEvent) => void) => Disposable,
+  predicate: (event: TEvent) => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
   return new Promise<TResult>(async (resolve, _) => {
     const result = action();

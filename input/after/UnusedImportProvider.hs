@@ -1,12 +1,5 @@
-{-# LANGUAGE NoImplicitPrelude #-}
+import Data.List (sort)
 
-module Main where
-
--- Some comment
-import Control.Monad
-import System.IO
-
-
-main :: IO ()
-main =
-  return ()
+foo :: Ord a => [a] -> [a]
+foo xs =
+  sort xs 

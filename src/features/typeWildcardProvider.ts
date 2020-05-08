@@ -6,15 +6,10 @@ import * as vscode from 'vscode';
 
 export default class TypeWildcardProvider implements CodeActionProvider {
   private static commandId: string = 'haskell.fillTypeWildcard';
-  private command: Disposable;
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(TypeWildcardProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
-  }
-
-  public dispose(): void {
-    this.command.dispose();
+    const command = vscode.commands.registerCommand(TypeWildcardProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {

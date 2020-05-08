@@ -1,28 +1,21 @@
-'use strict';
-
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind, Diagnostic, DiagnosticSeverity, DiagnosticChangeEvent, Uri } from 'vscode';
 import * as vscode from 'vscode';
 import ImportDeclaration from './importProvider/importDeclaration';
 import OrganizeImportProvider from './organizeImportProvider';
+import Configuration from '../configuration';
 
 
 export default class RemoveUnusedImportProvider implements CodeActionProvider {
   public static commandId: string = 'haskell.removeUnusedImports';
-  private command: Disposable;
   private diagnosticCollection: vscode.DiagnosticCollection;
   private static diagnosticCode: string = "haskutil.unusedImports";
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(RemoveUnusedImportProvider.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(RemoveUnusedImportProvider.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
     this.diagnosticCollection = vscode.languages.createDiagnosticCollection();
+    subscriptions.push(this.diagnosticCollection);
     vscode.languages.onDidChangeDiagnostics(this.didChangeDiagnostics, this, subscriptions);
-  }
-
-  public dispose(): void {
-    this.diagnosticCollection.clear();
-    this.diagnosticCollection.dispose();
-    this.command.dispose();
   }
 
   private async didChangeDiagnostics(e: DiagnosticChangeEvent) {
@@ -50,7 +43,8 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
     let codeActions = [];
-    for (let diagnostic of context.diagnostics.filter(d => d.code === RemoveUnusedImportProvider.diagnosticCode)) {
+    const diagnostics = context.diagnostics.filter(d => d.code === RemoveUnusedImportProvider.diagnosticCode);
+    for (let diagnostic of diagnostics) {
       let title = "Remove unused imports";
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
@@ -81,7 +75,7 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
         toBeDeleted.push(range);
       }
     }
-    if (OrganizeImportProvider.shouldAlignImports) {
+    if (Configuration.shouldAlignImports) {
       imports = OrganizeImportProvider.alignImports(imports);
     }
     for (const imp of imports) {

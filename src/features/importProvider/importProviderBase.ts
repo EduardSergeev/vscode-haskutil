@@ -1,10 +1,9 @@
-'use strict';
-
-import { Disposable, TextDocument, Range, WorkspaceEdit } from 'vscode';
 import * as vscode from 'vscode';
+import { Disposable, TextDocument, Range, WorkspaceEdit } from 'vscode';
 import ExtensionProvider from '../extensionProvider';
 import ImportDeclaration from './importDeclaration';
 import OrganizeImportProvider from '../organizeImportProvider';
+import Configuration from '../../configuration';
 
 
 export interface SearchResult {
@@ -15,23 +14,18 @@ export interface SearchResult {
 
 export default class ImportProviderBase {
   private static modulePattern = /^module(.|\n)+?where/m;
-  private command: Disposable;
   private hoogleSearch: (name: string, resultCallback: HoogleSearchCallback) => void;
 
   constructor(protected commandId: string) {
   }
 
   public activate(subscriptions: Disposable[]) {
-    this.command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
-    subscriptions.push(this);
+    const command = vscode.commands.registerCommand(this.commandId, this.runCodeAction, this);
+    subscriptions.push(command);
 
     const hoogle = vscode.extensions.getExtension('jcanero.hoogle-vscode');
     const hoogleApi = hoogle.exports;
     this.hoogleSearch = hoogleApi.search;
-  }
-
-  public dispose(): void {
-    this.command.dispose();
   }
 
   protected search(name: string): Promise<SearchResult[]> {
@@ -63,7 +57,7 @@ export default class ImportProviderBase {
     return result;
   }
 
-  private runCodeAction(document: TextDocument, moduleName: string, options: { alias?: string, elementName?: string } = {}): Thenable<boolean> {
+  private async runCodeAction(document: TextDocument, moduleName: string, options: { alias?: string, elementName?: string } = {}): Promise<void> {
     function afterMatch(offset) {
       const position = document.positionAt(offset);
       return document.offsetAt(position.with(position.line + 1, 0));
@@ -117,7 +111,10 @@ export default class ImportProviderBase {
       edit.insert(document.uri, document.positionAt(position), importDeclaration.text + "\n");
     }
 
-    return vscode.workspace.applyEdit(edit);
+    await vscode.workspace.applyEdit(edit);
+    if(Configuration.shouldOrganiseImportsOnInsert) {
+      await vscode.commands.executeCommand(OrganizeImportProvider.commandId, document);
+    }
   }
 }
 
