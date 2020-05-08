@@ -185,7 +185,7 @@
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && mocha ./out/test/runTest.js",
     "coverage": "nyc npm test",
-    "coveralls": "nyc --reporter=text-lcov npm test | coveralls"
+    "coveralls": "cat ./out/coverage/lcov.info | coveralls"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",

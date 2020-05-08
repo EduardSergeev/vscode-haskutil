@@ -15,7 +15,7 @@ jobs:
   - os: osx
     if: branch = master
 
-script: npm install && npm test
+script: npm install && npm run coverage
 
 after_success: npm run coveralls
 
