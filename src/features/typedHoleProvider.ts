@@ -16,7 +16,7 @@ export default class TypedHoleProvider implements CodeActionProvider {
     const errorPattern = / Found hole: ([^\s]+?) ::/;
     const fillPattern = /^\s+([^\s]+)\s::/gm;
     const codeActions = [];
-    for (const diagnostic of context.diagnostics.filter(d => range.contains(d.range))) {
+    for (const diagnostic of context.diagnostics) {
       const match = errorPattern.exec(diagnostic.message);
       if (match === null) {
         continue;

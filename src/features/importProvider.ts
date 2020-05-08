@@ -13,7 +13,7 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
       /Not in scope: type constructor or class [`‘](\S+)['’]/
     ];
     const codeActions = await Promise.all(context.diagnostics
-      .filter(d => range.contains(d.range) && d.severity === DiagnosticSeverity.Error)
+      .filter(d => d.severity === DiagnosticSeverity.Error)
       .flatMap(diagnostic =>
         patterns.map(pattern => pattern.exec(diagnostic.message))
         .filter(match => match)

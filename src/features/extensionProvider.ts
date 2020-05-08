@@ -19,7 +19,7 @@ export default class ExtensionProvider implements CodeActionProvider {
 
   public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): CodeAction[] {
     const codeActions = [];
-    for (const diagnostic of context.diagnostics.filter(d => range.contains(d.range))) {
+    for (const diagnostic of context.diagnostics) {
       for (const extension of Configuration.supportedExtensions) {
         if (!diagnostic.message.includes(extension)) {
           continue;

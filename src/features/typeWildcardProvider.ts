@@ -16,7 +16,7 @@ export default class TypeWildcardProvider implements CodeActionProvider {
     const errorPattern = / Found type wildcard [`‘](.+?)['’]/;
     const fillPattern = /standing for [`‘](.+?)['’]/;
     const codeActions = [];
-    for (const diagnostic of context.diagnostics.filter(d => range.contains(d.range))) {
+    for (const diagnostic of context.diagnostics) {
       const match = errorPattern.exec(diagnostic.message);
       if (match === null) {
         continue;

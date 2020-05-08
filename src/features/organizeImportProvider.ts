@@ -74,8 +74,7 @@ export default class OrganizeImportProvider implements CodeActionProvider {
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<CodeAction[]> {
     let codeActions = [];
-    const diagnostics = context.diagnostics.filter(d =>
-      range.contains(d.range) && d.code === OrganizeImportProvider.diagnosticCode);
+    const diagnostics = context.diagnostics.filter(d => d.code === OrganizeImportProvider.diagnosticCode);
     for (let diagnostic of diagnostics) {
       let title = "Organize imports";
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);

@@ -15,7 +15,7 @@ export default class TopLevelSignatureProvider implements CodeActionProvider {
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
     const pattern = /Top-level binding with no type signature:\s+([^]+)/;
     const codeActions = [];
-    for (const diagnostic of context.diagnostics.filter(d => range.contains(d.range))) {
+    for (const diagnostic of context.diagnostics) {
       const match = pattern.exec(diagnostic.message);
       if (match === null) {
         continue;
