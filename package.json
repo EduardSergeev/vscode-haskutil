@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -185,7 +185,8 @@
     "watch": "tsc -watch -p ./",
     "test": "npm run compile && mocha ./out/test/runTest.js",
     "coverage": "nyc npm test",
-    "coveralls": "cat ./out/coverage/lcov.info | coveralls"
+    "coveralls": "cat ./out/coverage/lcov.info | coveralls",
+    "package": "npm run compile && vsce package"
   },
   "nyc": {
     "extends": "@istanbuljs/nyc-config-typescript",
