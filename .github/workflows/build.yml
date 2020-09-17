@@ -1,0 +1,46 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        env:
+          - { CODE_VERSION: 1.48.0, DISPLAY: ':99.0' }
+    runs-on: ${{ matrix.os }}
+    env: ${{ matrix.env }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 8.x
+
+    - name: Build project
+      run: |
+        npm install
+        npm run compile
+
+    - name: Setup GHC environment
+      run: |
+        echo "::add-path::/opt/ghc/bin"
+        stack ghci --ghci-options --version
+
+    - name: Run tests with coverage
+      uses: GabrielBB/xvfb-action@v1.4
+      with:
+        run: npm run coverage
+
+    - name: Add GHC extension output
+      if: failure() && runner.os == 'Linux'
+      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
