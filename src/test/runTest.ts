@@ -25,8 +25,11 @@ async function main() {
       'jcanero.hoogle-vscode',
       'dramforever.vscode-ghc-simple'
     ];
+
+    const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
+
     for(const extension of dependencies) {
-      cp.spawnSync(cliPath, ['--install-extension', extension], {
+      cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--install-extension', extension], {
         encoding: 'utf-8',
         stdio: 'inherit'
       });
@@ -41,6 +44,7 @@ async function main() {
         '--new-window',
         '--disable-gpu',
         '--disable-updates',
+        '--extensions-dir', extensionsDir,
         '--logExtensionHostCommunication',
         '--skip-getting-started',
         '--skip-release-notes',
