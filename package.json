@@ -183,7 +183,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "rm -rf ./out && tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "npm run compile && mocha ./out/test/runTest.js",
+    "pretest": "npm run compile",
+    "test": "mocha ./out/test/runTest.js",
     "coverage": "nyc npm test",
     "coveralls": "cat ./out/coverage/lcov.info | coveralls",
     "package": "npm run compile && vsce package"
