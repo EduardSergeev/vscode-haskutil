@@ -17,7 +17,7 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = __dirname;
 
-    const vscodeExecutablePath = await downloadAndUnzipVSCode();
+    const vscodeExecutablePath = await downloadAndUnzipVSCode('1.48.0');
     const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
     // Install dependent extensions

@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.2] - unreleased
+### Fixed
+ * Test coverage
+
 ## [0.10.1] - 2020-09-17
 ### Fixed
  * Bump `lodash` dependency version to fix security vulnerabilitiy
