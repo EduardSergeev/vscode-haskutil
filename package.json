@@ -186,7 +186,6 @@
     "pretest": "npm run compile",
     "test": "mocha ./out/test/runTest.js",
     "coverage": "nyc npm test",
-    "coveralls": "cat ./out/coverage/lcov.info | coveralls",
     "package": "npm run compile && vsce package"
   },
   "nyc": {
@@ -217,7 +216,6 @@
     "@types/node": "^13.13.4",
     "@types/vscode": "^1.26.0",
     "chai": "^4.2.0",
-    "coveralls": "^3.1.0",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
     "source-map-support": "^0.5.19",
