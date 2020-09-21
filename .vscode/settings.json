@@ -1,8 +1,13 @@
 {
-    "files.exclude": {
-        "**/out": true,
-        "**/node_modules": true,
-        "**/.vscode-test/": true,
-        "**/*.vsix": true
-    }
+  "files.exclude": {
+    "**/out": true,
+    "**/node_modules": true,
+    "**/.vscode-test/": true,
+    "**/*.vsix": true
+  },
+  "markdownlint.config": {
+    "MD022": false,
+    "MD024": false,
+    "MD032": false
+  }
 }
