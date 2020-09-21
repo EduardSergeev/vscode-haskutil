@@ -41,6 +41,13 @@ jobs:
       with:
         run: npm run coverage
 
+    - name: Publish coverage on Coveralls.io
+      if: runner.os == 'Linux'
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./out/coverage/lcov.info
+        
     - name: Add GHC extension output
       if: failure() && runner.os == 'Linux'
       run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
