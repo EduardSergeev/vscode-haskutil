@@ -20,27 +20,41 @@ jobs:
           - windows-latest
           - macos-latest
         env:
-          - { CODE_VERSION: 1.48.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 1.45.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
-
     steps:
     - uses: actions/checkout@v2
-
-    - name: Install Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 8.x
-
-    - name: Build project
-      run: |
-        npm install
-        npm run compile
 
     - name: Setup GHC environment
       run: |
         echo "::add-path::/opt/ghc/bin"
         stack ghci --ghci-options --version
+
+    - run: npm install
+
+    - name: Run tests
+      uses: GabrielBB/xvfb-action@v1.4
+      with:
+        run: npm test
+
+    - name: Add GHC extension output (on failure)
+      if: failure() && runner.os == 'Linux'
+      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+
+  metrics:
+    runs-on: ubuntu-latest
+    env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0' }
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup GHC environment
+      run: |
+        echo "::add-path::/opt/ghc/bin"
+        stack ghci --ghci-options --version
+
+    - run: npm install
 
     - name: Run tests with coverage
       uses: GabrielBB/xvfb-action@v1.4
@@ -48,12 +62,23 @@ jobs:
         run: npm run coverage
 
     - name: Publish coverage on Coveralls.io
-      if: runner.os == 'Linux'
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ./out/coverage/lcov.info
         
-    - name: Add GHC extension output (on failure)
-      if: failure() && runner.os == 'Linux'
-      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+  upload:
+    if: github.event_name == 'push' && startsWith(github.event.base_ref, 'refs/heads/master')
+    needs:
+      - build
+      - metrics
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: npm install
+    
+    - name: Upload new version to MS Marketplace
+      run: npm run upload
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
