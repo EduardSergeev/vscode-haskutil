@@ -1,0 +1,29 @@
+name: branch
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup GHC environment
+      run: |
+        echo "::add-path::/opt/ghc/bin"
+        stack ghci --ghci-options --version
+
+    - run: npm install
+
+    - name: Run tests
+      uses: GabrielBB/xvfb-action@v1.4
+      with:
+        run: npm test
+
+    - name: Add GHC extension output (on failure)
+      if: failure()
+      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
