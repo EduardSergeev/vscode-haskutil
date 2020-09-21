@@ -39,9 +39,13 @@ jobs:
       with:
         run: npm test
 
-    - name: Add GHC extension output (on failure)
+    - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
       run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+
+    - name: Add GHC extension output (on failure on Windows)
+      if: failure() && runner.os == 'Windows'
+      run: Get-ChildItem -Path $env:APPDATA\Code\logs -Include *GHC.log -File -Recurse | Get-Content
 
   metrics:
     runs-on: ubuntu-latest
