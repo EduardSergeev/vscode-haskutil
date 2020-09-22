@@ -27,6 +27,8 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
 
   await runQuickFixes(applicable);
 
+  await doc.save();
+
   const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
   assert.strictEqual(doc.getText(), expected);
   await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
