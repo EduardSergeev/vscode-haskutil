@@ -1,5 +1,6 @@
 import * as cp from 'child_process';
 import * as path from 'path';
+import { env } from 'process';
 
 import {
   runTests,
@@ -16,8 +17,8 @@ async function main() {
     // The path to the extension test runner script
     // Passed to --extensionTestsPath
     const extensionTestsPath = __dirname;
-
-    const vscodeExecutablePath = await downloadAndUnzipVSCode('1.48.0');
+    const vscodeVersion = env['CODE_VERSION'];
+    const vscodeExecutablePath = await downloadAndUnzipVSCode(vscodeVersion);
     const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
     // Install dependent extensions

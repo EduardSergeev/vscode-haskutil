@@ -1,23 +1,21 @@
 # VSCode Haskutil
-[![Build Status](https://travis-ci.org/EduardSergeev/vscode-haskutil.svg?branch=master)](https://travis-ci.org/EduardSergeev/vscode-haskutil)
+[![Build Status](https://github.com/EduardSergeev/vscode-haskutil/workflows/master/badge.svg)](https://github.com/EduardSergeev/vscode-haskutil/actions?query=workflow%3Amaster+branch%3Amaster)
 [![Coverage Status](https://coveralls.io/repos/github/EduardSergeev/vscode-haskutil/badge.svg?branch=master)](https://coveralls.io/github/EduardSergeev/vscode-haskutil?branch=master)
 [![vscode-ghc-simple on Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/edka.haskutil.svg)](https://marketplace.visualstudio.com/items?itemName=Edka.haskutil)
 
-
 'QuickFix' actions for Haskell editor  
-
 
 ## Requirements
 This extension uses diagnostics (errors and warnings) from `PROBLEMS` tab which is populated by other Haskell extensions such as [Simple GHC](https://marketplace.visualstudio.com/items?itemName=dramforever.vscode-ghc-simple), [Haskero](https://marketplace.visualstudio.com/items?itemName=Vans.haskero), [ghcid](https://marketplace.visualstudio.com/items?itemName=ndmitchell.haskell-ghcid) or [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide). Please install one of them along with this extension.
 
 ## Features
- * [Add missing import](#add-missing-import)
- * [Organize imports](#organize-imports)
- * [Remove unused imports](#remove-unused-imports)
- * [Add missing LANGUAGE extension](#add-missing-language-extension)
- * [Organize LANGUAGE extensions](#organize-language-extensions)
- * [Add top-level signature](#add-top-level-signature)
- * [Fill typed hole](#fill-typed-hole)
+* [Add missing import](#add-missing-import)
+* [Organize imports](#organize-imports)
+* [Remove unused imports](#remove-unused-imports)
+* [Add missing LANGUAGE extension](#add-missing-language-extension)
+* [Organize LANGUAGE extensions](#organize-language-extensions)
+* [Add top-level signature](#add-top-level-signature)
+* [Fill typed hole](#fill-typed-hole)
 
 Individual features can be turned on and off via `haskutil.feature.[feature]` flags
 
@@ -52,4 +50,4 @@ Similarly replaces [type wildcard](https://downloads.haskell.org/~ghc/8.6.4/docs
 
 ## Dependencies
 
- * Automatic dependency (auto install) [hoogle-vscode](https://marketplace.visualstudio.com/items?itemName=jcanero.hoogle-vscode)
+* Automatic dependency (auto install) [hoogle-vscode](https://marketplace.visualstudio.com/items?itemName=jcanero.hoogle-vscode)
