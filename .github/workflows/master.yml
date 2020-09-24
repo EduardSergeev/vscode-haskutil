@@ -20,7 +20,7 @@ jobs:
           - windows-latest
           - macos-latest
         env:
-          - { CODE_VERSION: 1.45.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 1.26.0, DISPLAY: ':99.0' }
           - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
