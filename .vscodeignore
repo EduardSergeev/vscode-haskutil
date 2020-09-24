@@ -1,7 +1,7 @@
-.vscode/**
-.vscode-test/**
-.nyc_output
+.github/**
 .gitignore
+.nyc_output
+.vscode/**
 input
 out/test
 out/coverage
