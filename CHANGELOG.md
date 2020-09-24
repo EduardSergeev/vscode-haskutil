@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.3] - 2020-09-25
+### Fixed
+* Fix extension publishing via `npm run publish`
+
 ## [0.10.2] - 2020-09-22
 ### Added
 * Github actions build: matrix builds on multiple platforms and publishing to Marketplace on version tag push
