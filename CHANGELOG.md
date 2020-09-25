@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.4] - Unreleased
+### Fixed
+* Better isolation for tests: set custom `--user-data-dir` so the test would not interfere with the VSCode installed locally
+
 ## [0.10.3] - 2020-09-25
 ### Fixed
 * Fix extension publishing via `npm run publish`
