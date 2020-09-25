@@ -1,13 +1,28 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as util from 'util';
 import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
 import { assert } from 'chai';
 import { promisify } from 'util';
 
+export type DocFun = (doc: TextDocument) => Thenable<void>;
 
-export async function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]) {
+export function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]): Promise<void> {
+  return withTestDocument(file, diagnosticCount, async doc => {
+    const diagnostics = vscode.languages.getDiagnostics(doc.uri);
+    const available = await getQuickFixes(doc);
+    const applicable = available.filter(qf => !titles.length || titles.includes(qf.title));
+    assert.isNotEmpty(applicable, `
+      Could not find any applicable QuickFixes.
+      Available: '${available.map(qf => qf.title).join(', ')}'
+      Requested: '${titles.join(', ')}'
+      Diagnostics: '${diagnostics.map(d => d.message).join('\n')}'
+    `);
+    await runQuickFixes(applicable);
+  });
+}
+
+export async function withTestDocument(file: string, diagnosticCount: number, test: DocFun, cleanup?: DocFun): Promise<void> { 
   const before = path.join(__dirname, '../../input/before/', file);
   const after = path.join(__dirname, '../../input/after', file);
   const doc = await didChangeDiagnostics(before, diagnosticCount, async () => {
@@ -15,34 +30,14 @@ export async function runQuickfixTest(file: string, diagnosticCount: number, ...
     await vscode.window.showTextDocument(doc);
     return doc;
   });
-  const diagnostics = vscode.languages.getDiagnostics(doc.uri);
-  const available = await getQuickFixes(doc);
-  const applicable = available.filter(qf => !titles.length || titles.includes(qf.title));
-  assert.isNotEmpty(applicable, `
-    Could not find any applicable QuickFixes.
-    Available: '${available.map(qf => qf.title).join(', ')}'
-    Requested: '${titles.join(', ')}'
-    Diagnostics: '${diagnostics.map(d => d.message).join('\n')}'
-  `);
-
-  await runQuickFixes(applicable);
-
-  await doc.save();
-
-  const expected = await util.promisify(fs.readFile)(after, { encoding: 'utf8' });
-  assert.strictEqual(doc.getText(), expected);
-  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-}
-
-export async function warmup() {
-  const before = path.join(__dirname, '../../input/Welcome.hs');
-  const doc = await didChangeDiagnostics(before, 3, async () => {
-    const doc = await vscode.workspace.openTextDocument(before);
-    await vscode.window.showTextDocument(doc);
-    return doc;
-  });
-  await getQuickFixes(doc);
-  await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+  try {
+    await test(doc);
+    const expected = await promisify(fs.readFile)(after, { encoding: 'utf8' });
+    assert.strictEqual(doc.getText(), expected);
+  } finally {
+    await cleanup?.(doc);
+    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+  }
 }
 
 export async function getQuickFixes(doc : TextDocument): Promise<CodeAction[]> {

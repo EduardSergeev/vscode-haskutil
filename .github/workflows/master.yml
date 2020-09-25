@@ -20,7 +20,7 @@ jobs:
           - windows-latest
           - macos-latest
         env:
-          - { CODE_VERSION: 1.45.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0' }
           - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
@@ -28,9 +28,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup GHC environment
-      run: |
-        echo "::add-path::/opt/ghc/bin"
-        stack ghci --ghci-options --version
+      run: echo "::add-path::/opt/ghc/bin"
 
     - run: npm install
 
@@ -41,11 +39,11 @@ jobs:
 
     - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
-      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+      run: find .vscode-test/vscode-*/udd/logs -name *GHC* -exec cat {} \;
 
     - name: Add GHC extension output (on failure on Windows)
       if: failure() && runner.os == 'Windows'
-      run: Get-ChildItem -Path $env:APPDATA\Code\logs -Include *GHC.log -File -Recurse | Get-Content
+      run: Get-ChildItem -Path .vscode-test -Include *GHC.log -File -Recurse | Get-Content
 
   metrics:
     runs-on: ubuntu-latest
@@ -54,9 +52,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup GHC environment
-      run: |
-        echo "::add-path::/opt/ghc/bin"
-        stack ghci --ghci-options --version
+      run: echo "::add-path::/opt/ghc/bin"
 
     - run: npm install
 
@@ -69,7 +65,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./out/coverage/lcov.info
+        path-to-lcov: .coverage/lcov.info
         
   upload:
     if: github.event_name == 'push' && startsWith(github.event.base_ref, 'refs/heads/master')
