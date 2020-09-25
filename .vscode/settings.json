@@ -5,7 +5,9 @@
     "**/.vscode-test/": true,
     "**/*.vsix": true,
     "**/.vscode-test": true,
-    "**/.nyc_output": true
+    "**/.nyc_output": true,
+    "**/.coverage": true,
+    "*.vsix": true
   },
   "markdownlint.config": {
     "MD022": false,

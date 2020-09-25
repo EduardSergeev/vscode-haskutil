@@ -20,7 +20,7 @@ jobs:
           - windows-latest
           - macos-latest
         env:
-          - { CODE_VERSION: 1.45.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0' }
           - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
@@ -32,10 +32,10 @@ jobs:
 
     - run: npm install
 
-    - name: Run tests with coverage
+    - name: Run tests
       uses: GabrielBB/xvfb-action@v1.4
       with:
-        run: npm run coverage
+        run: npm test
 
     - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
@@ -65,7 +65,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ./out/coverage/lcov.info
+        path-to-lcov: .coverage/lcov.info
         
   upload:
     if: github.event_name == 'push' && startsWith(github.event.base_ref, 'refs/heads/master')

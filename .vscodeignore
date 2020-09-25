@@ -1,11 +1,11 @@
-.github/**
+.coverage
+.github
 .gitignore
 .nyc_output
-.vscode/**
+.vscode
 input
 out/test
-out/coverage
 out/**/*.map
-src/**
+src
 tsconfig.json
 tslint.json
