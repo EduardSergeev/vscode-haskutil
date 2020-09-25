@@ -24,7 +24,7 @@ async function main(): Promise<number> {
     // Install dependent extensions
     const dependencies = [
       'jcanero.hoogle-vscode',
-      'dramforever.vscode-ghc-simple'
+      'bin/vscode-ghc-simple-0.1.23.vsix'
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');

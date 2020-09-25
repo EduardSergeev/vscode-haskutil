@@ -28,16 +28,14 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup GHC environment
-      run: |
-        echo "::add-path::/opt/ghc/bin"
-        stack ghci --ghci-options --version
+      run: echo "::add-path::/opt/ghc/bin"
 
     - run: npm install
 
-    - name: Run tests
+    - name: Run tests with coverage
       uses: GabrielBB/xvfb-action@v1.4
       with:
-        run: npm test
+        run: npm run coverage
 
     - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
@@ -54,9 +52,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Setup GHC environment
-      run: |
-        echo "::add-path::/opt/ghc/bin"
-        stack ghci --ghci-options --version
+      run: echo "::add-path::/opt/ghc/bin"
 
     - run: npm install
 

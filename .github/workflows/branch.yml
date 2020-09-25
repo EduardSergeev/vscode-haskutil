@@ -15,7 +15,6 @@ jobs:
     - name: Setup GHC environment
       run: |
         echo "::add-path::/opt/ghc/bin"
-        stack ghci --ghci-options --version
 
     - run: npm install
 
