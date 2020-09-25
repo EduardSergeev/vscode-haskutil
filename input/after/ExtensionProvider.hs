@@ -1,6 +1,4 @@
-{-# LANGUAGE TupleSections    #-}
-{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TupleSections #-}
 
-foo :: String -> [(Int, Bool)]
-foo xs =
-  map (, True) . read @ [Int] $ xs
+foo :: [a] -> [(a, Bool)]
+foo = map (, True)

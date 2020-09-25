@@ -38,7 +38,7 @@ suite('', () => {
   });
   
   test('Add missing extension', () => {
-    return runQuickfixTest('ExtensionProvider.hs', 2);
+    return runQuickfixTest('ExtensionProvider.hs', 1);
   });
 
   test('Organize extensions', () => {
