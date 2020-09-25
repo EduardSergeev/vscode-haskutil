@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
-## [0.10.4] - Unreleased
+## [0.10.4] - 2020-09-26
 ### Fixed
 * Stop putting images into *.vsix package which reduces in ~20 times (oops...) and `README.md` points to Github-hosted files anyway
 * Better isolation for tests: set custom `--user-data-dir` so the test would not interfere with the VSCode installed locally
