@@ -41,11 +41,11 @@ jobs:
 
     - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
-      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+      run: find .vscode-test/vscode-*/VSCode-linux-*/user-data-dir/logs -name *GHC* -exec cat {} \;
 
     - name: Add GHC extension output (on failure on Windows)
       if: failure() && runner.os == 'Windows'
-      run: Get-ChildItem -Path $env:APPDATA\Code\logs -Include *GHC.log -File -Recurse | Get-Content
+      run: Get-ChildItem -Path ./.vscode-test -Include *GHC.log -File -Recurse | Get-Content
 
   metrics:
     runs-on: ubuntu-latest

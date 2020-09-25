@@ -8,7 +8,7 @@ import {
   resolveCliPathFromVSCodeExecutablePath
 } from 'vscode-test';
 
-async function main() {
+async function main(): Promise<number> {
   try {
     // The folder containing the Extension Manifest package.json
     // Passed to `--extensionDevelopmentPath`
@@ -28,6 +28,7 @@ async function main() {
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
+    const userDataDir = path.resolve(extensionsDir, '..', 'user-data-dir');
 
     for(const extension of dependencies) {
       cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--install-extension', extension], {
@@ -37,15 +38,16 @@ async function main() {
     }
     
     // Download VS Code, unzip it and run the integration test
-    const result = await runTests({
+    return await runTests({
       vscodeExecutablePath,
       extensionDevelopmentPath,
       extensionTestsPath,
       launchArgs: [
+        '--user-data-dir', userDataDir,
+        '--extensions-dir', extensionsDir,
         '--new-window',
         '--disable-gpu',
         '--disable-updates',
-        '--extensions-dir', extensionsDir,
         '--logExtensionHostCommunication',
         '--skip-getting-started',
         '--skip-release-notes',
@@ -53,7 +55,6 @@ async function main() {
         '--disable-telemetry',
       ]
     });
-    return result;
   } catch (err) {
     console.error(err);
     console.error('Failed to run tests');

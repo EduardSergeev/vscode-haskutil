@@ -26,4 +26,4 @@ jobs:
 
     - name: Add GHC extension output (on failure)
       if: failure()
-      run: find ~/.config/Code/logs -name *GHC* -exec cat {} \;
+      run: find .vscode-test/vscode-*/VSCode-linux-*/user-data-dir/logs -name *GHC* -exec cat {} \;
