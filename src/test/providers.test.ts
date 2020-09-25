@@ -1,11 +1,18 @@
 import * as vscode from 'vscode';
 import { runQuickfixTest } from './utils';
 
+const configs = {
+  'telemetry.enableTelemetry': false,
+  'ghcSimple.replCommand': 'ghci -Wall',
+  'ghcSimple.replScope': 'file',
+};
 
 suite('', () => {
   suiteSetup(async () => {
-    await vscode.workspace.getConfiguration('ghcSimple').update('replCommand', 'ghci', true);
-    await vscode.workspace.getConfiguration('ghcSimple').update('replScope', 'file', true);
+    const config = vscode.workspace.getConfiguration();
+    for (const setting in configs) { 
+      await config.update(setting, configs[setting], true);
+    }
   });
   
   test('Add missing import', () => {
@@ -54,7 +61,9 @@ suite('', () => {
   });  
 
   suiteTeardown(async () => {
-    await vscode.workspace.getConfiguration('ghcSimple').update('replScope', undefined, true);
-    await vscode.workspace.getConfiguration('ghcSimple').update('replCommand', undefined, true);
+    const config = vscode.workspace.getConfiguration();
+    for (const setting in configs) { 
+      await config.update(setting, undefined, true);
+    }
   });
 });
