@@ -28,7 +28,7 @@ async function main(): Promise<number> {
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
-    const userDataDir = path.resolve(extensionsDir, '..', 'user-data-dir');
+    const userDataDir = path.resolve(extensionsDir, '..', '..', 'udd');
 
     for(const extension of dependencies) {
       cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--install-extension', extension], {
