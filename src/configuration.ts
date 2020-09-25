@@ -1,87 +1,67 @@
 import * as vscode from 'vscode';
-import { WorkspaceConfiguration } from 'vscode';
 
 
-const rootSection = "haskutil";
-const organiseImportsOnInsertSection = "organiseImportsOnInsert";
-const organiseExtensionOnInsertSection = "organiseExtensionOnInsert";
-const supportedExtensionsSection = "supportedExtensions";
-const splitExtensionsSection = "splitExtensions";
-const alignExtensionsSection = "alignExtensions";
-const sortExtensionsSection = "sortExtensions";
-const organizeExtensionsOnSaveSection = "organiseExtensionOnSave";
-const alignImportsSection = "alignImports";
-const alwaysPadImportsSection = "alwaysPadImports";
-const sortImportsSection = "sortImports";
-const organizeImportsOnSaveSection = "organiseImportsOnSave";
-
-function root(): WorkspaceConfiguration {
-  return vscode.workspace.getConfiguration(rootSection);
+export enum Section {
+  OrganiseImportsOnInsert = 'organiseImportsOnInsert',
+  OrganiseExtensionOnInsert = 'organiseExtensionOnInsert',
+  SupportedExtensions = 'supportedExtensions',
+  SplitExtensions = 'splitExtensions',
+  AlignExtensions = 'alignExtensions',
+  SortExtensions = 'sortExtensions',
+  OrganizeExtensionsOnSave = 'organiseExtensionOnSave',
+  AlignImports = 'alignImports',
+  AlwaysPadImports = 'alwaysPadImports',
+  SortImports = 'sortImports',
+  OrganizeImportsOnSave = 'organiseImportsOnSave',
 }
 
-function get<T>(section: string): T { 
-  return root().get(section);
+function get<T>(section: Section): T { 
+  return vscode.workspace.getConfiguration('haskutil').get(section);
 }
 
 
 export default class Configuration {  
-  public static organiseImportsOnInsertSection = organiseImportsOnInsertSection;
-  public static organiseExtensionOnInsertSection = organiseExtensionOnInsertSection;
-  public static supportedExtensionsSection = supportedExtensionsSection;
-  public static splitExtensionsSection = splitExtensionsSection;
-  public static alignExtensionsSection = alignExtensionsSection;
-  public static sortExtensionsSection = sortExtensionsSection;
-  public static organizeExtensionsOnSaveSection = organizeExtensionsOnSaveSection;
-  public static alignImportsSection = alignImportsSection;
-  public static alwaysPadImportsSection = alwaysPadImportsSection;
-  public static sortImportsSection = sortImportsSection;
-  public static organizeImportsOnSaveSection = organizeImportsOnSaveSection;
-
-  public static get root(): WorkspaceConfiguration {
-    return root();
-  }
-
   public static get shouldOrganiseImportsOnInsert(): boolean {
-    return get(organiseImportsOnInsertSection);
+    return get(Section.OrganiseImportsOnInsert);
   }
 
   public static get shouldOrganiseExtensionOnInsert(): boolean {
-    return get(organiseExtensionOnInsertSection);
+    return get(Section.OrganiseExtensionOnInsert);
   }
 
   public static get supportedExtensions(): string[] {
-    return get(supportedExtensionsSection);
+    return get(Section.SupportedExtensions);
   }
 
   public static get shouldSplitExtensions(): boolean {
-    return get(splitExtensionsSection);
+    return get(Section.SplitExtensions);
   }
 
   public static get shouldAlignExtensions(): boolean {
-    return get(alignExtensionsSection);
+    return get(Section.AlignExtensions);
   }
 
   public static get shouldSortExtensions(): boolean {
-    return get(sortExtensionsSection);
+    return get(Section.SortExtensions);
   }
 
   public static get shouldOrganizeExtensionsOnSave(): boolean {
-    return get(organizeExtensionsOnSaveSection);
+    return get(Section.OrganizeExtensionsOnSave);
   }
 
   public static get shouldAlignImports(): boolean {
-    return get(alignImportsSection);
+    return get(Section.AlignImports);
   }
 
   public static get shouldPadImports(): boolean {
-    return get(alwaysPadImportsSection);
+    return get(Section.AlwaysPadImports);
   }
 
   public static get shouldSortImports(): boolean {
-    return get(sortImportsSection);
+    return get(Section.SortImports);
   }
 
   public static get shouldOrganizeImportsOnSave(): boolean {
-    return get(organizeImportsOnSaveSection);
+    return get(Section.OrganizeImportsOnSave);
   } 
 }
