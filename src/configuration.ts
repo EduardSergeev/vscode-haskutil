@@ -1,51 +1,87 @@
 import * as vscode from 'vscode';
+import { WorkspaceConfiguration } from 'vscode';
 
-export default class Configuration {
+
+const rootSection = "haskutil";
+const organiseImportsOnInsertSection = "organiseImportsOnInsert";
+const organiseExtensionOnInsertSection = "organiseExtensionOnInsert";
+const supportedExtensionsSection = "supportedExtensions";
+const splitExtensionsSection = "splitExtensions";
+const alignExtensionsSection = "alignExtensions";
+const sortExtensionsSection = "sortExtensions";
+const organizeExtensionsOnSaveSection = "organiseExtensionOnSave";
+const alignImportsSection = "alignImports";
+const alwaysPadImportsSection = "alwaysPadImports";
+const sortImportsSection = "sortImports";
+const organizeImportsOnSaveSection = "organiseImportsOnSave";
+
+function root(): WorkspaceConfiguration {
+  return vscode.workspace.getConfiguration(rootSection);
+}
+
+function get<T>(section: string): T { 
+  return root().get(section);
+}
+
+
+export default class Configuration {  
+  public static organiseImportsOnInsertSection = organiseImportsOnInsertSection;
+  public static organiseExtensionOnInsertSection = organiseExtensionOnInsertSection;
+  public static supportedExtensionsSection = supportedExtensionsSection;
+  public static splitExtensionsSection = splitExtensionsSection;
+  public static alignExtensionsSection = alignExtensionsSection;
+  public static sortExtensionsSection = sortExtensionsSection;
+  public static organizeExtensionsOnSaveSection = organizeExtensionsOnSaveSection;
+  public static alignImportsSection = alignImportsSection;
+  public static alwaysPadImportsSection = alwaysPadImportsSection;
+  public static sortImportsSection = sortImportsSection;
+  public static organizeImportsOnSaveSection = organizeImportsOnSaveSection;
+
+  public static get root(): WorkspaceConfiguration {
+    return root();
+  }
+
   public static get shouldOrganiseImportsOnInsert(): boolean {
-    return configuration().get("organiseImportsOnInsert");
+    return get(organiseImportsOnInsertSection);
   }
 
   public static get shouldOrganiseExtensionOnInsert(): boolean {
-    return configuration().get("organiseExtensionOnInsert");
+    return get(organiseExtensionOnInsertSection);
   }
 
   public static get supportedExtensions(): string[] {
-    return configuration().get("supportedExtensions");
+    return get(supportedExtensionsSection);
   }
 
   public static get shouldSplitExtensions(): boolean {
-    return configuration().get("splitExtensions");
+    return get(splitExtensionsSection);
   }
 
   public static get shouldAlignExtensions(): boolean {
-    return configuration().get("alignExtensions");
+    return get(alignExtensionsSection);
   }
 
   public static get shouldSortExtensions(): boolean {
-    return configuration().get("sortExtensions");
+    return get(sortExtensionsSection);
   }
 
   public static get shouldOrganizeExtensionsOnSave(): boolean {
-    return configuration().get("organiseExtensionOnSave");
+    return get(organizeExtensionsOnSaveSection);
   }
 
   public static get shouldAlignImports(): boolean {
-    return configuration().get("alignImports");
+    return get(alignImportsSection);
   }
 
   public static get shouldPadImports(): boolean {
-    return configuration().get("alwaysPadImports");
+    return get(alwaysPadImportsSection);
   }
 
   public static get shouldSortImports(): boolean {
-    return configuration().get("sortImports");
+    return get(sortImportsSection);
   }
 
   public static get shouldOrganizeImportsOnSave(): boolean {
-    return configuration().get("organiseImportsOnSave");
-  }
-}
-
-function configuration() {
-  return vscode.workspace.getConfiguration("haskutil");  
+    return get(organizeImportsOnSaveSection);
+  } 
 }

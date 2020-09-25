@@ -3,7 +3,9 @@
     "**/out": true,
     "**/node_modules": true,
     "**/.vscode-test/": true,
-    "**/*.vsix": true
+    "**/*.vsix": true,
+    "**/.vscode-test": true,
+    "**/.nyc_output": true
   },
   "markdownlint.config": {
     "MD022": false,
