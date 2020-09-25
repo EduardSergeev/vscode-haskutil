@@ -3,6 +3,7 @@
 .gitignore
 .nyc_output
 .vscode
+images
 input
 out/test
 out/**/*.map
