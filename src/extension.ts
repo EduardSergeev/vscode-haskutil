@@ -8,6 +8,7 @@ import TopLevelSignatureProvider from './features/topLevelSignatureProvider';
 import TypedHoleProvider from './features/typedHoleProvider';
 import TypeWildcardProvider from './features/typeWildcardProvider';
 import RemoveUnusedImportProvider from './features/removeUnusedImportProvider';
+import Configuration from './configuration';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -26,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
   checkDependencies();
 
   for (const feature in features) {
-    if (vscode.workspace.getConfiguration('haskutil').feature[feature]) {
+    if (Configuration.enabled(feature)) {
       const provider = features[feature];
       provider.activate(context.subscriptions);
       vscode.languages.registerCodeActionsProvider('haskell', provider);

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 
 export enum Section {
+  Feature = 'feature',
   OrganiseImportsOnInsert = 'organiseImportsOnInsert',
   OrganiseExtensionOnInsert = 'organiseExtensionOnInsert',
   SupportedExtensions = 'supportedExtensions',
@@ -21,6 +22,10 @@ function get<T>(section: Section): T {
 
 
 export default class Configuration {  
+  public static enabled(feature: string): boolean { 
+    return get(Section.Feature)[feature];
+  }
+
   public static get shouldOrganiseImportsOnInsert(): boolean {
     return get(Section.OrganiseImportsOnInsert);
   }
