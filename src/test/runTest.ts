@@ -8,7 +8,7 @@ import {
   resolveCliPathFromVSCodeExecutablePath
 } from 'vscode-test';
 
-async function main(): Promise<number> {
+async function main(): Promise<void> {
   try {
     // The folder containing the Extension Manifest package.json
     // Passed to `--extensionDevelopmentPath`
@@ -38,7 +38,7 @@ async function main(): Promise<number> {
     }
     
     // Download VS Code, unzip it and run the integration test
-    return await runTests({
+    process.exit(await runTests({
       vscodeExecutablePath,
       extensionDevelopmentPath,
       extensionTestsPath,
@@ -54,11 +54,10 @@ async function main(): Promise<number> {
         '--disable-restore-windows',
         '--disable-telemetry',
       ]
-    });
+    }));
   } catch (err) {
-    console.error(err);
-    console.error('Failed to run tests');
-    return 1;
+    console.error(`Failed to run tests: ${err}`);
+    process.exit(-1);
   }
 }
 

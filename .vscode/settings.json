@@ -15,12 +15,17 @@
     "MD032": false
   },
   "cSpell.ignorePaths": [
-    "**/package-lock.json",
-    "**/node_modules/**",
-    "**/vscode-extension/**",
-    "**/.git/objects/**",
+    "package*.json",
+    "node_modules",
     ".vscode",
-    ".vscode-insiders",
     "src"
+  ],
+  "cSpell.words": [
+    "CHANGLELOG",
+    "Haskutil",
+    "vsix"
+  ],
+  "cSpell.includeRegExpList": [
+    "\\[.+\\]"
   ]
 }

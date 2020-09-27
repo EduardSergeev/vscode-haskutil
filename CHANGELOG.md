@@ -1,6 +1,8 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.5] - Unreleased
+
 ## [0.10.4] - 2020-09-26
 ### Fixed
 * Stop putting images into *.vsix package which reduces in ~20 times (oops...) and `README.md` points to Github-hosted files anyway
@@ -15,13 +17,13 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 * Github actions build: matrix builds on multiple platforms and publishing to Marketplace on version tag push
 ### Fixed
 * Test coverage
-* CHANGELOG.md warnings
+* `CHANGELOG.md` warnings
 ### Removed
 * Travis-ci build
 
 ## [0.10.1] - 2020-09-17
 ### Fixed
-* Bump `lodash` dependency version to fix security vulnerabilitiy
+* Bump `lodash` dependency version to fix security vulnerability
 
 ## [0.10.0] - 2020-05-09
 ### Added
@@ -36,7 +38,7 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 ## [0.9.1] - 2020-05-04
 ### Fixed
 * Exclude unrelated files from .vsix package
-* CHANGLELOG (add missing contributer)
+* `CHANGLELOG.md` (add missing contributor)
 
 ## [0.9.0] - 2020-05-04
 ### Added
