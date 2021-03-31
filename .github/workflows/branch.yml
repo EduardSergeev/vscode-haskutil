@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
+    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
     steps:
     - uses: actions/checkout@v2
 
