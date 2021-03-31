@@ -20,8 +20,8 @@ jobs:
           - windows-latest
           - macos-latest
         env:
-          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0' }
-          - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
+          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
+          - { CODE_VERSION: 'stable', DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
     steps:
@@ -47,7 +47,7 @@ jobs:
 
   metrics:
     runs-on: ubuntu-latest
-    env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0' }
+    env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
     steps:
     - uses: actions/checkout@v2
 
