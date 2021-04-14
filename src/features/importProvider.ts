@@ -17,9 +17,10 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
       .flatMap(diagnostic =>
         patterns.map(pattern => pattern.exec(diagnostic.message))
         .filter(match => match)
-        .flatMap(async ([, name]) =>
-          this.addImportForVariable(document, diagnostic, name, await this.search(name))
-        )
+        .flatMap(async ([, name]) => {
+          let match = diagnostic.message.match(new RegExp(`Perhaps you want to add [\`‘]${name}[\`’] to the import list\\s+in the import of [\`‘](.+?)[\`’]`));
+          return this.addImportForVariable(document, diagnostic, name, match ? [{ module: match[1], package: null, result: null }] : await this.search(name))
+        })
       )
     );
     return codeActions.flat();
