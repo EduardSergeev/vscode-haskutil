@@ -25,7 +25,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Set up npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
 
     - name: Setup GHC environment
       run: echo "::add-path::/opt/ghc/bin"
@@ -33,7 +38,7 @@ jobs:
     - run: npm install
 
     - name: Run tests
-      uses: GabrielBB/xvfb-action@v1.4
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm test
 
@@ -49,7 +54,12 @@ jobs:
     runs-on: ubuntu-latest
     env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Set up npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
 
     - name: Setup GHC environment
       run: echo "::add-path::/opt/ghc/bin"
@@ -57,12 +67,12 @@ jobs:
     - run: npm install
 
     - name: Run tests with coverage
-      uses: GabrielBB/xvfb-action@v1.4
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm run coverage
 
     - name: Publish coverage on Coveralls.io
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: .coverage/lcov.info
@@ -74,7 +84,12 @@ jobs:
       - metrics
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Set up npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
 
     - run: npm install
     
