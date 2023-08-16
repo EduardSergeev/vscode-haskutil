@@ -1,6 +1,23 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.7] - 2023-08-20
+### Fixed
+* `RemoveUnusedImportProvider` on GHC > `9.0.2`:
+  Fix `Cannot read properties of undefined (reading 'removeElement')` exception
+* `TypeWildcardProvider`:
+  Handle various error message formats:
+  - old from GHC <= `9.0.2`
+  - new from GHC > `9.0.2`
+* `QualifiedImportProvider` on GHC > `9.0.2`:
+  Newer GHC uses a different error message format
+* `ExtensionProvider`:
+  - Do not create duplicated QuickFix actions
+  - Switch to `DataKinds` extension in test
+* Update all dependencies to the latest versions
+### Added
+* Extend matrix build with various supported GHC versions
+
 ## [0.10.5] - 2021-03-31
 ### Fixed
 * Bump dependencies to fix security vulnerability
