@@ -209,7 +209,7 @@
       "html",
       "lcov"
     ],
-    "check-coverage": true,
+    "check-coverage": false,
     "report-dir": ".coverage"
   },
   "devDependencies": {

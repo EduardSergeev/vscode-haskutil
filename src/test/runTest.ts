@@ -25,6 +25,7 @@ async function main(): Promise<number> {
     const dependencies = [
       'jcanero.hoogle-vscode',
       'dramforever.vscode-ghc-simple',
+      // 'bin/vscode-ghc-simple-0.1.23.vsix',
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
@@ -50,9 +51,12 @@ async function main(): Promise<number> {
         '--disable-updates',
         '--logExtensionHostCommunication',
         '--skip-getting-started',
+        '--skip-welcome',
         '--skip-release-notes',
+        '--disable-keytar',
         '--disable-restore-windows',
         '--disable-telemetry',
+        '--disable-workspace-trust',
         '--wait',
       ]
     });

@@ -19,9 +19,13 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
+        ghc:
+          - 8.10.7
+          - 9.0.2
+          - 9.4.5
         env:
-          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
-          - { CODE_VERSION: 'stable', DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
+          - { CODE_VERSION: 1.38.0, DISPLAY: ':99.0' }
+          - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
     steps:
@@ -32,19 +36,22 @@ jobs:
       with:
         node-version: 20
 
-    - name: Setup GHC environment
-      run: echo "::add-path::/opt/ghc/bin"
+    - name: Set up GHC ${{ matrix.ghc }} environment
+      run: |
+        echo "resolver: ghc-${{ matrix.ghc }}" > stack.yaml
+        echo "packages: []" >> stack.yaml
+        stack setup
 
     - run: npm install
 
     - name: Run tests
-      uses: coactions/setup-xvfb@v1
+      uses: smithki/xvfb-action@v1.1.2
       with:
         run: npm test
 
     - name: Add GHC extension output (on failure on Linux)
       if: failure() && runner.os == 'Linux'
-      run: find .vscode-test/vscode-*/udd/logs -name *GHC* -exec cat {} \;
+      run: find .vscode-test/udd/logs -name *GHC* -exec cat {} \;
 
     - name: Add GHC extension output (on failure on Windows)
       if: failure() && runner.os == 'Windows'
@@ -52,7 +59,7 @@ jobs:
 
   metrics:
     runs-on: ubuntu-latest
-    env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
+    env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0', GHC: 9.4.5 }
     steps:
     - uses: actions/checkout@v3
 
@@ -61,13 +68,16 @@ jobs:
       with:
         node-version: 20
 
-    - name: Setup GHC environment
-      run: echo "::add-path::/opt/ghc/bin"
-
+    - name: Set up GHC ${{ env.GHC }} environment
+      run: |
+        echo "resolver: ghc-${{ env.GHC }}" > stack.yaml
+        echo "packages: []" >> stack.yaml
+        stack setup
+  
     - run: npm install
 
     - name: Run tests with coverage
-      uses: coactions/setup-xvfb@v1
+      uses: smithki/xvfb-action@v1.1.2
       with:
         run: npm run coverage
 

@@ -1,14 +1,15 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Range, Position, CodeAction, TextDocument, Disposable } from 'vscode';
+import { Range, Position, CodeAction, TextDocument, Disposable, DiagnosticSeverity } from 'vscode';
 import { assert } from 'chai';
 import { promisify } from 'util';
 
 export type DocFun = (doc: TextDocument) => Thenable<void>;
 
-export function runQuickfixTest(file: string, diagnosticCount: number, ...titles: string[]): Promise<void> {
-  return withTestDocument(file, diagnosticCount, async doc => {
+export function runQuickfixTest(file: string, diagsCount: number|[DiagnosticSeverity, number], ...titles: string[]): Promise<void> {
+  const [severety, count] = typeof diagsCount === 'number' ? [DiagnosticSeverity.Warning, diagsCount] : diagsCount;
+  return withTestDocument(file, [severety, count], async doc => {
     const diagnostics = vscode.languages.getDiagnostics(doc.uri);
     const available = await getQuickFixes(doc);
     const applicable = available.filter(qf => !titles.length || titles.includes(qf.title));
@@ -22,7 +23,7 @@ export function runQuickfixTest(file: string, diagnosticCount: number, ...titles
   });
 }
 
-export async function withTestDocument(file: string, diagnosticCount: number, test: DocFun, cleanup?: DocFun): Promise<void> { 
+export async function withTestDocument(file: string, diagnosticCount: [DiagnosticSeverity, number], test: DocFun, cleanup?: DocFun): Promise<void> { 
   const before = path.join(__dirname, '../../input/before/', file);
   const after = path.join(__dirname, '../../input/after', file);
   const doc = await didChangeDiagnostics(before, diagnosticCount, async () => {
@@ -60,12 +61,14 @@ export async function runQuickFixes(quickFixes: CodeAction[]) {
   }
 }
 
-export async function didChangeDiagnostics<T>(fsPath: string, count: number, action: () => Thenable<T>): Promise<T> {
-  return didEvent(
+export async function didChangeDiagnostics<T>(fsPath: string, [severety, count]: [DiagnosticSeverity, number], action: () => Thenable<T>) {
+    return didEvent(
     vscode.languages.onDidChangeDiagnostics,
     e => {
       const uri = e.uris.find(uri => uri.fsPath === fsPath);
-      return uri && vscode.languages.getDiagnostics(uri).length === count;
+      const diags = vscode.languages.getDiagnostics(uri).filter(d => d.severity <= severety);
+      assert.isAtMost(diags.length, count);
+      return uri && diags.length === count;
     },
     action);
 }
