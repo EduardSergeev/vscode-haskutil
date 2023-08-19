@@ -66,7 +66,7 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
     const toBeDeleted = [];
     for (const [range,,, list] of this.getUnusedImports(document.uri)) {
       const start = document.offsetAt(range.start);
-      const oldImportIndex = imports.findIndex(i => i.offset === start);
+      const oldImportIndex = imports.findIndex(i => i.offset <= start && i.offset + i.length >= start);
       const oldImport = imports[oldImportIndex];
       if(list) {
         list.split(",").forEach(e => oldImport.removeElement(e.trim()));
