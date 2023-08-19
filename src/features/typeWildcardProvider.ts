@@ -13,15 +13,18 @@ export default class TypeWildcardProvider implements CodeActionProvider {
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
-    const errorPattern = / Found type wildcard [`‘](.+?)['’]/;
-    const fillPattern = /standing for [`‘](.+?)['’]/;
+    const errorPattern = /Found .* wildcard/;
+    const widlcardPattern = /wildcard [`‘](.+?)['’]/;
+    const fillPattern = /standing for\n?.*[`‘](.+?)['’]/;
     const codeActions = [];
     for (const diagnostic of context.diagnostics) {
       const match = errorPattern.exec(diagnostic.message);
       if (match === null) {
         continue;
       }
-      let wildcard = match[1];
+
+      const wildcardMatch = widlcardPattern.exec(diagnostic.message);
+      let wildcard = wildcardMatch ? wildcardMatch[1] : '_';
 
       let fillMatch = fillPattern.exec(diagnostic.message);
       if (fillMatch) {
