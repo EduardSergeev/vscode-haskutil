@@ -30,6 +30,8 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
           const expressionMatch = /(\S+)\.(\S+)/.exec(document.getText(diagnostic.range));
           if (expressionMatch) {
             alias = expressionMatch[1];
+          } else {
+            continue;
           }
         }
 
