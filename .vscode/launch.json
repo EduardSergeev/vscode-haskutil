@@ -13,7 +13,7 @@
       "stopOnEntry": false,
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceRoot}/out/src/**/*.js"
+        "${workspaceRoot}/out/**/*.js"
       ],
       "preLaunchTask": "npm: compile"
     },
@@ -29,7 +29,7 @@
       "stopOnEntry": false,
       "sourceMaps": true,
       "outFiles": [
-        "${workspaceRoot}/out/test/**/*.js"
+        "${workspaceRoot}/out/**/*.js"
       ],
       "preLaunchTask": "npm: compile"
     }

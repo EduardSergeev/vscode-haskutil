@@ -11,21 +11,34 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
   }
 
   public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext, token: CancellationToken): Promise<any> {
-    const pattern = /Not in scope:[^`]*[`‘]([^.]+)\.([^'’]+)['’]/;
+    const patterns = [
+      /Not in scope:[^`]*[`‘]([^.]+)\.([^'’]+)['’]/,
+      /Variable not in scope:\s+(?:(\S+)\.)?(\S+)/,
+    ];
     let codeActions = [];
     const diagnostics = context.diagnostics.filter(d => d.severity === vscode.DiagnosticSeverity.Error);
     for (let diagnostic of diagnostics) {
-      const match = pattern.exec(diagnostic.message);
-      if (match === null) {
-        continue;
-      }
-      const [, alias, name] = match;
+      for (const pattern of patterns) {
+        const match = pattern.exec(diagnostic.message);
+        if (match === null) {
+          continue;
+        }
 
-      const results = await this.search(name);
-      codeActions = codeActions.concat(this.addImportForVariable(document, ` as ${alias}`, results));
-      codeActions.forEach(action => {
-        action.diagnostics = [diagnostic];
-      });
+        let [, alias, name] = match;
+
+        if (!alias) {
+          const expressionMatch = /(\S+)\.(\S+)/.exec(document.getText(diagnostic.range));
+          if (expressionMatch) {
+            alias = expressionMatch[1];
+          }
+        }
+
+        const results = await this.search(name);
+        codeActions = codeActions.concat(this.addImportForVariable(document, ` as ${alias}`, results));
+        codeActions.forEach(action => {
+          action.diagnostics = [diagnostic];
+        });
+      }
     }
     return codeActions;
   }

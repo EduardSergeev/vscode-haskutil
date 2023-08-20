@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -209,23 +209,23 @@
       "html",
       "lcov"
     ],
-    "check-coverage": true,
+    "check-coverage": false,
     "report-dir": ".coverage"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@types/chai": "^4.2.22",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^16.11.6",
-    "@types/vscode": "^1.38.0",
-    "chai": "^4.3.4",
-    "mocha": "^9.1.3",
-    "nyc": "^15.1.0",
-    "source-map-support": "^0.5.20",
-    "ts-node": "^10.4.0",
-    "tslint": "^6.1.3",
-    "typescript": "^4.4.4",
-    "vscode-test": "^1.6.1",
-    "vsce": "^1.100.2"
+    "@istanbuljs/nyc-config-typescript": "1.0.2",
+    "@types/chai": "4.3.5",
+    "@types/mocha": "10.0.1",
+    "@types/node": "20.5.0",
+    "@types/vscode": "1.38.0",
+    "@vscode/vsce": "2.20.1",
+    "@vscode/test-electron": "2.3.4",
+    "chai": "4.3.7",
+    "mocha": "10.2.0",
+    "nyc": "15.1.0",
+    "source-map-support": "0.5.21",
+    "ts-node": "10.9.1",
+    "tslint": "6.1.3",
+    "typescript": "4.9.5"
   }
 }

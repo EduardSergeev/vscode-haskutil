@@ -27,6 +27,10 @@ export default class ExtensionProvider implements CodeActionProvider {
 
         const line = `{-# LANGUAGE ${extension} #-}`;
         const title = `Add: ${line}`;
+        if (codeActions.findIndex(a => a.title === title) !== -1) {
+          continue;
+        }
+
         const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
         codeAction.command = {
           title: title,

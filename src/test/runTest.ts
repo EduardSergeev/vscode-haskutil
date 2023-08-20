@@ -6,7 +6,7 @@ import {
   runTests,
   downloadAndUnzipVSCode,
   resolveCliPathFromVSCodeExecutablePath
-} from 'vscode-test';
+} from '@vscode/test-electron';
 
 async function main(): Promise<number> {
   try {
@@ -24,7 +24,8 @@ async function main(): Promise<number> {
     // Install dependent extensions
     const dependencies = [
       'jcanero.hoogle-vscode',
-      'bin/vscode-ghc-simple-0.1.23.vsix'
+      'dramforever.vscode-ghc-simple',
+      // 'bin/vscode-ghc-simple-0.1.23.vsix',
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
@@ -50,9 +51,13 @@ async function main(): Promise<number> {
         '--disable-updates',
         '--logExtensionHostCommunication',
         '--skip-getting-started',
+        '--skip-welcome',
         '--skip-release-notes',
+        '--disable-keytar',
         '--disable-restore-windows',
         '--disable-telemetry',
+        '--disable-workspace-trust',
+        '--wait',
       ]
     });
   } catch (err) {

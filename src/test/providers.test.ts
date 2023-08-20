@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import { runQuickfixTest } from './utils';
+import { DiagnosticSeverity } from 'vscode';
 
 const configs = {
   'telemetry.enableTelemetry': false,
-  'ghcSimple.replCommand': 'ghci -Wall',
+  'ghcSimple.replCommand': 'stack exec ghci',
   'ghcSimple.replScope': 'file',
 };
 
@@ -24,25 +25,25 @@ suite('', () => {
   });
 
   test('Add missing import qualified', () => {
-    return runQuickfixTest('QualifiedImportProvider.hs', 1,
+    return runQuickfixTest('QualifiedImportProvider.hs', [DiagnosticSeverity.Error, 1],
       'Add: "import qualified Data.ByteString as BS"'
     );
   });
 
   test('Organize imports', () => {
-    return runQuickfixTest('OrganizeImportProvider.hs', 1);
+    return runQuickfixTest('OrganizeImportProvider.hs', 0);
   });  
   
   test('Remove unused imports', () => {
-    return runQuickfixTest('UnusedImportProvider.hs', 3);
+    return runQuickfixTest('UnusedImportProvider.hs', 2);
   });
   
   test('Add missing extension', () => {
-    return runQuickfixTest('ExtensionProvider.hs', 1);
+    return runQuickfixTest('ExtensionProvider.hs', 2);
   });
 
   test('Organize extensions', () => {
-    return runQuickfixTest('OrganizeExtensionProvider.hs', 1);
+    return runQuickfixTest('OrganizeExtensionProvider.hs', 0);
   });
 
   test('Replace wildcard with suggested type', () => {

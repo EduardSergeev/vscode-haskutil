@@ -8,21 +8,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0', ACTIONS_ALLOW_UNSECURE_COMMANDS: true }
+    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0', GHC: 9.4.5 }
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup GHC environment
+    - name: Set up npm
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: Set up GHC ${{ env.GHC }} environment
       run: |
-        echo "::add-path::/opt/ghc/bin"
-
+        echo "resolver: ghc-${{ env.GHC }}" > stack.yaml
+        echo "packages: []" >> stack.yaml
+        stack setup
+  
     - run: npm install
 
     - name: Run tests
-      uses: GabrielBB/xvfb-action@v1.4
+      uses: smithki/xvfb-action@v1.1.2
       with:
-        run: npm test
+        run: npm run test
 
     - name: Add GHC extension output (on failure)
       if: failure()
-      run: find .vscode-test/vscode-*/udd/logs -name *GHC* -exec cat {} \;
+      run: find .vscode-test/udd/logs -name *GHC* -exec cat {} \;
