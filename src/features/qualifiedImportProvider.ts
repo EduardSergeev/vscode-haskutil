@@ -30,11 +30,13 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
           const expressionMatch = /(\S+)\.(\S+)/.exec(document.getText(diagnostic.range));
           if (expressionMatch) {
             alias = expressionMatch[1];
+          } else {
+            continue;
           }
         }
 
         const results = await this.search(name);
-        codeActions = codeActions.concat(this.addImportForVariable(document, ` as ${alias}`, results));
+        codeActions = codeActions.concat(this.addImportForVariable(document, alias, results));
         codeActions.forEach(action => {
           action.diagnostics = [diagnostic];
         });
@@ -46,7 +48,7 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
   private addImportForVariable(document: TextDocument, alias: string, searchResults: SearchResult[]): CodeAction[] {
     const codeActions = [];
     for (const result of searchResults) {
-      const title = `Add: "import qualified ${result.module}${alias}"`;
+      const title = `Add: "import qualified ${result.module}${result.module !== alias ? ` as ${alias}` : ''}"`;
       const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
         title: title,
@@ -55,7 +57,8 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
           document,
           result.module,
           {
-            alias: alias
+            qualified: true,
+            alias: result.module !== alias ? ` as ${alias}` : null
           }
         ]
       };

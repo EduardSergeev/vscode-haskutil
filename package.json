@@ -2,13 +2,13 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
   },
   "engines": {
-    "vscode": "^1.38.0"
+    "vscode": "^1.48.0"
   },
   "categories": [
     "Other"
@@ -217,7 +217,7 @@
     "@types/chai": "4.3.5",
     "@types/mocha": "10.0.1",
     "@types/node": "20.5.0",
-    "@types/vscode": "1.38.0",
+    "@types/vscode": "1.48.0",
     "@vscode/vsce": "2.20.1",
     "@vscode/test-electron": "2.3.4",
     "chai": "4.3.7",

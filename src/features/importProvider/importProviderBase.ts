@@ -57,7 +57,7 @@ export default class ImportProviderBase {
     return result;
   }
 
-  private async runCodeAction(document: TextDocument, moduleName: string, options: { alias?: string, elementName?: string } = {}): Promise<void> {
+  private async runCodeAction(document: TextDocument, moduleName: string, options: { qualified?: Boolean, alias?: string, elementName?: string } = {}): Promise<void> {
     function afterMatch(offset) {
       const position = document.positionAt(offset);
       return document.offsetAt(position.with(position.line + 1, 0));
@@ -97,9 +97,11 @@ export default class ImportProviderBase {
         position = afterMatch(importInfo.offset + importInfo.length);
       }
       const importDeclaration = new ImportDeclaration(moduleName);
-      if (options.alias) {
+      if (options.qualified) {
         importDeclaration.qualified = " qualified ";
-        importDeclaration.alias = options.alias;
+        if (options.alias) {
+          importDeclaration.alias = options.alias;
+        }
       }
       if (options.elementName) {
         importDeclaration.addImportElement(options.elementName);
