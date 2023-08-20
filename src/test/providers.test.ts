@@ -25,8 +25,9 @@ suite('', () => {
   });
 
   test('Add missing import qualified', () => {
-    return runQuickfixTest('QualifiedImportProvider.hs', [DiagnosticSeverity.Error, 1],
-      'Add: "import qualified Data.ByteString as BS"'
+    return runQuickfixTest('QualifiedImportProvider.hs', [DiagnosticSeverity.Error, 2],
+      'Add: "import qualified Data.ByteString as BS"',
+      'Add: "import qualified Numeric"'
     );
   });
 
