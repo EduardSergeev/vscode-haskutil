@@ -25,7 +25,6 @@ async function main(): Promise<number> {
     const dependencies = [
       'jcanero.hoogle-vscode',
       'dramforever.vscode-ghc-simple',
-      // 'bin/vscode-ghc-simple-0.1.23.vsix',
     ];
 
     const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
@@ -37,7 +36,7 @@ async function main(): Promise<number> {
         stdio: 'inherit'
       });
     }
-    
+
     // Download VS Code, unzip it and run the integration test
     return await runTests({
       vscodeExecutablePath,
