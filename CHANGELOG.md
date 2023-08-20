@@ -1,17 +1,27 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.10.8] - 2023-08-21
+### Fixed
+* `QualifiedImportProvider`:  
+  - Suppress `Add: "import qualified ... as undefined"` suggestions
+  - Avoid annecessary alias in qualified import: fixes [#48](https://github.com/EduardSergeev/vscode-haskutil/issues/48)
+* `certificate has expired` error in tests:  
+  Switch to VSCode version `1.66.2` which does not have this problem
+### Changed
+* Oldest supported VSCode version is now `1.48.0`
+
 ## [0.10.7] - 2023-08-20
 ### Fixed
-* `RemoveUnusedImportProvider` on GHC > `9.0.2`:
+* `RemoveUnusedImportProvider` on GHC > `9.0.2`:  
   Fix `Cannot read properties of undefined (reading 'removeElement')` exception
-* `TypeWildcardProvider`:
-  Handle various error message formats:
+* `TypeWildcardProvider`:  
+  Handle various error message formats:  
   - old from GHC <= `9.0.2`
   - new from GHC > `9.0.2`
-* `QualifiedImportProvider` on GHC > `9.0.2`:
+* `QualifiedImportProvider` on GHC > `9.0.2`:  
   Newer GHC uses a different error message format
-* `ExtensionProvider`:
+* `ExtensionProvider`:  
   - Do not create duplicated QuickFix actions
   - Switch to `DataKinds` extension in test
 * Update all dependencies to the latest versions
