@@ -39,7 +39,8 @@ function checkDependencies() {
     ['dramforever.vscode-ghc-simple', 'Simple GHC'],
     ['Vans.haskero', 'Haskero'],
     ['ndmitchell.haskell-ghcid', 'ghcid'],
-    ['digitalassetholdingsllc.ghcide', 'ghcide']
+    ['digitalassetholdingsllc.ghcide', 'ghcide'],
+    ['taylorfausak.purple-yolk', 'Purple Yolk']
   ];
   if(!dependencies.find(([id]) => vscode.extensions.getExtension(id))) {
     const toLink = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
