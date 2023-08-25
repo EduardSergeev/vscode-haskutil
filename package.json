@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.10.8",
+  "version": "0.11.0",
   "publisher": "Edka",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
@@ -169,6 +169,11 @@
             "TypeApplications",
             "ViewPatterns"
           ]
+        },
+        "haskutil.checkDiagnosticsExtension": {
+          "type": "boolean",
+          "description": "Check if any of recommended VSCode extensions which generate Haskell diagnostics is installed",
+          "default": true
         }
       }
     }

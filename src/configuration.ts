@@ -14,6 +14,7 @@ const alignImportsSection = "alignImports";
 const alwaysPadImportsSection = "alwaysPadImports";
 const sortImportsSection = "sortImports";
 const organizeImportsOnSaveSection = "organiseImportsOnSave";
+const checkDiagnosticsExtensionSection = "checkDiagnosticsExtension";
 
 function root(): WorkspaceConfiguration {
   return vscode.workspace.getConfiguration(rootSection);
@@ -24,7 +25,8 @@ function get<T>(section: string): T {
 }
 
 
-export default class Configuration {  
+export default class Configuration {
+  public static rootSection = rootSection;
   public static organiseImportsOnInsertSection = organiseImportsOnInsertSection;
   public static organiseExtensionOnInsertSection = organiseExtensionOnInsertSection;
   public static supportedExtensionsSection = supportedExtensionsSection;
@@ -36,6 +38,7 @@ export default class Configuration {
   public static alwaysPadImportsSection = alwaysPadImportsSection;
   public static sortImportsSection = sortImportsSection;
   public static organizeImportsOnSaveSection = organizeImportsOnSaveSection;
+  public static checkDiagnosticsExtensionSection = checkDiagnosticsExtensionSection;
 
   public static get root(): WorkspaceConfiguration {
     return root();
@@ -83,5 +86,9 @@ export default class Configuration {
 
   public static get shouldOrganizeImportsOnSave(): boolean {
     return get(organizeImportsOnSaveSection);
+  } 
+
+  public static get checkDiagnosticsExtension(): boolean {
+    return get(checkDiagnosticsExtensionSection);
   } 
 }
