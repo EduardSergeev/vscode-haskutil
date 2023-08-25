@@ -2,13 +2,11 @@ name: branch
 
 on:
   push:
-    branches-ignore:
-      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0', GHC: 9.4.5 }
+    env: { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     steps:
     - uses: actions/checkout@v3
 
@@ -17,11 +15,8 @@ jobs:
       with:
         node-version: 20
 
-    - name: Set up GHC ${{ env.GHC }} environment
-      run: |
-        echo "resolver: ghc-${{ env.GHC }}" > stack.yaml
-        echo "packages: []" >> stack.yaml
-        stack setup
+    - name: Set up GHC environment
+      run: stack setup
   
     - run: npm install
 
