@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import Configuration from './configuration';
 import ImportProvider from './features/importProvider';
 import QualifiedImportProvider from './features/qualifiedImportProvider';
 import OrganizeImportProvider from './features/organizeImportProvider';
@@ -23,10 +24,12 @@ export function activate(context: vscode.ExtensionContext) {
     removeUnusedImport: new RemoveUnusedImportProvider(),
   };
 
-  checkDependencies();
+  if (Configuration.checkDiagnosticsExtension) {
+    checkDependencies();
+  }
 
   for (const feature in features) {
-    if (vscode.workspace.getConfiguration('haskutil').feature[feature]) {
+    if (Configuration.root.feature[feature]) {
       const provider = features[feature];
       provider.activate(context.subscriptions);
       vscode.languages.registerCodeActionsProvider('haskell', provider);
@@ -44,10 +47,13 @@ function checkDependencies() {
   if(!dependencies.find(([id]) => vscode.extensions.getExtension(id))) {
     const toLink = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
     const items = dependencies.map(toLink);
+    const warningSetting = `${Configuration.rootSection}.${Configuration.checkDiagnosticsExtensionSection}`;
+    const warningLink = `[${warningSetting}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${warningSetting}"]`)})`;
     vscode.window.showWarningMessage(`Dependency is not installed.
       Extension which populates diagnostics (Errors and Warnings) is not installed.
       Please install either ${items.slice(0, -1).join(', ')} or ${items.pop()}
-      to get the full set of QuickFix actions provided by ${toLink(['edka.haskutil','Haskutil'])}.
+      to get the full set of QuickFix actions provided by ${toLink(['edka.haskutil','Haskutil'])}.  
+      If you use diagnostics from non-supported extension you can disable this warning via ${warningLink}
     `);
   }  
 }

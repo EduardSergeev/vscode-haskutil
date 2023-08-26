@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.11.0] - 2023-08-26
+### Added
+* `haskutil.checkDiagnosticsExtension` configuration option:
+  Check if any of recommended VSCode extensions which generate Haskell diagnostics is installed
+  Optional, default is `true`
+
 ## [0.10.8] - 2023-08-21
 ### Fixed
 * `QualifiedImportProvider`:  
