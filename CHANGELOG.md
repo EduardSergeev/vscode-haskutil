@@ -1,12 +1,17 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.11.3] - 2023-08-26
+### Fixed
+* `ImportProvider`:  
+  Do not add `(..)` when adding import for operators
+
 ## [0.11.2] - 2023-08-26
 ### Fixed
 * `OrganizeExtensionProvider`:  
   Make sure all `LANGUAGE` extension are aligning using minimal padding  
   Fixes [#41](https://github.com/EduardSergeev/vscode-haskutil/issues/41)
-- `ImportProvider`:  
+* `ImportProvider`:  
   Suggest adding class or data type with `(..)`, i.e. with all defined constructors/members  
   Fixes [#44](https://github.com/EduardSergeev/vscode-haskutil/issues/41)
 

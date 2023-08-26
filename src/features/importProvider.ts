@@ -41,7 +41,7 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
       codeAction.diagnostics = [diagnostic];
       codeActions.set(title, codeAction);
 
-      const element = variableName[0] === variableName[0].toUpperCase() ? `${variableName}(..)` : variableName;
+      const element = variableName[0] === variableName[0].toLowerCase() ? variableName : `${variableName}(..)`;
       title = `Add: "import ${result.module} (${element})"`;
       codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
