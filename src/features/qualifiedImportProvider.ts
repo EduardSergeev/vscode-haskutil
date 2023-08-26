@@ -46,7 +46,7 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
   }
 
   private addImportForVariable(document: TextDocument, alias: string, searchResults: SearchResult[]): CodeAction[] {
-    const codeActions = [];
+    const codeActions = new Map<string, CodeAction>();
     for (const result of searchResults) {
       const title = `Add: "import qualified ${result.module}${result.module !== alias ? ` as ${alias}` : ''}"`;
       const codeAction = new CodeAction(title, CodeActionKind.QuickFix);
@@ -62,8 +62,8 @@ export default class QualifiedImportProvider extends ImportProviderBase implemen
           }
         ]
       };
-      codeActions.push(codeAction);
+      codeActions.set(title, codeAction);
     }
-    return codeActions;
+    return [...codeActions.values()];
   }
 }
