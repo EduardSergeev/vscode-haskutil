@@ -87,12 +87,14 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: .coverage/lcov.info
         
-  upload:
-    if: github.event_name == 'push' && startsWith(github.event.base_ref, 'refs/heads/master')
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     needs:
       - build
       - metrics
     runs-on: ubuntu-latest
+    env:
+      RELEASE_BODY_FILE: ${{ github.workspace }}/release-description.md
     steps:
     - uses: actions/checkout@v3
 
@@ -101,9 +103,28 @@ jobs:
       with:
         node-version: 20
 
-    - run: npm install
+    - name: Build package
+      run: |
+        npm install
+        npm run package
     
+    - name: Create release notes
+      run: |
+        echo "RELEASE=$(git show -q --format=format:%s)" >> $GITHUB_ENV
+        git show -q --format=format:%b > ${{ env.RELEASE_BODY_FILE }}
+
+    - name: Create release
+      uses: ncipollo/release-action@v1
+      with:
+        commit: ${{ github.sha }}
+        name: ${{ env.RELEASE }}
+        bodyFile: ${{ env.RELEASE_BODY_FILE }}
+        artifacts: haskutil-*.vsix
+        makeLatest: ${{ startsWith(github.event.base_ref, 'refs/heads/master') }}
+        prerelease: ${{ !startsWith(github.event.base_ref, 'refs/heads/master') }}
+
     - name: Upload new version to MS Marketplace
+      if: startsWith(github.event.base_ref, 'refs/heads/master')
       run: npm run upload
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
