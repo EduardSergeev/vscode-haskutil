@@ -32,7 +32,8 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
 
     const aligned =
       extensions.length === 0 ||
-      extensions.every(extension => extension.extensions.length === extensions[0].extensions.length);
+      extensions.every(extension => extension.extensions.length === extensions[0].extensions.length) &&
+      Math.max(...extensions.map(extension => extension.extensions.trimEnd().length)) === extensions[0].extensions.length;
     unorganized = unorganized || Configuration.shouldAlignExtensions && !aligned;
 
     let pred = "";
@@ -123,9 +124,13 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
 
   private async alignExtensions(document: TextDocument) {
     const oldExtensions = ExtensionDeclaration.getExtensions(document.getText());
-    const length = Math.max(...oldExtensions.map(extension => extension.extensions.length));
-    const newExtensions = oldExtensions.map(extension =>
-      new ExtensionDeclaration(extension.header, extension.extensions.concat(" ".repeat(length - extension.extensions.length))));
+    const length = Math.max(...oldExtensions.map(extension => extension.extensions.trimEnd().length));
+    const newExtensions = oldExtensions.map(extension => {
+      const extensionsTrimmed = extension.extensions.trimEnd();
+      return new ExtensionDeclaration(
+        extension.header,
+        extensionsTrimmed.concat(" ".repeat(length - extensionsTrimmed.length + 1)));
+    });
 
     var edit = new WorkspaceEdit();
     for (let i = oldExtensions.length - 1; i >= 0; i--) {

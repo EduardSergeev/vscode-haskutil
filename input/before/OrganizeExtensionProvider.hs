@@ -4,7 +4,7 @@
 
 {-# LANGUAGE MultiParamTypeClasses,
   FlexibleContexts, FlexibleInstances #-}
-{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE DeriveFunctor               #-}
 
 module Main where
 
