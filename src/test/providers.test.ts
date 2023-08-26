@@ -31,6 +31,12 @@ suite('', () => {
     );
   });
 
+  test('Add missing constructor import', () => {
+    return runQuickfixTest('ImportProviderConstructor.hs', [DiagnosticSeverity.Error, 1],
+      'Add: "import Data.Proxy (Proxy(..))"'
+    );
+  });
+
   test('Organize imports', () => {
     return runQuickfixTest('OrganizeImportProvider.hs', 0);
   });  

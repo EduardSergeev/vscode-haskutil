@@ -26,7 +26,7 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
   }
 
   private addImportForVariable(document: TextDocument, diagnostic: Diagnostic, variableName: string, searchResults: SearchResult[]): CodeAction[] {
-    const codeActions = [];
+    const codeActions = new Map<string, CodeAction>();
     for (const result of searchResults) {
       let title = `Add: "import ${result.module}"`;
       let codeAction = new CodeAction(title, CodeActionKind.QuickFix);
@@ -39,9 +39,10 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
         ],
       };
       codeAction.diagnostics = [diagnostic];
-      codeActions.push(codeAction);
+      codeActions.set(title, codeAction);
 
-      title = `Add: "import ${result.module} (${variableName})"`;
+      const element = variableName[0] === variableName[0].toUpperCase() ? `${variableName}(..)` : variableName;
+      title = `Add: "import ${result.module} (${element})"`;
       codeAction = new CodeAction(title, CodeActionKind.QuickFix);
       codeAction.command = {
         title: title,
@@ -50,13 +51,13 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
           document,
           result.module,
           {
-            elementName: variableName
+            elementName: element
           }
         ]
       };
       codeAction.diagnostics = [diagnostic];
-      codeActions.push(codeAction);
+      codeActions.set(title, codeAction);
     }
-    return codeActions;
+    return [...codeActions.values()];
   }
 }
