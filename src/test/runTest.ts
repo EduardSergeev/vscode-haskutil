@@ -37,6 +37,9 @@ async function main(): Promise<number> {
       });
     }
 
+    // This is required for Mocha tests to report non-zero exit code in case of test failure
+    process.removeAllListeners('exit');
+
     // Download VS Code, unzip it and run the integration test
     return await runTests({
       vscodeExecutablePath,
@@ -62,7 +65,7 @@ async function main(): Promise<number> {
   } catch (err) {
     console.error(err);
     console.error('Failed to run tests');
-    return 1;
+    process.exit(1);
   }
 }
 

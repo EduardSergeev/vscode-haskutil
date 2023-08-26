@@ -49,8 +49,8 @@ jobs:
       with:
         run: npm test
 
-    - name: Add GHC extension output (on failure on Linux)
-      if: failure() && runner.os == 'Linux'
+    - name: Add GHC extension output (on failure on Linux or MacOS)
+      if: failure() && runner.os != 'Windows'
       run: find .vscode-test/udd/logs -name *GHC* -exec cat {} \;
 
     - name: Add GHC extension output (on failure on Windows)
