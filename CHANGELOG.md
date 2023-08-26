@@ -3,7 +3,7 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.11.0] - 2023-08-26
 ### Added
-* `haskutil.checkDiagnosticsExtension` configuration option:
+* `haskutil.checkDiagnosticsExtension` configuration option:  
   Check if any of recommended VSCode extensions which generate Haskell diagnostics is installed
   Optional, default is `true`
 
@@ -77,11 +77,13 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.9.0] - 2020-05-04
 ### Added
-* Add [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide) as an option for base extension populating PROBLEMS ([#29](https://github.com/EduardSergeev/vscode-haskutil/pull/29) - thanks to [ArturGajowy](https://github.com/ArturGajowy) for contribution)
+* Add [ghcide](https://marketplace.visualstudio.com/items?itemName=DigitalAssetHoldingsLLC.ghcide) as an option for base extension populating PROBLEMS  
+  ([#29](https://github.com/EduardSergeev/vscode-haskutil/pull/29) - thanks to [ArturGajowy](https://github.com/ArturGajowy) for contribution)
 
 ## [0.8.1] - 2020-04-20
 ### Fixed
-* Untitled files re-opening themselves after closing ([#28](https://github.com/EduardSergeev/vscode-haskutil/pull/28) - thanks to [dramforever](https://github.com/dramforever) for contribution)
+* Untitled files re-opening themselves after closing  
+  ([#28](https://github.com/EduardSergeev/vscode-haskutil/pull/28) - thanks to [dramforever](https://github.com/dramforever) for contribution)
 * Haskutil complaining about non-Haskell files with unorganized imports
 * Organize import can produce code that the extension considers unorganized ([#26](https://github.com/EduardSergeev/vscode-haskutil/issues/26))
 
@@ -110,13 +112,15 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 ## [0.5.1] - 2020-04-09
 ### Fixed
 * Fix wildcard replacement under GHC 8.8
-* Better handling of wildcards (nested parenthesis and `()` as replacement)
+* Better handling of wildcards  
+  (nested parenthesis and `()` as replacement)
 
 ## [0.5.0] - 2020-04-01
 ### Added
 * Settings for turning on/off individual features
 ### Fixed
-* Fix 'Not in scope' error detection (different platforms) ([#16](https://github.com/EduardSergeev/vscode-haskutil/pull/16) - thanks to [serras](https://github.com/serras) for contribution)
+* Fix 'Not in scope' error detection (different platforms)  
+  ([#16](https://github.com/EduardSergeev/vscode-haskutil/pull/16) - thanks to [serras](https://github.com/serras) for contribution)
 * Make LANGUAGE pragma handling case insensitive
 
 ## [0.4.5] - 2019-07-26
@@ -158,7 +162,7 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 ## [0.2.0] - 2018-09-30
 ### Added
 * Organize LANGUAGE extensions (split, align and sort)
-* Configuration of the padding of `import` in `qualified` area
+* Configuration of the padding of `import` in `qualified` area  
   (should we always pad with 9 spaces even if there is no `qualified` import)
 
 ## [0.1.0] - 2018-09-20
