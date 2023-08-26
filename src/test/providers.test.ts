@@ -17,7 +17,8 @@ suite('', () => {
   });
   
   test('Add missing import', () => {
-    return runQuickfixTest('ImportProvider.hs', 3,
+    return runQuickfixTest('ImportProvider.hs', 4,
+      'Add: "import Control.Arrow ((>>>))"',
       'Add: "import Data.Maybe"',
       'Add: "import Data.List (tails)"',
       'Add: "import Data.List (sort)"',
