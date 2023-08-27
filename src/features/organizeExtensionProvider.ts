@@ -33,7 +33,7 @@ export default class OrganizeExtensionProvider implements CodeActionProvider {
     const aligned =
       extensions.length === 0 ||
       extensions.every(extension => extension.extensions.length === extensions[0].extensions.length) &&
-      Math.max(...extensions.map(extension => extension.extensions.trimEnd().length)) === extensions[0].extensions.length;
+      Math.max(...extensions.map(extension => extension.extensions.trimEnd().length + 1)) === extensions[0].extensions.length;
     unorganized = unorganized || Configuration.shouldAlignExtensions && !aligned;
 
     let pred = "";
