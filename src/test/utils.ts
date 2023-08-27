@@ -64,11 +64,13 @@ export async function runQuickFixes(quickFixes: CodeAction[]) {
 export async function didChangeDiagnostics<T>(fsPath: string, [severety, count]: [DiagnosticSeverity, number], action: () => Thenable<T>) {
     return didEvent(
     vscode.languages.onDidChangeDiagnostics,
-    e => {
-      const uri = e.uris.find(uri => uri.fsPath === fsPath);
-      const diags = vscode.languages.getDiagnostics(uri).filter(d => d.severity <= severety);
+    () => {
+      const diags = vscode.languages.getDiagnostics()
+        .filter(([u, _]) => u.fsPath === fsPath)
+        .flatMap(([_, d]) => d)
+        .filter(d => d.severity <= severety);
       assert.isAtMost(diags.length, count);
-      return uri && diags.length === count;
+      return diags.length === count;
     },
     action);
 }
@@ -76,18 +78,29 @@ export async function didChangeDiagnostics<T>(fsPath: string, [severety, count]:
 
 export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,
-  predicate: (event: TEvent) => Boolean,
+  predicate: () => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
-  return new Promise<TResult>(async (resolve, _) => {
-    const result = action();
-    const disposable = subscribe(async e => {
-      if(predicate(e)) {
-        disposable.dispose();
-        resolve(await result);
-      }
+    const diagnostics = new Promise<Disposable>((resolve, _) => {
+      const disposableEvent = subscribe(e => {
+        if(predicate()) {
+          resolve(disposable);
+        }
+      });
+      const timer = setInterval(() => {
+        if(predicate()) {
+          resolve(disposable);
+        }
+      }, 1000);
+      const disposableTimer = Disposable.from({
+        dispose: () => clearInterval(timer)
+      });
+      const disposable = Disposable.from(disposableEvent, disposableTimer);
     });
-  });
-}
+    const result = await action();
+    const disposable = await diagnostics;
+    disposable.dispose();
+    return result;
+  }
 
 export async function outputGHCiLog() {
     vscode.window.onDidChangeVisibleTextEditors(editors => {
