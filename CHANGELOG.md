@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.11.4] - 2023-08-27
+### Fixed
+* `OrganizeExtensionProvider`: false positive of `Extension are unorganised`
+  Aligned extension were incorrectly detected as being not aligned
+* `ImportProvider`: `Organize imports` behaviour on Windows
+  Fix invalid parsing of imports in file with `\r\n` (Windows) line ending
+  As a result applying `Organize imports` would previously lead to corrupted imports
+* Fail CI build in case of test failure:
+  Previously build would still be green even if some of the test wer failing
+
 ## [0.11.3] - 2023-08-26
 ### Fixed
 * `ImportProvider`:  
