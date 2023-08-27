@@ -80,8 +80,8 @@ export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,
   predicate: () => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
-    const diagnostics = new Promise<Disposable>(async (resolve, _) => {
-      const disposableEvent = subscribe(async e => {
+    const diagnostics = new Promise<Disposable>((resolve, _) => {
+      const disposableEvent = subscribe(e => {
         if(predicate()) {
           resolve(disposable);
         }
