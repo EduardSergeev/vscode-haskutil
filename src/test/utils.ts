@@ -80,21 +80,24 @@ export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,
   predicate: () => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
-    const p1 = new Promise<Disposable>(async (resolve, _) => {
-      const disposable = subscribe(async e => {
+    const diagnostics = new Promise<Disposable>(async (resolve, _) => {
+      const disposableEvent = subscribe(async e => {
         if(predicate()) {
           resolve(disposable);
         }
       });
       const timer = setInterval(() => {
         if(predicate()) {
-          clearInterval(timer);
           resolve(disposable);
         }
       }, 1000);
+      const disposableTimer = Disposable.from({
+        dispose: () => clearInterval(timer)
+      });
+      const disposable = Disposable.from(disposableEvent, disposableTimer);
     });
     const result = await action();
-    const disposable = await p1;
+    const disposable = await diagnostics;
     disposable.dispose();
     return result;
   }
