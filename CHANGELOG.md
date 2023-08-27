@@ -3,12 +3,12 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.11.4] - 2023-08-27
 ### Fixed
-* `OrganizeExtensionProvider`: false positive of `Extension are unorganised`
+* `OrganizeExtensionProvider`: false positive of `Extension are unorganised`  
   Aligned extension were incorrectly detected as being not aligned
-* `ImportProvider`: `Organize imports` behaviour on Windows
-  Fix invalid parsing of imports in file with `\r\n` (Windows) line ending
+* `ImportProvider`: `Organize imports` behaviour on Windows  
+  Fix invalid parsing of imports in file with `\r\n` (Windows) line ending  
   As a result applying `Organize imports` would previously lead to corrupted imports
-* Fail CI build in case of test failure:
+* Fail CI build in case of test failure:  
   Previously build would still be green even if some of the test wer failing
 
 ## [0.11.3] - 2023-08-26
@@ -28,7 +28,7 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 ## [0.11.0] - 2023-08-26
 ### Added
 * `haskutil.checkDiagnosticsExtension` configuration option:  
-  Check if any of recommended VSCode extensions which generate Haskell diagnostics is installed
+  Check if any of recommended VSCode extensions which generate Haskell diagnostics is installed  
   Optional, default is `true`
 
 ## [0.10.8] - 2023-08-21
@@ -73,7 +73,8 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.10.2] - 2020-09-22
 ### Added
-* Github actions build: matrix builds on multiple platforms and publishing to Marketplace on version tag push
+* Github actions matric build:  
+  Builds on multiple platforms and publishing to Marketplace on version tag push
 ### Fixed
 * Test coverage
 * CHANGELOG.md warnings
