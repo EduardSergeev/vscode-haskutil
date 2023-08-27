@@ -78,16 +78,18 @@ export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,
   predicate: (event: TEvent) => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
-  return new Promise<TResult>(async (resolve, _) => {
-    const result = action();
-    const disposable = subscribe(async e => {
-      if(predicate(e)) {
-        disposable.dispose();
-        resolve(await result);
-      }
+    const p1 = new Promise<Disposable>(async (resolve, _) => {
+      const disposable = subscribe(async e => {
+        if(predicate(e)) {
+          resolve(disposable);
+        }
+      });
     });
-  });
-}
+    const result = action();
+    const disposable = await p1;
+    disposable.dispose();
+    return result;
+  }
 
 export async function outputGHCiLog() {
     vscode.window.onDidChangeVisibleTextEditors(editors => {
