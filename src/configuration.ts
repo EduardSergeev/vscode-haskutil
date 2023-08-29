@@ -15,6 +15,7 @@ const alwaysPadImportsSection = "alwaysPadImports";
 const sortImportsSection = "sortImports";
 const organizeImportsOnSaveSection = "organiseImportsOnSave";
 const checkDiagnosticsExtensionSection = "checkDiagnosticsExtension";
+const supportedDependenciesSection = "supportedDependencies";
 
 function root(): WorkspaceConfiguration {
   return vscode.workspace.getConfiguration(rootSection);
@@ -39,6 +40,7 @@ export default class Configuration {
   public static sortImportsSection = sortImportsSection;
   public static organizeImportsOnSaveSection = organizeImportsOnSaveSection;
   public static checkDiagnosticsExtensionSection = checkDiagnosticsExtensionSection;
+  public static supportedDependenciesSection = supportedDependenciesSection;
 
   public static get root(): WorkspaceConfiguration {
     return root();
@@ -90,5 +92,9 @@ export default class Configuration {
 
   public static get checkDiagnosticsExtension(): boolean {
     return get(checkDiagnosticsExtensionSection);
-  } 
+  }
+
+  public static get supportedDependencies(): [{ id: string, name: string }] {
+    return get(supportedDependenciesSection);
+  }
 }

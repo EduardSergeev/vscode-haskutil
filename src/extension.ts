@@ -38,22 +38,20 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function checkDependencies() {
-  const dependencies = [
-    ['dramforever.vscode-ghc-simple', 'Simple GHC'],
-    ['Vans.haskero', 'Haskero'],
-    ['ndmitchell.haskell-ghcid', 'ghcid'],
-    ['digitalassetholdingsllc.ghcide', 'ghcide']
-  ];
-  if(!dependencies.find(([id]) => vscode.extensions.getExtension(id))) {
-    const toLink = ([id, name]) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
+  const dependencies = Configuration.supportedDependencies;
+  if(!dependencies.find(extension => vscode.extensions.getExtension(extension.id))) {
+    const toLink = ({id, name}) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
     const items = dependencies.map(toLink);
     const warningSetting = `${Configuration.rootSection}.${Configuration.checkDiagnosticsExtensionSection}`;
-    const warningLink = `[${warningSetting}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${warningSetting}"]`)})`;
+    const warningLink = `[${Configuration.checkDiagnosticsExtensionSection}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${warningSetting}"]`)})`;
+    const listSetting = `${Configuration.rootSection}.${Configuration.supportedDependenciesSection}`;
+    const listLink = `[${Configuration.supportedDependenciesSection}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${listSetting}"]`)})`;
     vscode.window.showWarningMessage(`Dependency is not installed.
       Extension which populates diagnostics (Errors and Warnings) is not installed.
       Please install either ${items.slice(0, -1).join(', ')} or ${items.pop()}
-      to get the full set of QuickFix actions provided by ${toLink(['edka.haskutil','Haskutil'])}.  
-      If you use diagnostics from non-supported extension you can disable this warning via ${warningLink}
+      to get the full set of QuickFix actions provided by ${toLink({ id: 'edka.haskutil', name: 'Haskutil' })}.  
+      You can disable this warning in ${warningLink}
+      or can add any 3rd party extension to the list in ${listLink}.
     `);
   }  
 }
