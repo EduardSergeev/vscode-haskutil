@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.12.0] - 2023-08-30
+### Added
+* `haskutil.supportedDependencies` configuration option:  
+  Make the list of supported Haskell diagnostic generating extensions configurable
+
 ## [0.11.4] - 2023-08-27
 ### Fixed
 * `OrganizeExtensionProvider`: false positive of `Extension are unorganised`
