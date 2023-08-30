@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.12.2] - 2023-08-31
+### Changed
+* `Dependency not installed` warning message extension links:  
+  Instead of linking to extension's Marketplace page link to VSCode `EXTENSIONS` view  
+  Focused to linked extension via `workbench.extensions.search` command-link
+
 ## [0.12.1] - 2023-08-30
 ### Fixed
 * `CHANGELOG` formatting:  
