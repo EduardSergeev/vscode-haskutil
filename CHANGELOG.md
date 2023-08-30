@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.12.1] - 2023-08-30
+### Fixed
+* `CHANGELOG` formatting:  
+  Add missing spaces to `CHANGELOG.md` for proper newline rendering
+
 ## [0.12.0] - 2023-08-30
 ### Added
 * `haskutil.supportedDependencies` configuration option:  
