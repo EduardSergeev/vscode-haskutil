@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 function checkDependencies() {
   const dependencies = Configuration.supportedDependencies;
   if(!dependencies.find(extension => vscode.extensions.getExtension(extension.id))) {
-    const toLink = ({id, name}) => `[${name}](https://marketplace.visualstudio.com/items?itemName=${id})`;
+    const toLink = ({id, name}) => `[${name}](${vscode.Uri.parse(`command:workbench.extensions.search?["@id:${id}"]`)})`;
     const items = dependencies.map(toLink);
     const warningSetting = `${Configuration.rootSection}.${Configuration.checkDiagnosticsExtensionSection}`;
     const warningLink = `[${Configuration.checkDiagnosticsExtensionSection}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${warningSetting}"]`)})`;
