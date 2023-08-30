@@ -8,12 +8,12 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.11.4] - 2023-08-27
 ### Fixed
-* `OrganizeExtensionProvider`: false positive of `Extension are unorganised`
+* `OrganizeExtensionProvider`: false positive of `Extension are unorganised`  
   Aligned extension were incorrectly detected as being not aligned
-* `ImportProvider`: `Organize imports` behaviour on Windows
-  Fix invalid parsing of imports in file with `\r\n` (Windows) line ending
+* `ImportProvider`: `Organize imports` behaviour on Windows  
+  Fix invalid parsing of imports in file with `\r\n` (Windows) line ending  
   As a result applying `Organize imports` would previously lead to corrupted imports
-* Fail CI build in case of test failure:
+* Fail CI build in case of test failure:  
   Previously build would still be green even if some of the test wer failing
 
 ## [0.11.3] - 2023-08-26
@@ -69,8 +69,10 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.10.4] - 2020-09-26
 ### Fixed
-* Stop putting images into *.vsix package which reduces in ~20 times (oops...) and `README.md` points to Github-hosted files anyway
-* Better isolation for tests: set custom `--user-data-dir` so the test would not interfere with the VSCode installed locally
+* Stop putting images into *.vsix package  
+  This fix reduces in ~20 times (oops...) and `README.md` points to Github-hosted files anyway
+* Better isolation for tests:  
+  Set custom `--user-data-dir` so the test would not interfere with the VSCode installed locally
 
 ## [0.10.3] - 2020-09-25
 ### Fixed
@@ -78,7 +80,9 @@ All notable changes to the "Haskutil" extension will be documented in this file.
 
 ## [0.10.2] - 2020-09-22
 ### Added
-* Github actions build: matrix builds on multiple platforms and publishing to Marketplace on version tag push
+* Github actions build:  
+  - Matrix builds on multiple platforms
+  - Publish to Marketplace on version tag push
 ### Fixed
 * Test coverage
 * CHANGELOG.md warnings
