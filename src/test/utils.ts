@@ -76,16 +76,16 @@ export async function didChangeDiagnostics<T>(fsPath: string, [severety, count]:
 
 export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,
-  predicate: (event: TEvent) => Boolean,
+  predicate: (event: TEvent) => boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
-  return new Promise<TResult>(async (resolve, _) => {
-    const result = action();
-    const disposable = subscribe(async e => {
-      if(predicate(e)) {
+  return new Promise<TResult>((resolve, _) => {
+    const disposable = subscribe(event => {
+      if(predicate(event)) {
         disposable.dispose();
-        resolve(await result);
+        actionResult.then(result => resolve(result))
       }
     });
+    const actionResult = action();
   });
 }
 
