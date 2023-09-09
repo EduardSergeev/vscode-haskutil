@@ -8,7 +8,7 @@
    viewBox="0 0 32 32"
    version="1.1"
    id="svg346"
-   sodipodi:docname="Haskutil-logo.svg"
+   sodipodi:docname="Haskutil-logo3.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    inkscape:export-filename="/home/edka/work/vscode-haskutil/images/Haskutil-logo.png"
    inkscape:export-xdpi="30.719999"
@@ -29,8 +29,8 @@
      inkscape:pagecheckerboard="0"
      showgrid="true"
      inkscape:zoom="1.09"
-     inkscape:cx="121.55963"
-     inkscape:cy="470.6422"
+     inkscape:cx="302.29358"
+     inkscape:cy="255.9633"
      inkscape:window-width="1920"
      inkscape:window-height="1048"
      inkscape:window-x="0"
@@ -44,7 +44,7 @@
   <path
      d="M 5.5176052,31.2 11.510148,18.310068 5.5176052,5.4201401 H 10.015999 L 16.042805,18.310068 10.015999,31.2 Z m 5.9925428,0 5.99334,-12.889932 -5.99334,-12.8899279 h 4.532657 L 28,31.2 H 23.512764 L 19.757066,23.072449 16.042805,31.2 Z m 14.506416,-7.528258 -1.996187,-4.297785 h 6.980674 v 4.297785 z m -3.005037,-6.443824 -1.992201,-4.297785 h 9.972961 v 4.297785 z"
      id="path344"
-     style="stroke-width:0.953756;stroke:none;stroke-opacity:1;fill:#666666;fill-opacity:1" />
+     style="stroke-width:0.953756" />
   <path
      fill-rule="evenodd"
      clip-rule="evenodd"

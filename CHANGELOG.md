@@ -1,10 +1,9 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
-## [0.12.3] - 2023-08-31
+## [0.12.3] - 2023-09-09
 ### Added
-* `Supported dependent extension check` test:  
-  Test the situation when non of the extensions listed in `haskutil.supportedDependencies` setting are currently installed
+* Extension icon
 
 ## [0.12.2] - 2023-08-31
 ### Changed
