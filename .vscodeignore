@@ -4,6 +4,7 @@
 .nyc_output
 .vscode
 images
+!images/Haskutil-logo.png
 input
 out/test
 out/**/*.map
