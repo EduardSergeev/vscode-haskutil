@@ -4,6 +4,7 @@
   "description": "'QuickFix' actions for Haskell editor",
   "version": "0.12.3",
   "publisher": "Edka",
+  "icon": "images/Haskutil-logo.png",
   "repository": {
     "url": "https://github.com/EduardSergeev/vscode-haskutil"
   },
