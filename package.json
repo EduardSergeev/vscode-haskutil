@@ -197,10 +197,6 @@
               "id": "dramforever.vscode-ghc-simple",
               "name": "GHC"
             },{
-              "id": "taylorfausak.purple-yolk",
-              "name": "Purple Yolk"
-            },{
-            },{
               "id": "Vans.haskero",
               "name": "Haskero"
             },{
@@ -209,6 +205,9 @@
             },{
               "id": "digitalassetholdingsllc.ghcide",
               "name": "ghcid"
+            },{
+              "id": "taylorfausak.purple-yolk",
+              "name": "Purple Yolk"
           }]
         }
       }
