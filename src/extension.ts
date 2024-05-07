@@ -46,12 +46,9 @@ function checkDependencies() {
     const warningLink = `[${Configuration.checkDiagnosticsExtensionSection}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${warningSetting}"]`)})`;
     const listSetting = `${Configuration.rootSection}.${Configuration.supportedDependenciesSection}`;
     const listLink = `[${Configuration.supportedDependenciesSection}](${vscode.Uri.parse(`command:workbench.action.openSettings?["${listSetting}"]`)})`;
-    vscode.window.showWarningMessage(`Dependency is not installed.
-      Extension which populates diagnostics (Errors and Warnings) is not installed.
-      Please install either ${items.slice(0, -1).join(', ')} or ${items.pop()}
-      to get the full set of QuickFix actions provided by ${toLink({ id: 'edka.haskutil', name: 'Haskutil' })}.  
-      You can disable this warning in ${warningLink}
-      or can add any 3rd party extension to the list in ${listLink}.
-    `);
+    vscode.window.showWarningMessage(`No supported Haskell diagnostics extension was found.
+To get QuickFix provided by ${toLink({ id: 'edka.haskutil', name: 'Haskutil' })} 
+install one of the recommended extension: ${items.slice(0, -1).join(', ')} or ${items.pop()}. 
+Otherwise to supress this warning either add any 3rd party Haskell diagnostics extension to ${listLink} or disable it in ${warningLink}.`);
   }  
 }
