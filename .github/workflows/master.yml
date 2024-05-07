@@ -36,6 +36,13 @@ jobs:
       with:
         node-version: 20
 
+    - name: Install Haskell Stack
+      if: runner.os == 'macOS'
+      run: |
+        brew install llvm@12
+        echo "/opt/homebrew/opt/llvm@12/bin" >> $GITHUB_PATH
+        brew install haskell-stack
+
     - name: Set up GHC ${{ matrix.ghc }} environment
       run: |
         echo "resolver: ghc-${{ matrix.ghc }}" > stack.yaml
