@@ -2,7 +2,7 @@
   "name": "haskutil",
   "displayName": "Haskutil",
   "description": "'QuickFix' actions for Haskell editor",
-  "version": "0.12.3",
+  "version": "0.13.0",
   "publisher": "Edka",
   "icon": "images/Haskutil-logo.png",
   "repository": {
@@ -205,6 +205,9 @@
             },{
               "id": "digitalassetholdingsllc.ghcide",
               "name": "ghcid"
+            },{
+              "id": "taylorfausak.purple-yolk",
+              "name": "Purple Yolk"
           }]
         }
       }
@@ -251,17 +254,17 @@
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
-    "@types/chai": "4.3.5",
-    "@types/mocha": "10.0.1",
-    "@types/node": "20.5.7",
+    "@types/chai": "4.3.16",
+    "@types/mocha": "10.0.6",
+    "@types/node": "20.12.10",
     "@types/vscode": "1.48.0",
-    "@vscode/vsce": "2.21.0",
-    "@vscode/test-electron": "2.3.4",
-    "chai": "4.3.8",
-    "mocha": "10.2.0",
+    "@vscode/vsce": "2.26.1",
+    "@vscode/test-electron": "2.3.9",
+    "chai": "4.4.1",
+    "mocha": "10.4.0",
     "nyc": "15.1.0",
     "source-map-support": "0.5.21",
-    "ts-node": "10.9.1",
+    "ts-node": "10.9.2",
     "tslint": "6.1.3",
     "typescript": "4.9.5"
   }

@@ -8,20 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     env: { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up npm
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
 
     - name: Set up GHC environment
-      run: stack setup
+      run: |
+        echo "resolver: ghc-9.4.5" > stack.yaml
+        echo "packages: []" >> stack.yaml
+        stack setup
   
     - run: npm install
 
     - name: Run npm test
-      uses: smithki/xvfb-action@v1.1.2
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm test
 

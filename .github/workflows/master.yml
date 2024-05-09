@@ -29,12 +29,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up npm
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
+
+    - name: Install Haskell Stack
+      if: runner.os == 'macOS'
+      run: |
+        brew install llvm@12
+        echo "/opt/homebrew/opt/llvm@12/bin" >> $GITHUB_PATH
+        brew install haskell-stack
 
     - name: Set up GHC ${{ matrix.ghc }} environment
       run: |
@@ -45,7 +52,7 @@ jobs:
     - run: npm install
 
     - name: Run npm test
-      uses: smithki/xvfb-action@v1.1.2
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm test
 
@@ -61,10 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     env: { CODE_VERSION: 1.48.0, DISPLAY: ':99.0', GHC: 9.4.5 }
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up npm
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
 
@@ -77,7 +84,7 @@ jobs:
     - run: npm install
 
     - name: Run tests with coverage
-      uses: smithki/xvfb-action@v1.1.2
+      uses: coactions/setup-xvfb@v1
       with:
         run: npm run coverage
 
@@ -95,10 +102,10 @@ jobs:
     env:
       RELEASE_BODY_FILE: ${{ github.workspace }}/release-description.md
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up npm
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
 

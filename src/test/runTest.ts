@@ -31,7 +31,8 @@ async function main(): Promise<number> {
     const userDataDir = path.resolve(extensionsDir, '..', '..', 'udd');
 
     for(const extension of dependencies) {
-      cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--install-extension', extension], {
+      cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--user-data-dir', userDataDir, '--install-extension', extension], {
+        shell: process.platform === 'win32' ? true : undefined,
         encoding: 'utf-8',
         stdio: 'inherit'
       });
