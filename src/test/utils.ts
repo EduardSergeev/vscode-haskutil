@@ -63,16 +63,16 @@ export async function runQuickFixes(quickFixes: CodeAction[]) {
 
 export async function didChangeDiagnostics<T>(fsPath: string, [severety, count]: [DiagnosticSeverity, number], action: () => Thenable<T>) {
     return didEvent(
-    vscode.languages.onDidChangeDiagnostics,
-    e => {
-      const uri = e.uris.find(uri => uri.fsPath === fsPath);
-      const diags = vscode.languages.getDiagnostics(uri).filter(d => d.severity <= severety);
-      assert.isAtMost(diags.length, count);
-      return uri && diags.length === count;
-    },
-    action);
+      vscode.languages.onDidChangeDiagnostics,
+      e => {
+        const uri = e.uris.find(uri => uri.fsPath === fsPath);
+        const diags = vscode.languages.getDiagnostics(uri).filter(d => d.severity <= severety);
+        assert.isAtMost(diags.length, count);
+        return uri && diags.length === count;
+      },
+      action,
+    );
 }
-
 
 export async function didEvent<TResult, TEvent>(
   subscribe: (arg: (event: TEvent) => void) => Disposable,

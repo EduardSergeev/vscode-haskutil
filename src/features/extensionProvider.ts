@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { CodeActionProvider, Disposable, TextDocument, Range, CodeActionContext, CancellationToken, CodeAction, WorkspaceEdit, CodeActionKind } from 'vscode';
 import OrganizeExtensionProvider from './organizeExtensionProvider';
 import Configuration from '../configuration';
-import { promisify } from 'util';
 
 
 export default class ExtensionProvider implements CodeActionProvider {
