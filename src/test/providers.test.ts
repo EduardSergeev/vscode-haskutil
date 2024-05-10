@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { runQuickfixTest } from './utils';
+import { didChangeDiagnostics, runQuickfixTest } from './utils';
 import { DiagnosticSeverity } from 'vscode';
+import path = require('path');
 
 const configs = {
   'telemetry.enableTelemetry': false,
@@ -14,6 +15,19 @@ suite('', () => {
     for (const setting in configs) { 
       await config.update(setting, configs[setting], true);
     }
+
+    // Temporary hack to fix intermittent (but quite persistent) test failures
+    const welcome = path.join(__dirname, '../../input/Welcome.hs');
+    const doc = await didChangeDiagnostics(welcome, [DiagnosticSeverity.Warning, 1], async () => {
+      const doc = await vscode.workspace.openTextDocument(welcome);
+      await vscode.window.showTextDocument(doc);
+      // Not sure why by VSCode aborts the subsequent `vscode.executeCodeActionProvider` command
+      // with `Cancelled` error if we do not give VSCode or our extensions some time to initialise
+      // Could not find a proper event to wait on so we have to `sleep` for 3s instead 
+      await require('util').promisify(setTimeout)(3000);
+      return doc;
+    });
+    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
   });
   
   test('Add missing import', () => {
