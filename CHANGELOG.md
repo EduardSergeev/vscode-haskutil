@@ -1,9 +1,15 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.13.1] - 2024-05-11
+### Fixed
+* Intermittent test failures  
+  Failures with "Cancelled" error message
+* CHANELOG formatting
+
 ## [0.13.0] - 2024-05-07
 ### Added
-* [Purple Yolk](https://github.com/tfausak/purple-yolk) extension is added to the list of `haskutil.supportedDependencies`
+* [Purple Yolk](https://github.com/tfausak/purple-yolk) extension is added to the list of `haskutil.supportedDependencies`  
   ([#73](https://github.com/EduardSergeev/vscode-haskutil/pull/73) - thanks to [Taylor Fausak](https://github.com/tfausak) for contribution)
 ### Fixed
 * CI build on MacOS
