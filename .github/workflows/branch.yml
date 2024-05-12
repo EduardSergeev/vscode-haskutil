@@ -17,8 +17,8 @@ jobs:
 
     - name: Set up GHC environment
       run: |
-        echo "resolver: ghc-9.4.5" > stack.yaml
-        echo "packages: []" >> stack.yaml
+        # echo "resolver: ghc-9.4.5" > stack.yaml
+        # echo "packages: []" >> stack.yaml
         stack setup
   
     - run: npm install
