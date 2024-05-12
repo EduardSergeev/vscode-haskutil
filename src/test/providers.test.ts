@@ -5,6 +5,7 @@ import path = require('path');
 
 const configs = {
   'telemetry.enableTelemetry': false,
+  "workbench.editor.enablePreview": false,
   'ghcSimple.replCommand': 'stack exec ghci',
   'ghcSimple.replScope': 'file',
 };
