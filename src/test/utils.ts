@@ -79,13 +79,13 @@ export async function didEvent<TResult, TEvent>(
   predicate: (event: TEvent) => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
   return new Promise<TResult>(async (resolve, _) => {
-    const result = action();
     const disposable = subscribe(async e => {
       if(predicate(e)) {
         disposable.dispose();
         resolve(await result);
       }
     });
+    let result = action();
   });
 }
 
