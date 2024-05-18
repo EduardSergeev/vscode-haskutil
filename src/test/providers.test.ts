@@ -57,7 +57,7 @@ suite('', () => {
   });  
   
   test('Remove unused imports', () => {
-    return runQuickfixTest('UnusedImportProvider.hs', 2);
+    return runQuickfixTest('UnusedImportProvider.hs', 3);
   });
   
   test('Add missing extension', () => {
