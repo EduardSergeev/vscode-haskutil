@@ -16,10 +16,7 @@ jobs:
         node-version: 20
 
     - name: Set up GHC environment
-      run: |
-        echo "resolver: ghc-9.4.5" > stack.yaml
-        echo "packages: []" >> stack.yaml
-        stack setup
+      run: stack setup
   
     - run: npm install
 
