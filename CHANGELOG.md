@@ -1,11 +1,20 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.13.2] - 2024-05-19
+### Fixed
+* `Remove unused imports` action when import declaration contains elements with `(..)` ([#40](https://github.com/EduardSergeev/vscode-haskutil/issues/40)):  
+  Fix behaviour of `RemoveUnusedImportProvider` in regards to removal from import lists containing elements with export lists, e.g. `Sum(..)` or `Sum(fromSum)`;
+* `Replace wildcard` action under GHC 9.6.5 ([#79](https://github.com/EduardSergeev/vscode-haskutil/issues/79)):  
+  Fix `TypeWildcardProvider` behavior when running with latest GHC handling changes in corresponding GHC error message format;
+### Changed
+* Switch `branch` CI build to run tests against the latest GHC
+
 ## [0.13.1] - 2024-05-11
 ### Fixed
 * Intermittent test failures  
-  Failures with "Cancelled" error message
-* CHANELOG formatting
+  Failures with `Cancelled` error message
+* `CHANELOG` formatting
 
 ## [0.13.0] - 2024-05-07
 ### Added
