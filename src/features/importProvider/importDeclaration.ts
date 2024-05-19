@@ -70,12 +70,14 @@ export default class ImportDeclaration {
 
   public removeElement(elem: string) {
     const before = this.importElements;
-    const index = this.importNames.findIndex(oldElem => oldElem === elem);
-    this._importElements.splice(index, 1);
-    if(index === 0 && this._importElements.length > 0) {
-      this._importElements[0] = this._importElements[0].trimLeft();
+    const index = this.importNames.findIndex(oldElem => oldElem === elem || oldElem == `${elem}(..)`);
+    if (index !== -1) {
+      this._importElements.splice(index, 1);
+      if(index === 0 && this._importElements.length > 0) {
+        this._importElements[0] = this._importElements[0].trimStart();
+      }
+      this.importList = this.importList.replace(before, this.importElements);
     }
-    this.importList = this.importList.replace(before, this.importElements);
   }
 
   public get text() {

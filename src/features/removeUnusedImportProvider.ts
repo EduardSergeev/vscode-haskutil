@@ -93,7 +93,7 @@ export default class RemoveUnusedImportProvider implements CodeActionProvider {
     return diagnostics
       .map(d => [
         d.range,
-        d.message.match(/The (qualified )?import of (?:[`‘](.+?)['’]\s+from module )?[`‘](.+?)['’] is redundant/m)
+        d.message.match(/The (qualified )?import of (?:[`‘]([\s\S]+?)['’]\s+from module )?[`‘](.+?)['’] is redundant/m)
       ] as const)
       .filter(([,m]) => m)
       .map(([range, match]) => [

@@ -40,7 +40,7 @@ export default class TypeWildcardProvider implements CodeActionProvider {
         }
 
         const line = document.lineAt(diagnostic.range.start);
-        if(fill === "()") {
+        if(fill === "()" || fill == "() :: Constraint") {
           fill = "";
           const wilcardMatch = line.text.match(/_\s*=>\s*/) || line.text.match(/,\s*_\s*/) || line.text.match(/\s*_\s*,/);
           if(wilcardMatch) {
