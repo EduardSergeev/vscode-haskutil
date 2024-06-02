@@ -16,7 +16,7 @@ export default class ImportProvider extends ImportProviderBase implements CodeAc
       .filter(d => d.severity === DiagnosticSeverity.Error)
       .flatMap(diagnostic =>
         patterns.map(pattern => pattern.exec(diagnostic.message))
-        .filter(match => match && !document.getText(diagnostic.range).includes('.'))
+        .filter(match => match && !/\w\./.test(match[1]))
         .flatMap(async ([, name]) =>
           this.addImportForVariable(document, diagnostic, name, await this.search(name))
         )
