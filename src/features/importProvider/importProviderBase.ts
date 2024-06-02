@@ -34,7 +34,7 @@ export default class ImportProviderBase {
         resolve(searchResult.results
           .filter(result => {
             if (!result.isModule() && !result.isPackage()) {
-              const r = result.getQueryResult();
+              const r = this.decodeHtmlEntity(result.getQueryResult());
               const i = r.indexOf(name);
               const j = i + name.length;
               return (i >= 0) &&
@@ -55,6 +55,11 @@ export default class ImportProviderBase {
       });
     });
     return result;
+  }
+
+  private decodeHtmlEntity(str: string): string {
+    return str.replace(/&#(\d+);/g, (_, dec) =>
+      String.fromCharCode(dec));
   }
 
   private async runCodeAction(document: TextDocument, moduleName: string, options: { qualified?: Boolean, alias?: string, elementName?: string } = {}): Promise<void> {
