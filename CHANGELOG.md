@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+## [0.13.3] - 2024-06-19
+### Fixed:
+* `Add import` action's handling of operators containing `.` (dot)([#80](https://github.com/EduardSergeev/vscode-haskutil/issues/80)):  
+  Previously no quick fix action was emitted for such operators (e.g. `(.&.)` or `(.=)`)
+* `Add import` action's handling of names containing `'` (single quote) ([#81](https://github.com/EduardSergeev/vscode-haskutil/issues/81)):  
+  Previously no quick fix action was emitted for such names (e.g. `foldl'`)
+
 ## [0.13.2] - 2024-05-19
 ### Fixed
 * `Remove unused imports` action when import declaration contains elements with `(..)` ([#40](https://github.com/EduardSergeev/vscode-haskutil/issues/40)):  

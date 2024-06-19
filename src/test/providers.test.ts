@@ -31,11 +31,13 @@ suite('', () => {
   });
   
   test('Add missing import', () => {
-    return runQuickfixTest('ImportProvider.hs', 4,
+    return runQuickfixTest('ImportProvider.hs', 6,
       'Add: "import Control.Arrow ((>>>))"',
       'Add: "import Data.Maybe"',
       'Add: "import Data.List (tails)"',
       'Add: "import Data.List (sort)"',
+      'Add: "import Data.List (foldl\')"',
+      'Add: "import Data.Bits ((.&.))"'
     );
   });
 

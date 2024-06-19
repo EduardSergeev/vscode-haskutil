@@ -1,5 +1,6 @@
 import Control.Arrow ((>>>))
-import Data.List (sort, tails)
+import Data.Bits ((.&.))
+import Data.List (foldl', sort, tails)
 import Data.Maybe
 
 foo :: Ord a => [a] -> Maybe [a]
@@ -9,3 +10,11 @@ foo xs =
 bar :: (a -> b) -> (b -> c) -> (a -> c)
 bar f g =
   f >>> g
+
+escaped :: Int
+escaped =
+    foldl' (+) 0 [1..10]
+
+dot :: Int
+dot =
+  42 .&. 1
