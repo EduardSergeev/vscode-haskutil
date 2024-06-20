@@ -49,7 +49,7 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     if (Configuration.shouldSortImports) {
       for (const imp of imports) {
         const curr = imp.module + (imp.importList || "");
-        if (curr < pred) {
+        if (curr < pred || Configuration.shouldSortImportedElementLists && !imp.importElementsSorted) {
           messages.unshift("unsorted");
           break;
         }
@@ -95,6 +95,9 @@ export default class OrganizeImportProvider implements CodeActionProvider {
     const oldImports = ImportDeclaration.getImports(document.getText());
     let newImports = oldImports.map(i => i);
     if (Configuration.shouldSortImports) {
+      if (Configuration.shouldSortImportedElementLists) {
+        newImports.forEach(imp => imp.importElementsSorted || imp.sortImportElements());
+      }
       newImports.sort((l, r) => {
         const ls = l.module + (l.importList || "");
         const rs = r.module + (r.importList || "");

@@ -1,4 +1,5 @@
 import { Range, TextDocument } from "vscode";
+import Configuration from "../../configuration";
 
 export default class ImportDeclaration {
   private _before: string = '';
@@ -45,8 +46,8 @@ export default class ImportDeclaration {
 
   public set importElements(elementsString: string) {
     const before = /^\s*/g;
-    const elements = /[^\s,]+/g;
-    const separators = /\S([\s,]+)\S/g;
+    const elements = /[^\s,]+(\s*\([^,]+\))?/g;
+    const separators = /\S(\s*,\s*)\S/g;
     const after = /\s*$/g;
     elementsString ??= '';
     this._before = elementsString.match(before)[0];
@@ -79,7 +80,7 @@ export default class ImportDeclaration {
   public removeElement(elem: string) {
     const before = this.importElements;
 
-    const index = this._importElements.findIndex(oldElem => oldElem === elem || oldElem == `${elem}(..)`);
+    const index = this._importElements.findIndex(oldElem => oldElem === elem || oldElem.replace(' ', '') == `${elem}(..)`);
     if (index !== -1) {
       if (this._importElements.length > 1) {
         if (index === this._importElements.length - 1) {
@@ -94,11 +95,27 @@ export default class ImportDeclaration {
     }
   }
 
+  public get importElementsSorted() {
+    return [...this._importElements]
+      .sort(this.compareImportElements)
+      .every((elem, i) => this._importElements[i] === elem);
+  }
+
+  public sortImportElements() {
+    if (this._importElements.length > 0) {
+      const before = this.importElements;
+      this._importElements.sort(this.compareImportElements);
+      this.importList = this.importList.replace(before, this.importElements);
+    }
+  }  
+
   private compareImportElements(left: string, right: string) {
     const toSortable = (elem: string) => elem.replace('(', '~');
-    const ls = toSortable(left);
-    const rs = toSortable(right);
-    return ls < rs ? -1 : ls > rs ? 1 : 0;
+    if (Configuration.shouldplaceOperatorsAfterFunctions) {
+      left = toSortable(left);
+      right = toSortable(right);
+    }
+    return left < right ? -1 : left > right ? 1 : 0;
   }
 
   public get text() {

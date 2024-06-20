@@ -101,6 +101,16 @@
           "description": "Sort imports when organizing imports",
           "default": true
         },
+        "haskutil.placeOperatorsAfterFunctions": {
+          "type": "boolean",
+          "description": "Place operators after other elements in imported element lists in import declarations",
+          "default": false
+        },
+        "haskutil.sortImportedElementLists": {
+          "type": "boolean",
+          "description": "Sort imported elements lists in import declarations when organizing imports",
+          "default": true
+        },
         "haskutil.organiseImportsOnSave": {
           "type": "boolean",
           "description": "Organize imports on save",
