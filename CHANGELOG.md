@@ -1,8 +1,20 @@
 # Change Log
 All notable changes to the "Haskutil" extension will be documented in this file.
 
+
+## [0.14.0] - 2024-06-23
+### Added
+* `Organize imports` now also sorts imported element lists ([#86](https://github.com/EduardSergeev/vscode-haskutil/issues/86)):  
+  When sorting import declaration if `"haskutil.sortImportedElementLists"` is set to `true` (default value)
+* An option to place operators at the end of imported element lists [#88](https://github.com/EduardSergeev/vscode-haskutil/issues/88):  
+  When inserting new elements via `Add import` or sorting imported elements via `Organize imports` operators can now be placed after other type of elements, i.e. after functions, constructors or types.  
+  This behavior is controlled via new configuration setting `"haskutil.placeOperatorsAfterFunctions"` which is set to `false` by default
+### Changed
+* Switch to [c8](https://github.com/bcoe/c8) for code coverage (fix [#87](https://github.com/EduardSergeev/vscode-haskutil/issues/87))
+  
+
 ## [0.13.3] - 2024-06-19
-### Fixed:
+### Fixed
 * `Add import` action's handling of operators containing `.` (dot)([#80](https://github.com/EduardSergeev/vscode-haskutil/issues/80)):  
   Previously no quick fix action was emitted for such operators (e.g. `(.&.)` or `(.=)`)
 * `Add import` action's handling of names containing `'` (single quote) ([#81](https://github.com/EduardSergeev/vscode-haskutil/issues/81)):  
