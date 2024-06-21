@@ -190,15 +190,15 @@
           "type": "array",
           "description": "Supported Haskell diagnostic generating extensions",
           "items": {
-            "type":"object",
+            "type": "object",
             "properties": {
               "id": {
                 "title": "Extension id",
-                "type":"string"
+                "type": "string"
               },
               "name": {
                 "title": "Extension name",
-                "type":"string"
+                "type": "string"
               }
             }
           },
@@ -206,19 +206,24 @@
             {
               "id": "dramforever.vscode-ghc-simple",
               "name": "GHC"
-            },{
+            },
+            {
               "id": "Vans.haskero",
               "name": "Haskero"
-            },{
+            },
+            {
               "id": "ndmitchell.haskell-ghcid",
               "name": "ghcid"
-            },{
+            },
+            {
               "id": "digitalassetholdingsllc.ghcide",
               "name": "ghcid"
-            },{
+            },
+            {
               "id": "taylorfausak.purple-yolk",
               "name": "Purple Yolk"
-          }]
+            }
+          ]
         }
       }
     }
@@ -235,24 +240,20 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "mocha ./out/test/runTest.js",
-    "coverage": "nyc npm test",
+    "coverage": "c8 npm test",
     "prepackage": "npm run compile",
     "package": "vsce package",
     "preupload": "npm run package",
     "upload": "vsce publish"
   },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "require": [
-      "ts-node/register",
-      "source-map-support/register"
-    ],
+  "c8": {
     "include": [
       "src/**/*.ts",
       "out/**/*.js"
     ],
     "exclude": [
-      "src/test/*"
+      "src/test/*",
+      "out/test/*"
     ],
     "reporter": [
       "text-summary",
@@ -263,16 +264,15 @@
     "report-dir": ".coverage"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@types/chai": "4.3.16",
     "@types/mocha": "10.0.6",
     "@types/node": "20.12.12",
     "@types/vscode": "1.48.0",
     "@vscode/test-electron": "2.3.9",
     "@vscode/vsce": "2.23.0",
+    "c8": "^10.1.2",
     "chai": "4.4.1",
     "mocha": "10.4.0",
-    "nyc": "15.1.0",
     "source-map-support": "0.5.21",
     "ts-node": "10.9.2",
     "tslint": "6.1.3",
