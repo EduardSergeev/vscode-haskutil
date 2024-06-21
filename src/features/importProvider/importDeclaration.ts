@@ -40,27 +40,38 @@ export default class ImportDeclaration {
   };
 
   public get importElements() {
-    const separators = this._importSeparators.concat([this._after]);
-    return [this._before].concat(this._importElements.flatMap((elem, i) => [elem, separators[i]])).join('');
+    const separators = this._importSeparators.concat('');
+    const list = this._importElements.flatMap((elem, i) => [elem, separators[i]]);
+    return [this._before, ...list, this._after].join('');
   }
 
   public set importElements(elementsString: string) {
+    const input = elementsString ?? '';
+    const empty = /^\s*$/g;
     const before = /^\s*/g;
-    const elements = /[^\s,]+(\s*\([^,]+\))?/g;
-    const separators = /\S(\s*,\s*)\S/g;
     const after = /\s*$/g;
-    elementsString ??= '';
-    this._before = elementsString.match(before)[0];
-    this._importElements = elementsString ? [...elementsString.matchAll(elements)].map(m => m[0]) : [];
-    this._importSeparators = elementsString ? [...elementsString.matchAll(separators)].map(m => m[1]) : [];
-    this._after = elementsString.match(after)[0];
+    const separators = /(?<=\S)\s*,\s*(?=\S)/g;
+    if (empty.test(input)) {
+      const middle = input.length / 2;
+      this._before = input.slice(0, middle);
+      this._after = input.slice(middle)
+    } else {
+      this._before = input.match(before)[0];
+      this._after = input.match(after)[0];
+    }
+    const matches = [...input.matchAll(separators)].map(m => [m.index, m[0]] as const);
+    this._importSeparators = matches.map(m => m[1]);
+    const indices = matches.map(m => [m[0], m[0] + m[1].length] as const);
+    const starts = [this._before.length].concat(indices.map(ixs => ixs[1]));
+    const ends = indices.map(ixs => ixs[0]).concat(input.length - this._after.length);
+    this._importElements = starts.map((ix, i) => input.slice(ix, ends[i])).filter(e => e !== '');
   }
 
   public addImportElement(newElem: string) {
-    let before = this.importElements;
-    if (this._importElements.length === 0) {
-      this.importList = " (I)";
-      before = "I";
+    let before = `(${this.importElements})`;
+    if (!this.importList) {
+      this.importList = " ()";
+      before = "()";
     }
 
     let index = this._importElements.findIndex(oldElem => this.compareImportElements(newElem, oldElem) < 0);
@@ -74,7 +85,7 @@ export default class ImportDeclaration {
     }
     this._importElements.splice(index, 0, newElem);
 
-    this.importList = this.importList.replace(before, this.importElements);
+    this.importList = this.importList.replace(before, `(${this.importElements})`);
   }
 
   public removeElement(elem: string) {
