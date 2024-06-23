@@ -5,8 +5,9 @@ import path = require('path');
 
 const configs = {
   'telemetry.enableTelemetry': false,
-  'ghcSimple.replCommand': 'stack exec ghci',
-  'ghcSimple.replScope': 'file',
+  'purple-yolk.haskell.interpreter.command': 'stack ghci ${file} --ghci-options "-ddump-json -Wall"',
+  // 'ghcSimple.replCommand': 'stack exec ghci',
+  // 'ghcSimple.replScope': 'file',
 };
 
 suite('', () => {
@@ -16,11 +17,14 @@ suite('', () => {
       await config.update(setting, configs[setting], true);
     }
 
+    await vscode.commands.executeCommand('workbench.actions.view.problems');
+    await vscode.commands.executeCommand('workbench.action.positionPanelRight');
+
     // Temporary hack to fix intermittent (but quite persistent) test failures
     const welcome = path.join(__dirname, '../../input/Welcome.hs');
     const doc = await didChangeDiagnostics(welcome, [DiagnosticSeverity.Warning, 1], async () => {
       const doc = await vscode.workspace.openTextDocument(welcome);
-      await vscode.window.showTextDocument(doc);
+      await vscode.window.showTextDocument(doc, { preview: false });
       // Not sure why by VSCode aborts the subsequent `vscode.executeCodeActionProvider` command
       // with `Cancelled` error if we do not give VSCode or our extensions some time to initialise
       // Could not find a proper event to wait on so we have to `sleep` for 3s instead 

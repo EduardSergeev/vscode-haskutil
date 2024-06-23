@@ -24,7 +24,7 @@ jobs:
           - 9.0.2
           - 9.4.5
         env:
-          - { CODE_VERSION: 1.66.2, DISPLAY: ':99.0' }
+          # - { CODE_VERSION: 1.66.2, DISPLAY: ':99.0' }
           - { CODE_VERSION: 'stable', DISPLAY: ':99.0' }
     runs-on: ${{ matrix.os }}
     env: ${{ matrix.env }}

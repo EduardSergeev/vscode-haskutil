@@ -28,7 +28,8 @@ export async function withTestDocument(file: string, diagnosticCount: [Diagnosti
   const after = path.join(__dirname, '../../input/after', file);
   const doc = await didChangeDiagnostics(before, diagnosticCount, async () => {
     const doc = await vscode.workspace.openTextDocument(before);
-    await vscode.window.showTextDocument(doc);
+    await vscode.window.showTextDocument(doc, { preview: false });
+    await vscode.commands.executeCommand('purple-yolk.haskell.interpret');
     return doc;
   });
   try {
@@ -79,13 +80,13 @@ export async function didEvent<TResult, TEvent>(
   predicate: (event: TEvent) => Boolean,
   action: () => Thenable<TResult>): Promise<TResult> {
   return new Promise<TResult>(async (resolve, _) => {
-    const result = action();
     const disposable = subscribe(async e => {
       if(predicate(e)) {
         disposable.dispose();
         resolve(await result);
       }
     });
+    let result = action();
   });
 }
 

@@ -24,11 +24,12 @@ async function main(): Promise<number> {
     // Install dependent extensions
     const dependencies = [
       'jcanero.hoogle-vscode',
-      'dramforever.vscode-ghc-simple',
+      // 'dramforever.vscode-ghc-simple',
+      'taylorfausak.purple-yolk',
     ];
 
-    const extensionsDir = path.resolve(path.dirname(cliPath), '..', 'extensions');
-    const userDataDir = path.resolve(extensionsDir, '..', '..', 'udd');
+    const extensionsDir = path.resolve(path.dirname(cliPath), '..', '..', 'extensions');
+    const userDataDir = path.resolve(extensionsDir, '..', 'udd');
 
     for(const extension of dependencies) {
       cp.spawnSync(cliPath, ['--extensions-dir', extensionsDir, '--user-data-dir', userDataDir, '--install-extension', extension], {
@@ -49,18 +50,24 @@ async function main(): Promise<number> {
       launchArgs: [
         '--user-data-dir', userDataDir,
         '--extensions-dir', extensionsDir,
+        '--logExtensionHostCommunication',
         '--new-window',
         '--disable-gpu',
         '--disable-updates',
-        '--logExtensionHostCommunication',
-        '--skip-getting-started',
-        '--skip-welcome',
-        '--skip-release-notes',
-        '--disable-keytar',
         '--disable-restore-windows',
         '--disable-telemetry',
         '--disable-workspace-trust',
+        '--do-not-sync',
+        '--skip-add-to-recently-opened',
+        '--skip-getting-started',
+        '--skip-welcome',
+        '--skip-release-notes',
+        '--use-inmemory-secretstorage',
         '--wait',
+
+        // '--verbose',
+        '--sandbox',
+        // '--trace',
       ]
     });
   } catch (err) {
