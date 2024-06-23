@@ -8,10 +8,10 @@ import           Control.Monad
 import qualified Data.ByteString.Lazy as M
 import           Data.List
 import           Data.Maybe (
-    Maybe, 
+    Maybe,
     listToMaybe
   )
-import           Prelude (Ord, ($), (.))
+import           Prelude (($), (.),  Ord)
 import           System.IO
 
 

@@ -6,12 +6,12 @@ module Main where
 -- Some comment
 import System.IO
 import Data.Maybe (
-    Maybe, 
-    listToMaybe
+    listToMaybe,
+    Maybe
   )
 import Data.List
 import qualified Data.ByteString.Lazy as M
-import Prelude (Ord, ($), (.))
+import Prelude ((.), Ord,  ($))
 import Control.Monad
 
 

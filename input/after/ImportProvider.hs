@@ -1,5 +1,6 @@
 import Control.Arrow ((>>>))
 import Data.Bits ((.&.))
+import Data.Char ( isDigit )
 import Data.List (foldl', sort, tails)
 import Data.Maybe
 
@@ -18,3 +19,7 @@ escaped =
 dot :: Int
 dot =
   42 .&. 1
+
+existing :: Char -> Bool
+existing =
+    isDigit

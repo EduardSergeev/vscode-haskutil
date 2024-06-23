@@ -1,3 +1,4 @@
+import Data.Char (  )
 
 foo :: Ord a => [a] -> Maybe [a]
 foo xs =
@@ -14,3 +15,7 @@ escaped =
 dot :: Int
 dot =
   42 .&. 1
+
+existing :: Char -> Bool
+existing =
+    isDigit

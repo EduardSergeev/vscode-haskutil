@@ -1,6 +1,6 @@
 import Data.List (sort, tails)
 import Data.Maybe
-import Data.Monoid (All(..), Any(getAny), Product(getProduct), Sum(..))
+import Data.Monoid (All (..), Any(getAny), Product(getProduct), Sum(..), Any(..), First(..))
 
 foo :: Ord a => [a] -> [a]
 foo xs =

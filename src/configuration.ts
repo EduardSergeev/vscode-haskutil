@@ -13,6 +13,8 @@ const organizeExtensionsOnSaveSection = "organiseExtensionOnSave";
 const alignImportsSection = "alignImports";
 const alwaysPadImportsSection = "alwaysPadImports";
 const sortImportsSection = "sortImports";
+const sortImportedElementListsSection = "sortImportedElementLists";
+const placeOperatorsAfterFunctionsSection = "placeOperatorsAfterFunctions";
 const organizeImportsOnSaveSection = "organiseImportsOnSave";
 const checkDiagnosticsExtensionSection = "checkDiagnosticsExtension";
 const supportedDependenciesSection = "supportedDependencies";
@@ -38,6 +40,8 @@ export default class Configuration {
   public static alignImportsSection = alignImportsSection;
   public static alwaysPadImportsSection = alwaysPadImportsSection;
   public static sortImportsSection = sortImportsSection;
+  public static sortImportedElementListsSection = sortImportedElementListsSection;
+  public static placeOperatorsAfterFunctionsSection = placeOperatorsAfterFunctionsSection;
   public static organizeImportsOnSaveSection = organizeImportsOnSaveSection;
   public static checkDiagnosticsExtensionSection = checkDiagnosticsExtensionSection;
   public static supportedDependenciesSection = supportedDependenciesSection;
@@ -84,6 +88,14 @@ export default class Configuration {
 
   public static get shouldSortImports(): boolean {
     return get(sortImportsSection);
+  }
+
+  public static get shouldSortImportedElementLists(): boolean {
+    return get(sortImportedElementListsSection);
+  }
+
+  public static get shouldplaceOperatorsAfterFunctions(): boolean {
+    return get(placeOperatorsAfterFunctionsSection);
   }
 
   public static get shouldOrganizeImportsOnSave(): boolean {
